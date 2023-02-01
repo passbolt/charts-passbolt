@@ -1,0 +1,83 @@
+{{- if .Values.cronJobEmail.enabled }}
+{{- $type := "cron" -}}
+{{- $action := "proc-email" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+spec:
+  schedule: {{ .Values.cronJobEmail.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cronJobEmail.concurrencyPolicy | default "Replace" }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+           {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 12 }}
+        spec:
+          serviceAccountName: {{ $Name }}-sa-common
+          restartPolicy: OnFailure
+          securityContext:
+            runAsUser: 33
+            fsGroup: 33
+          containers:
+            - name: {{ $fullName }}
+          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 14 }}
+              command:
+                - "/bin/bash"
+              args:
+                - "-c"
+                - |
+                  sleep 10
+                  echo "Sending emails" \
+                  && bin/cron \
+                  && touch /tmp/pod/success
+              env:
+                - name: DATASOURCES_DEFAULT_HOST
+                  value: {{ include "passbolt.databaseServiceName" . }}
+              envFrom:
+                - configMapRef:
+                    name: {{ $Name }}-cm-env
+                - secretRef:
+                    name: {{ $Name }}-sec-env
+              volumeMounts:
+                - name: {{ $Name }}-vol-success
+                  mountPath: /tmp/pod
+            {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
+            - name: {{ $fullName }}-redisproxy
+              {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 14 }}
+              command:
+                - "/bin/bash"
+              args:
+                - "-c"
+                - |
+                  haproxy -f /usr/local/etc/haproxy/haproxy.cfg &
+                  REDIS_PROXY_PID=$?
+                  while true; do if [ -f "/tmp/pod/success" ]; then kill $REDIS_PROXY_PID; sleep 5;  exit 0; fi; done
+              volumeMounts:
+                - name: {{ $Name }}-vol-success
+                  mountPath: /tmp/pod
+                - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
+                  subPath: haproxy.cfg
+                  name: {{ $fullName }}-sec-redis-proxy
+                  readOnly: true
+              resources:
+                {{- toYaml .Values.redisProxyResources | nindent 16 }}
+            {{- end }}
+          volumes:
+            - name: {{ $Name }}-vol-success
+              emptyDir: {}
+            - name: {{ $fullName }}-sec-gcs
+              secret:
+                secretName: {{ $Name }}-sec-gcs
+            {{- if .Values.app.cache.redis.sentinelProxy }}
+            - name: {{ $fullName }}-sec-redis-proxy
+              secret:
+                secretName: {{ $Name }}-sec-redis-proxy
+            {{- end -}}
+{{- end -}}

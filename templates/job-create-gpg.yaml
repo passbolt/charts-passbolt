@@ -1,0 +1,73 @@
+{{ if or ( not .Values.gpgServerKeyPublic ) ( not .Values.gpgServerKeyPrivate ) }}
+{{- $type := "job" -}}
+{{- $action := "create-gpg-keys" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+  annotations:
+    helm.sh/hook: pre-install
+    helm.sh/hook-weight: "0"
+spec:
+  template:
+    metadata:
+      labels:
+      {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 8 }}
+    spec:
+      serviceAccountName: {{ $Name }}-sa-{{ $action }}
+      restartPolicy: OnFailure
+      containers:
+        - name: {{ $fullName }}
+          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
+          command:
+            - "/bin/bash"
+          args:
+            - "-c"
+            - |
+              set -e
+              key_email="${PASSBOLT_KEY_EMAIL:-passbolt@yourdomain.com}"
+              key_name="${PASSBOLT_KEY_NAME:-Passbolt default user}"
+              key_length="${PASSBOLT_KEY_LENGTH:-3072}"
+              subkey_length="${PASSBOLT_SUBKEY_LENGTH:-4096}"
+              expiration="${PASSBOLT_KEY_EXPIRATION:-0}"
+              su -c "gpg --homedir $GNUPGHOME --batch --no-tty --gen-key <<EOF
+                Key-Type: default
+                Key-Length: $key_length
+                Subkey-Type: default
+                Subkey-Length: $subkey_length
+                Name-Real: $key_name
+                Name-Email: $key_email
+                Expire-Date: $expiration
+                %no-protection
+                %commit
+              EOF" -ls /bin/bash www-data
+
+              PRIVATE_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export-secret-keys $key_email | base64 -w0)"
+              PUBLIC_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export $key_email | base64 -w0)"
+
+              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              chmod +x kubectl
+              ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey_private.asc", "value" : '"${PRIVATE_SERVERKEY}"'}]'
+              ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey.asc", "value" : '"${PUBLIC_SERVERKEY}"'}]'
+              touch /tmp/pod/success
+              echo "Success"
+          env:
+            - name: DATASOURCES_DEFAULT_HOST
+              value: {{ include "passbolt.databaseServiceName" . }}
+          envFrom:
+            - configMapRef:
+                name: {{ $Name }}-cm-env
+            - secretRef:
+                name: {{ $Name }}-sec-env
+          volumeMounts:
+            - name: {{ $fullName }}-vol-success
+              mountPath: /tmp/pod
+      volumes:
+        - name: {{ $fullName }}-vol-success
+          emptyDir: {}
+{{- end }}

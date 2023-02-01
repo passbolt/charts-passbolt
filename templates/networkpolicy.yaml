@@ -1,0 +1,23 @@
+{{- if .Values.networkPolicy.enabled }}
+{{- $type := "netpol" -}}
+{{- $action := "ingress-2-passbolt" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ $fullName }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: {{ $Name }}
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          {{ .Values.networkPolicy.label }}: {{ .Values.networkPolicy.namespaceLabel }}
+    - podSelector:
+        matchLabels:
+          {{ .Values.networkPolicy.label }}: {{ .Values.networkPolicy.podLabel }}
+{{- end }}

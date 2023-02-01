@@ -1,0 +1,178 @@
+{{- $type := "depl" -}}
+{{- $action := "srv" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  {{ include "passbolt-library.selector" . | nindent 2 }}
+  template:
+    metadata:
+      labels:
+        {{- include "passbolt-library.selectorLabels" . | nindent 8 }}
+      annotations:
+        checksum/sec-env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
+        checksum/sec-gpg: {{ include (print $.Template.BasePath "/secret-gpg.yaml") . | sha256sum }}
+        checksum/cm-env: {{ include (print $.Template.BasePath "/configmap-env.yaml") . | sha256sum }}
+        {{- if .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED }}
+        checksum/sec-jwt: {{ include (print $.Template.BasePath "/secret-jwt.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
+        checksum/sec-redis-proxy: {{ include (print $.Template.BasePath "/secret-redis-proxy.yaml") . | sha256sum }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ $Name }}-sa-common
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: {{ $fullName }}-init
+          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.initImage) | nindent 10 }}
+          command:
+            - "/bin/bash"
+          args:
+            - "-c"
+            - |
+              cat <<-EOF > /defaultsfile.cnf
+              [client]
+              user=${DATASOURCES_DEFAULT_USERNAME}
+              password=${DATASOURCES_DEFAULT_PASSWORD}
+              host=${DATASOURCES_DEFAULT_HOST}
+              connect-timeout=2
+              EOF
+              userhost="%"
+              while ! mysql --defaults-file=/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
+                echo "Waiting for database connection..."
+                sleep 2
+              done
+          env:
+            - name: DATASOURCES_DEFAULT_HOST
+              value: {{ include "passbolt.databaseServiceName" . }}
+          envFrom:
+            - configMapRef:
+                name: {{ $Name }}-cm-env
+            - secretRef:
+                name: {{ $Name }}-sec-env
+      containers:
+        - command:
+            - "/bin/bash"
+          args:
+            - "-c"
+            - |
+              set -e
+              apt update && apt install -y php-redis
+              mv /etc/supervisor/conf.d/cron.conf{,.disabled}
+              /docker-entrypoint.sh
+          name: {{ $fullName }}
+          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
+          ports:
+          - name: https
+            containerPort: 443
+            protocol: TCP
+          - name: http
+            containerPort: 80
+            protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          env:
+            - name: DATASOURCES_DEFAULT_HOST
+              value: {{ include "passbolt.databaseServiceName" . }}
+          envFrom:
+            - configMapRef:
+                name: {{ $Name }}-cm-env
+            - secretRef:
+                name: {{ $Name }}-sec-env
+          volumeMounts:
+            {{- if .Values.app.cache.redis.enabled }}
+            - mountPath: "/etc/passbolt/app.php"
+              subPath: app.php
+              name: {{ $Name }}-cm-app-php
+              readOnly: true
+            {{- end }}
+            - mountPath: /etc/ssl/certs/passbolt
+              name: {{ $fullName }}-sec-tls
+              readOnly: true
+            - name: {{ $fullName }}-sec-gpg
+              mountPath: {{ .Values.gpgPath }}
+              readOnly: true
+            {{- if .Values.subscriptionKey }}
+            - name: {{ $fullName }}-sec-subscription
+              mountPath: {{ quote .Values.subscription_keyPath }}
+              subPath: subscription_key.txt
+              readOnly: true
+            {{- end }}
+            {{- if .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED }}
+            - name: {{ $fullName }}-sec-jwt
+              mountPath: {{ quote .Values.jwtPath }}
+              readOnly: true
+            {{- end }}
+          resources:
+            {{- toYaml .Values.app.resources | nindent 12 }}
+        {{- if .Values.app.cache.redis.sentinelProxy }}
+        - name: {{ $fullName }}-redisproxy
+          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 10 }}
+          volumeMounts:
+            - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
+              subPath: haproxy.cfg
+              name: {{ $fullName }}-sec-redis-proxy
+              readOnly: true
+          resources:
+            {{- toYaml .Values.redisProxyResources | nindent 12 }}
+        {{- end -}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: {{ $fullName }}-sec-tls
+          secret:
+            secretName: {{ $Name }}-sec-tls
+        - name: {{ $fullName }}-sec-gpg
+          secret:
+            secretName: {{ $Name }}-sec-gpg
+        {{- if .Values.app.cache.redis.enabled }}
+        - configMap:
+            name: {{ $Name }}-cm-app-php
+          name: {{ $Name }}-cm-app-php
+        {{- end }}
+        {{- if .Values.subscriptionKey }}
+        - name: {{ $fullName }}-sec-subscription
+          secret:
+            secretName: {{ $Name }}-sec-subscription
+            items:
+              - key: key
+                path: subscription_key.txt
+        {{- end }}
+        {{- if .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED }}
+        - name: {{ $fullName }}-sec-jwt
+          secret:
+            secretName: {{ $Name }}-sec-jwt
+        {{- end }}
+        {{- if .Values.app.cache.redis.sentinelProxy }}
+        - name: {{ $fullName }}-sec-redis-proxy
+          secret:
+            secretName: {{ $Name }}-sec-redis-proxy
+        {{- end -}}

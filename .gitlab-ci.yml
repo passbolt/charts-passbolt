@@ -1,0 +1,27 @@
+stages:
+  - test
+  - deploy
+  - publish
+lint Helm Charts:
+  image:
+    name: registry.gitlab.com/passbolt/passbolt-ci-docker-images/helm:latest
+    entrypoint: ["/bin/sh", "-c"]
+  stage: test
+  script:
+    - helm repo add passbolt https://download.passbolt.com/charts
+    - helm lint .
+
+publish:
+  stage: publish
+  image: registry.gitlab.com/passbolt/passbolt-ci-docker-images/helm:latest
+  variables:
+    REPO_BUCKET: "download.passbolt.com"
+    REPO_DIR: "charts"
+    CHART_NAME: "passbolt"
+  script:
+    - |
+      export GOOGLE_APPLICATION_CREDENTIALS="$BUCKET_SVC_ACC"
+      sh .gitlab-ci/scripts/bin/publishing.sh
+      #rules:
+      #  - if: '$CI_COMMIT_TAG'
+      #    when: on_success
