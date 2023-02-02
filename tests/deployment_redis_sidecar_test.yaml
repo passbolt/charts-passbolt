@@ -1,0 +1,83 @@
+---
+suite: redis proxy sidecar on deployments
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should not have one redis sidecar
+    templates:
+      - deployment.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: false
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers
+          content:
+            image: haproxy:latest
+            volumeMounts:
+              - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
+                subPath: haproxy.cfg
+                name: test-passbolt-depl-srv-sec-redis-proxy
+                readOnly: true
+
+  - it: should have only one redis sidecar and mount its configuration
+    templates:
+      - deployment.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: haproxy:latest
+            volumeMounts:
+              - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
+                subPath: haproxy.cfg
+                name: test-passbolt-depl-srv-sec-redis-proxy
+                readOnly: true
+          count: 1
+          any: true
+
+  - it: should contain a volumes section
+    templates:
+      - deployment.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            secret:
+              secretName: test-passbolt-sec-redis-proxy
+          count: 1
+          any: true
+
+  - it: should contain a shasum for redis proxy secret
+    templates:
+      - deployment.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - isNotEmpty:
+          path: spec.template.metadata.annotations.checksum/sec-redis-proxy

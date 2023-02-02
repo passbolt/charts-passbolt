@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -euo
+set -eo
 
 # ENV
 # REPO_BUCKET
@@ -24,8 +24,10 @@ then
   helm gcs init "gs://$REPO_URL"
 fi
 
+helm dependency update
+
 helm package "."
 
 helm repo add "$REPO_NAME" "gs://$REPO_URL"
 
-helm gcs push "$CHART_NAME"-*.tgz "$REPO_NAME"
+helm gcs push "$CHART_NAME"-*.tgz "$REPO_NAME" --public --publicUrl "https://$REPO_URL"

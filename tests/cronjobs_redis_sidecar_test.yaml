@@ -1,0 +1,66 @@
+---
+suite: redis proxy sidecar on cronjobs
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should have only one sidecar and mount its configuration
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+      cronJobEmail.enabled: true
+    asserts:
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers
+          content:
+            image: haproxy:latest
+          count: 1
+          any: true
+
+  - it: should contain a volumes section
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+      enableEmailCron: true
+    asserts:
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.volumes
+          content:
+            secret:
+              secretName: test-passbolt-sec-redis-proxy
+          count: 1
+          any: true
+
+  - it: should contain a volumes section for success flag
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+      cleanOrgs: true
+      migrateOldDbs: true
+      enableEmailCron: true
+    asserts:
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.volumes
+          content:
+            name: test-passbolt-vol-success
+          count: 1
+          any: true
