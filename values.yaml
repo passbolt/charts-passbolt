@@ -14,7 +14,7 @@ redis:
     # -- Enable redis authentication
     enabled: true
     # -- Configure redis password
-    password: "test"
+    password: "CHANGEME"
   sentinel:
     # -- Enable redis sentinel
     enabled: true
@@ -31,13 +31,13 @@ mariadb:
     # -- Configure mariadb auth root password
     rootPassword: root
     # -- Configure mariadb auth username
-    username: test
+    username: CHANGEME
     # -- Configure mariadb auth password
-    password: test
+    password: CHANGEME
     # -- Configure mariadb auth database
-    database: test
+    database: passbolt
     # -- Configure mariadb auth replicationPassword
-    replicationPassword: test
+    replicationPassword: CHANGEME
 
 ## Passbolt configuration
 
@@ -85,9 +85,9 @@ cronJobEmail:
 ## Passbolt environment parameters
 
 # -- Pro subscription key in base64 only if you are using pro version
-subscriptionKey:
+# subscriptionKey:
 # -- Configure passbolt subscription key path
-subscription_keyPath: /etc/passbolt/subscription_key.txt
+# subscription_keyPath: /etc/passbolt/subscription_key.txt
 
 # -- Configure passbolt gpg directory
 gpgPath: /etc/passbolt/gpg
@@ -115,8 +115,6 @@ passboltEnv:
     PASSBOLT_REGISTRATION_PUBLIC: true
     # -- Configure passbolt cake cache server
     CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
-    # -- Configure passbolt cake cache password
-    CACHE_CAKE_DEFAULT_PASSWORD: test
     # -- Configure passbolt default email service port
     EMAIL_TRANSPORT_DEFAULT_PORT: 587
     # -- Toggle passbolt debug mode
@@ -140,16 +138,18 @@ passboltEnv:
     # -- Toggle passbolt jwt authentication
     PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED: true
   secret:
+    # -- Configure passbolt cake cache password
+    CACHE_CAKE_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt default database password
-    DATASOURCES_DEFAULT_PASSWORD: test
+    DATASOURCES_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt default database username
-    DATASOURCES_DEFAULT_USERNAME: test
+    DATASOURCES_DEFAULT_USERNAME: CHANGEME
     # -- Configure passbolt default database
-    DATASOURCES_DEFAULT_DATABASE: test
+    DATASOURCES_DEFAULT_DATABASE: passbolt
     # -- Configure passbolt default email service username
-    EMAIL_TRANSPORT_DEFAULT_USERNAME: test
+    EMAIL_TRANSPORT_DEFAULT_USERNAME: CHANGEME
     # -- Configure passbolt default email service password
-    EMAIL_TRANSPORT_DEFAULT_PASSWORD: test
+    EMAIL_TRANSPORT_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt server gpg key fingerprint
     # PASSBOLT_GPG_SERVER_KEY_FINGERPRINT:
     # -- Configure passbolt security salt. 
