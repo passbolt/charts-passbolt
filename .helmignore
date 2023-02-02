@@ -19,3 +19,7 @@
 .project
 .idea/
 *.tmproj
+# Gitlab
+.gitlab-ci.yml
+.gitlab-ci/
+tests/

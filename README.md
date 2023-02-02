@@ -1,6 +1,6 @@
 # Passbolt Helm chart
 
-![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.8.0](https://img.shields.io/badge/AppVersion-3.8.0-informational?style=flat-square)
+![Version: 0.1.0](https://img.shields.io/badge/Version-0.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.9.0-2-ce](https://img.shields.io/badge/AppVersion-3.9.0--2--ce-informational?style=flat-square)
 
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
@@ -8,8 +8,8 @@ collaboration.
 ## TL;DR
 
 ```bash
-helm repo add my-repo https://download.passbolt.com/charts
-helm install my-release my-repo
+helm repo add my-repo https://download.passbolt.com/charts/passbolt
+helm install my-release my-repo/passbolt
 ```
 
 ## Introduction

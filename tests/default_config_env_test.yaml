@@ -1,0 +1,21 @@
+---
+suite: default config cache pointing to proxy
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: default should point to localhost for cache
+    templates:
+      - configmap-env.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      www.cache.redis.sentinelProxy.enabled: true
+      www.cache.redis.sentinelProxy.image.repository: haproxy
+      www.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - equal:
+          path: data.CACHE_CAKE_DEFAULT_SERVER
+          value: 127.0.0.1

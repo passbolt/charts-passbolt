@@ -121,8 +121,6 @@ passboltEnv:
     EMAIL_TRANSPORT_DEFAULT_PORT: 587
     # -- Toggle passbolt debug mode
     DEBUG: false
-    # -- Configure email used on gpg key. This is used when automatically creating a new gpg server key and when automatically calculating the fingerprint.
-    PASSBOLT_KEY_EMAIL: passbolt@yourdomain.com
     # -- Toggle passbolt selenium mode
     PASSBOLT_SELENIUM_ACTIVE: false
     # -- Configure passbolt license path
@@ -151,9 +149,9 @@ passboltEnv:
     # -- Configure passbolt default email service password
     EMAIL_TRANSPORT_DEFAULT_PASSWORD: test
     # -- Configure passbolt server gpg key fingerprint
-    # PASSBOLT_GPG_SERVER_KEY_FINGERPRINT:
-    # -- Configure passbolt security salt. 
-    # SECURITY_SALT:
+    PASSBOLT_GPG_SERVER_KEY_FINGERPRINT: ""
+    # -- Configure passbolt security salt
+    SECURITY_SALT: ""
 
 ## Passbolt deployment parameters
 
