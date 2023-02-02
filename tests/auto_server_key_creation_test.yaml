@@ -1,0 +1,105 @@
+---
+suite: automated serverkey creation
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should create a gpg job
+    templates:
+      - job-create-gpg.yaml
+    set:
+      gpgServerKeyPublic: ""
+      gpgServerKeyPrivate: ""
+    asserts:
+      - containsDocument:
+          apiVersion: batch/v1
+          kind: Job
+          name: test-passbolt-job-create-gpg-keys
+
+  - it: should not create a gpg job
+    templates:
+      - job-create-gpg.yaml
+    set:
+      passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT: "test"
+      gpgServerKeyPublic: "test"
+      gpgServerKeyPrivate: "test"
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should be executed only on pre-install
+    templates:
+      - job-create-gpg.yaml
+    asserts:
+      - equal:
+          path: metadata.annotations.helm\.sh\/hook
+          value: pre-install
+
+  - it: should restart on failure
+    templates:
+      - job-create-gpg.yaml
+    asserts:
+      - equal:
+          path: spec.template.spec.restartPolicy
+          value: OnFailure
+
+  - it: should patch the gpg serverkey secret
+    templates:
+      - job-create-gpg.yaml
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.containers[0].args[1]
+          pattern: ./kubectl patch secret test-passbolt-sec-gpg*
+
+  - it: should have a gpg-secret with smaller weight than gpg secret job
+    templates:
+      - secret-gpg.yaml
+    asserts:
+      - equal:
+          path: metadata.annotations.helm\.sh\/hook-weight
+          value: "-1"
+
+  - it: should have a gpg-secret with higher weight than gpg secret job
+    templates:
+      - job-create-gpg.yaml
+    asserts:
+      - equal:
+          path: metadata.annotations.helm\.sh\/hook-weight
+          value: "0"
+
+  - it: should create an empty gpg secret by default
+    templates:
+      - secret-gpg.yaml
+    set:
+      gpgServerKeyPublic: ""
+      gpgServerKeyPrivate: ""
+    asserts:
+      - equal:
+          path: data.serverkey\.asc
+          value: ""
+      - equal:
+          path: data.serverkey_private\.asc
+          value: ""
+
+  - it: should create an non-empty gpg secret by default
+    templates:
+      - secret-gpg.yaml
+    set:
+      gpgServerKeyPublic: "test"
+      gpgServerKeyPrivate: "test"
+    asserts:
+      - equal:
+          path: data.serverkey\.asc
+          value: "test"
+      - equal:
+          path: data.serverkey_private\.asc
+          value: "test"
+
+  - it: should have a lifecycle that installs before upgrade and before install
+    templates:
+      - secret-gpg.yaml
+    asserts:
+      - equal:
+          path: metadata.annotations.helm\.sh\/hook
+          value: pre-install, pre-upgrade
