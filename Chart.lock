@@ -1,12 +1,12 @@
 dependencies:
 - name: passbolt-library
   repository: https://download.passbolt.com/charts/passbolt-library
-  version: 0.2.1
+  version: 0.2.7
 - name: redis
   repository: https://charts.bitnami.com/bitnami
   version: 17.3.8
 - name: mariadb
   repository: https://charts.bitnami.com/bitnami
   version: 11.3.5
-digest: sha256:acb861ae4d403b436d2bd2a2c8b0d8d5e16d353842130382eaea16b68cea7f89
-generated: "2023-02-01T15:51:49.06151079+01:00"
+digest: sha256:832fc7bb8379da3146cdf338645df33d4cf2fbdc976bc6915fcb2cc30b8a6b70
+generated: "2023-02-10T14:41:40.445534405+01:00"
