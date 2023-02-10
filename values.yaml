@@ -56,7 +56,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 3.9.0-2-ce
+    tag: 3.10.0-1-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -152,7 +152,7 @@ passboltEnv:
     EMAIL_TRANSPORT_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt server gpg key fingerprint
     # PASSBOLT_GPG_SERVER_KEY_FINGERPRINT:
-    # -- Configure passbolt security salt. 
+    # -- Configure passbolt security salt.
     # SECURITY_SALT:
 
 ## Passbolt deployment parameters
