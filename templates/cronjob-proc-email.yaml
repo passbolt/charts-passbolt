@@ -19,6 +19,10 @@ spec:
         metadata:
           labels:
            {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 12 }}
+          annotations:
+            checksum/sec-env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
+            checksum/sec-gpg: {{ include (print $.Template.BasePath "/secret-gpg.yaml") . | sha256sum }}
+            checksum/cm-env: {{ include (print $.Template.BasePath "/configmap-env.yaml") . | sha256sum }}
         spec:
           serviceAccountName: {{ $Name }}-sa-common
           restartPolicy: OnFailure
@@ -48,6 +52,9 @@ spec:
               volumeMounts:
                 - name: {{ $Name }}-vol-success
                   mountPath: /tmp/pod
+                - name: {{ $Name }}-sec-gpg
+                  mountPath: {{ .Values.gpgPath }}
+                  readOnly: true
             {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
             - name: {{ $fullName }}-redisproxy
               {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 14 }}
@@ -75,6 +82,9 @@ spec:
             - name: {{ $fullName }}-sec-gcs
               secret:
                 secretName: {{ $Name }}-sec-gcs
+            - name: {{ $fullName }}-sec-gpg
+              secret:
+                secretName: {{ $Name }}-sec-gpg
             {{- if .Values.app.cache.redis.sentinelProxy }}
             - name: {{ $fullName }}-sec-redis-proxy
               secret:
