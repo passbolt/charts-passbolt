@@ -24,7 +24,7 @@ tests:
           count: 1
           any: true
 
-  - it: should contain a volumes section
+  - it: should contain a volumes section for redis proxy secret
     templates:
       - cronjob-proc-email.yaml
     set:
@@ -62,5 +62,23 @@ tests:
           path: spec.jobTemplate.spec.template.spec.volumes
           content:
             name: test-passbolt-vol-success
+          count: 1
+          any: true
+
+  - it: should contain a volumes section for gpg secret
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      cleanOrgs: true
+      migrateOldDbs: true
+      enableEmailCron: true
+    asserts:
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.volumes
+          content:
+            name: test-passbolt-sec-gpg
           count: 1
           any: true
