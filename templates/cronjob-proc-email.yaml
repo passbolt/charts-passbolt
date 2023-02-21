@@ -48,6 +48,9 @@ spec:
               volumeMounts:
                 - name: {{ $Name }}-vol-success
                   mountPath: /tmp/pod
+                - name: {{ $Name }}-sec-gpg
+                  mountPath: {{ .Values.gpgPath }}
+                  readOnly: true
             {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
             - name: {{ $fullName }}-redisproxy
               {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 14 }}
@@ -75,6 +78,9 @@ spec:
             - name: {{ $fullName }}-sec-gcs
               secret:
                 secretName: {{ $Name }}-sec-gcs
+            - name: {{ $Name }}-sec-gpg
+              secret:
+                secretName: {{ $Name }}-sec-gpg
             {{- if .Values.app.cache.redis.sentinelProxy }}
             - name: {{ $fullName }}-sec-redis-proxy
               secret:

@@ -3,7 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.1.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.1.2...HEAD)
+
+## [0.1.2] - 2023-02-21
+
+### Added
+
+- Merged [#3](https://github.com/passbolt/charts-passbolt/pull/3)
+- Added test for gpg volumes on cronjob
 
 ## [0.1.1] - 2023-02-10
 
