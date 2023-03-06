@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.1.2...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.1.4...HEAD)
+
+## [0.1.4] - 2023-03-06
+
+- Bump passbolt docker image tag to 3.11.1-1
+
+## [0.1.3] - 2023-03-02
+
+- Bump passbolt docker image tag to 3.11.0-1
 
 ## [0.1.2] - 2023-02-21
 
