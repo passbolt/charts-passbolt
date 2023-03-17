@@ -137,6 +137,8 @@ passboltEnv:
     PASSBOLT_JWT_SERVER_PEM: /var/www/passbolt/config/jwt/jwt.pem
     # -- Toggle passbolt jwt authentication
     PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED: true
+    # -- Download Command for kubectl
+    KUBECTL_DOWNLOAD_CMD: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   secret:
     # -- Configure passbolt cake cache password
     CACHE_CAKE_DEFAULT_PASSWORD: CHANGEME
