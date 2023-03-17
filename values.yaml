@@ -38,6 +38,52 @@ mariadb:
     database: passbolt
     # -- Configure mariadb auth replicationPassword
     replicationPassword: CHANGEME
+  # -- Configure parameters for the primary instance.
+  primary:
+    # -- Configure persistence options.
+    persistence:
+      # -- Enable persistence on MariaDB primary replicas using a `PersistentVolumeClaim`. If false, use emptyDir
+      enabled: true
+      # -- Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas. When it's set the rest of persistence parameters are ignored.
+      existingClaim: ""
+      # -- Subdirectory of the volume to mount at
+      subPath: ""
+      # -- Primary persistent volume storage Class
+      storageClass: ""
+      # -- Labels for the PVC
+      labels: {}
+      # -- Primary persistent volume claim annotations
+      annotations: {}
+      # -- Primary persistent volume access Modes
+      accessModes:
+        - ReadWriteOnce
+      # -- Primary persistent volume size
+      size: 8Gi
+      # -- Selector to match an existing Persistent Volume
+      selector: {}      
+  # -- Configure parameters for the secondary instance.
+  secondary:
+    # -- Configure persistence options.
+    persistence:
+      # -- Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`. If false, use emptyDir
+      enabled: true
+      # -- Name of an existing `PersistentVolumeClaim` for MariaDB secondary replicas. When it's set the rest of persistence parameters are ignored.
+      existingClaim: ""
+      # -- Subdirectory of the volume to mount at
+      subPath: ""
+      # -- Secondary persistent volume storage Class
+      storageClass: ""
+      # -- Labels for the PVC
+      labels: {}
+      # -- Secondary persistent volume claim annotations
+      annotations: {}
+      # -- Secondary persistent volume access Modes
+      accessModes:
+        - ReadWriteOnce
+      # -- Secondary persistent volume size
+      size: 8Gi
+      # -- Selector to match an existing Persistent Volume
+      selector: {}      
 
 ## Passbolt configuration
 
