@@ -50,7 +50,8 @@ spec:
               PRIVATE_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export-secret-keys $key_email | base64 -w0)"
               PUBLIC_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export $key_email | base64 -w0)"
 
-              curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+              kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
+              eval $kubectlDownload
               chmod +x kubectl
               ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey_private.asc", "value" : '"${PRIVATE_SERVERKEY}"'}]'
               ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey.asc", "value" : '"${PUBLIC_SERVERKEY}"'}]'
