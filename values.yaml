@@ -56,7 +56,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 3.11.1-1-ce
+    tag: 3.12.0-3-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -213,14 +213,12 @@ networkPolicy:
   # -- Configure network policies namespaceLabel for namespaceSelector
   namespaceLabel: ingress-nginx
 
-
 # -- Configure image pull secrets
 imagePullSecrets: []
 # -- Value to override the chart name on default
 nameOverride: ""
 # -- Value to override the whole fullName
 fullnameOverride: ""
-
 
 serviceAccount:
   # -- Specifies whether a service account should be created
@@ -232,7 +230,8 @@ serviceAccount:
 podAnnotations: {}
 
 # -- Security Context configuration for passbolt server pod
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
 service:
@@ -260,9 +259,9 @@ ingress:
   # -- Configure passbolt ingress tls
   tls:
     # @ignored
-  - secretName: tls
-    hosts:
-      - passbolt.local
+    - secretName: tls
+      hosts:
+        - passbolt.local
 # -- Configure passbolt deployment nodeSelector
 nodeSelector: {}
 

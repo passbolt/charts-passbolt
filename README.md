@@ -72,7 +72,7 @@ Check the [configuration](#Configuration) section to check which parameters you 
 Once the chart is deployed, you can create your first user by running the following command:
 
 ```bash
-kubectl exec -it <passbolt-pod-name> -- /bin/bash -c "bin/cake passbolt register_user -u <email> -f <firstname> -l <lastname> -r admin" -s /bin/bash www-data
+kubectl exec -it <passbolt-pod-name> -- su -c "bin/cake passbolt register_user -u <email> -f <firstname> -l <lastname> -r admin" -s /bin/bash www-data
 ```
 
 
