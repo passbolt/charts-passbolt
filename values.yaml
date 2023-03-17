@@ -56,7 +56,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 3.11.1-1-ce
+    tag: 3.12.0-3-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -128,7 +128,7 @@ passboltEnv:
     # -- Configure passbolt default email from
     EMAIL_DEFAULT_FROM: no-reply@passbolt.local
     # -- Configure passbolt default email host
-    EMAIL_TRANSPORT_DEFAULT_HOST:
+    EMAIL_TRANSPORT_DEFAULT_HOST: 127.0.0.1
     # -- Toggle passbolt tls
     EMAIL_TRANSPORT_DEFAULT_TLS: true
     # -- Configure passbolt jwt private key path
@@ -137,6 +137,8 @@ passboltEnv:
     PASSBOLT_JWT_SERVER_PEM: /var/www/passbolt/config/jwt/jwt.pem
     # -- Toggle passbolt jwt authentication
     PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED: true
+    # -- Download Command for kubectl
+    KUBECTL_DOWNLOAD_CMD: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
   secret:
     # -- Configure passbolt cake cache password
     CACHE_CAKE_DEFAULT_PASSWORD: CHANGEME
@@ -213,14 +215,12 @@ networkPolicy:
   # -- Configure network policies namespaceLabel for namespaceSelector
   namespaceLabel: ingress-nginx
 
-
 # -- Configure image pull secrets
 imagePullSecrets: []
 # -- Value to override the chart name on default
 nameOverride: ""
 # -- Value to override the whole fullName
 fullnameOverride: ""
-
 
 serviceAccount:
   # -- Specifies whether a service account should be created
@@ -232,7 +232,8 @@ serviceAccount:
 podAnnotations: {}
 
 # -- Security Context configuration for passbolt server pod
-podSecurityContext: {}
+podSecurityContext:
+  {}
   # fsGroup: 2000
 
 service:
@@ -260,9 +261,9 @@ ingress:
   # -- Configure passbolt ingress tls
   tls:
     # @ignored
-  - secretName: tls
-    hosts:
-      - passbolt.local
+    - secretName: tls
+      hosts:
+        - passbolt.local
 # -- Configure passbolt deployment nodeSelector
 nodeSelector: {}
 
