@@ -73,7 +73,6 @@ spec:
             - "-c"
             - |
               set -e
-              apt update && apt install -y php-redis
               mv /etc/supervisor/conf.d/cron.conf{,.disabled}
               /docker-entrypoint.sh
           name: {{ $fullName }}
