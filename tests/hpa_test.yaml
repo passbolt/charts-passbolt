@@ -1,0 +1,68 @@
+---
+suite: horizontal pod autoscaler
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should render hpa template
+    templates:
+      - hpa.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: true
+      app.cache.redis.sentinelProxy.enabled: false
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - containsDocument:
+          apiVersion: autoscaling/v2
+          kind: HorizontalPodAutoscaler
+          name: test-passbolt-hpa-srv
+      - equal:
+          path: spec.scaleTargetRef.name
+          value: test-passbolt-depl-srv
+
+  - it: should set max an min boundaries
+    templates:
+      - hpa.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: true
+      autoscaling.minReplicas: 2
+      autoscaling.maxReplicas: 5
+      app.cache.redis.sentinelProxy.enabled: false
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - equal:
+          path: spec.minReplicas
+          value: 2
+      - equal:
+          path: spec.maxReplicas
+          value: 5
+
+  - it: should set cpu average utilization
+    templates:
+      - hpa.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: true
+      autoscaling.minReplicas: 2
+      autoscaling.maxReplicas: 5
+      app.cache.redis.sentinelProxy.enabled: false
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+    asserts:
+      - equal:
+          path: spec.metrics[0].resource.name
+          value: cpu
+      - equal:
+          path: spec.metrics[0].resource.target.type
+          value: Utilization
+      - equal:
+          path: spec.metrics[0].resource.target.averageUtilization
+          value: 80
