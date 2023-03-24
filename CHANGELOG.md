@@ -3,7 +3,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.2.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.2.1...HEAD)
+
+## [0.2.1] - 2023-03-24
+
+This release fixes a few issues reported by the community regarding the use of HPA.
+Using the autoscaling/v2 api would require you run a 1.23 or greater kubernetes cluster.
+It also merges some PR to add more control over the bitnami charts used by default.
+
+Thanks to @plusiv and @cm3brian for their contributions!
+
+### Added
+- [#10](https://github.com/passbolt/charts-passbolt/pull/10) feat: add mariadb persistence options
+
+### Fixed
+- [#11](https://github.com/passbolt/charts-passbolt/issues/11) Incorrect/not guaranteed refs present
 
 ## [0.2.0] - 2023-03-17
 
