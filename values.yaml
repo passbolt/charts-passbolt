@@ -60,15 +60,13 @@ mariadb:
       # -- Primary persistent volume size
       size: 8Gi
       # -- Selector to match an existing Persistent Volume
-      selector: {}      
+      selector: {}
   # -- Configure parameters for the secondary instance.
   secondary:
     # -- Configure persistence options.
     persistence:
       # -- Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`. If false, use emptyDir
       enabled: true
-      # -- Name of an existing `PersistentVolumeClaim` for MariaDB secondary replicas. When it's set the rest of persistence parameters are ignored.
-      existingClaim: ""
       # -- Subdirectory of the volume to mount at
       subPath: ""
       # -- Secondary persistent volume storage Class
@@ -83,7 +81,7 @@ mariadb:
       # -- Secondary persistent volume size
       size: 8Gi
       # -- Selector to match an existing Persistent Volume
-      selector: {}      
+      selector: {}
 
 ## Passbolt configuration
 
@@ -102,7 +100,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 3.12.0-3-ce
+    tag: 3.12.2-1-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section

@@ -46,7 +46,7 @@ spec:
           args:
             - "-c"
             - |
-              cat <<-EOF > /defaultsfile.cnf
+              cat <<-EOF > /tmp/defaultsfile.cnf
               [client]
               user=${DATASOURCES_DEFAULT_USERNAME}
               password=${DATASOURCES_DEFAULT_PASSWORD}
@@ -54,7 +54,7 @@ spec:
               connect-timeout=2
               EOF
               userhost="%"
-              while ! mysql --defaults-file=/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
+              while ! mysql --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
                 echo "Waiting for database connection..."
                 sleep 2
               done
@@ -67,19 +67,19 @@ spec:
             - secretRef:
                 name: {{ $Name }}-sec-env
       containers:
-        - command:
+        - name: {{ $fullName }}
+          command:
             - "/bin/bash"
           args:
             - "-c"
             - |
               set -e
-              mv /etc/supervisor/conf.d/cron.conf{,.disabled}
+              > /etc/supervisor/conf.d/cron.conf
               /docker-entrypoint.sh
-          name: {{ $fullName }}
           {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
           ports:
           - name: https
-            containerPort: 443
+            containerPort: {{ .Values.service.targetPort }}
             protocol: TCP
           - name: http
             containerPort: 80

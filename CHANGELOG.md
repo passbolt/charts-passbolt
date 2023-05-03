@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.2.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.3.0...HEAD)
+
+## [0.3.0] - 2023-05-03
+
+### Fixed
+
+- Bumped bitnami mariadb dependency to 11.5.7, fixes [#15](https://github.com/passbolt/charts-passbolt/issues/15)
+- Removed existingClaim from mariadb secondary in values, fixes [#14](https://github.com/passbolt/charts-passbolt/issues/14)
+- Moved defaultsfile.cnf to /tmp/defaultsfile.cnf to allow non-root deployments, fixes [#13](https://github.com/passbolt/charts-passbolt/issues/13)
+- Typo in JWT values [#16](https://github.com/passbolt/charts-passbolt/pull/16)
+- Values.service.targetPort sync in deployment.yaml to allow changing container ports for non-root deployments
 
 ## [0.2.1] - 2023-03-24
 

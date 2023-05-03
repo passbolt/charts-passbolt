@@ -45,11 +45,23 @@ spec:
                 Expire-Date: $expiration
                 %no-protection
                 %commit
-              EOF" -ls /bin/bash www-data
+              EOF" -ls /bin/bash www-data || \
+              gpg --homedir $GNUPGHOME --batch --no-tty --gen-key <<EOF
+                Key-Type: default
+                Key-Length: $key_length
+                Subkey-Type: default
+                Subkey-Length: $subkey_length
+                Name-Real: $key_name
+                Name-Email: $key_email
+                Expire-Date: $expiration
+                %no-protection
+                %commit
+              EOF
 
               PRIVATE_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export-secret-keys $key_email | base64 -w0)"
               PUBLIC_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export $key_email | base64 -w0)"
 
+              cd /tmp
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
