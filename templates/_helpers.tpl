@@ -72,14 +72,14 @@ Render the value of the database service
 {{- end -}}
 {{- end }}
 
-{{/* 
+{{/*
 Show error message if the user didn't set the gpg key after upgrade
 */}}
 {{- define "passbolt.validateGpgKey" -}}
 {{ if and $.Release.IsUpgrade (or ( not $.Values.gpgServerKeyPublic ) ( not $.Values.gpgServerKeyPrivate )) }}
 {{- $secretName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "sec" "gpg" -}}
-{{- $dpName := printf "%s-%s-%s" $.Release.Name "depl" "srv" -}}
-{{- $containerName := printf "%s-%s-%s" $.Release.Name "depl" "srv" -}}
+{{- $dpName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
+{{- $containerName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
 {{- $message := "" -}}
 {{- $message := printf "  GPG key values should not be empty after during upgrade process. Please update your values file or add the following arguments to the helm upgrade commmand:" -}}
 {{- $message := printf "%s\n%s" $message (printf "  export PRIVATE_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey_private\\.asc") -}}
