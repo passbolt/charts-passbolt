@@ -73,7 +73,7 @@ spec:
             - "-c"
             - |
               set -e
-              mv /etc/supervisor/conf.d/cron.conf{,.disabled}
+              > /etc/supervisor/conf.d/cron.conf
               /docker-entrypoint.sh
           name: {{ $fullName }}
           {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
