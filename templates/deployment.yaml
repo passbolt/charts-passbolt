@@ -67,7 +67,8 @@ spec:
             - secretRef:
                 name: {{ $Name }}-sec-env
       containers:
-        - command:
+        - name: {{ $fullName }}
+          command:
             - "/bin/bash"
           args:
             - "-c"
@@ -75,11 +76,10 @@ spec:
               set -e
               > /etc/supervisor/conf.d/cron.conf
               /docker-entrypoint.sh
-          name: {{ $fullName }}
           {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
           ports:
           - name: https
-            containerPort: 443
+            containerPort: {{ .Values.service.targetPort }}
             protocol: TCP
           - name: http
             containerPort: 80
