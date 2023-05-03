@@ -20,7 +20,7 @@ test Helm Charts:
   script:
     - helm dependency update
     - helm plugin install https://github.com/quintush/helm-unittest
-    - helm unittest -d . -3
+    - helm unittest --color -d .
 
 publish:
   stage: publish
@@ -34,5 +34,5 @@ publish:
       export GOOGLE_APPLICATION_CREDENTIALS="$BUCKET_SVC_ACC"
       sh .gitlab-ci/scripts/bin/publishing.sh
   rules:
-    - if: '$CI_COMMIT_TAG'
+    - if: "$CI_COMMIT_TAG"
       when: on_success

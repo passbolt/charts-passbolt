@@ -33,7 +33,7 @@ tests:
       - job-create-gpg.yaml
     asserts:
       - equal:
-          path: metadata.annotations.helm\.sh\/hook
+          path: metadata.annotations["helm.sh/hook"]
           value: pre-install
 
   - it: should restart on failure
@@ -57,7 +57,7 @@ tests:
       - secret-gpg.yaml
     asserts:
       - equal:
-          path: metadata.annotations.helm\.sh\/hook-weight
+          path: metadata.annotations["helm.sh/hook-weight"]
           value: "-1"
 
   - it: should have a gpg-secret with higher weight than gpg secret job
@@ -65,7 +65,7 @@ tests:
       - job-create-gpg.yaml
     asserts:
       - equal:
-          path: metadata.annotations.helm\.sh\/hook-weight
+          path: metadata.annotations["helm.sh/hook-weight"]
           value: "0"
 
   - it: should create an empty gpg secret by default
@@ -76,10 +76,10 @@ tests:
       gpgServerKeyPrivate: ""
     asserts:
       - equal:
-          path: data.serverkey\.asc
+          path: data["serverkey.asc"]
           value: ""
       - equal:
-          path: data.serverkey_private\.asc
+          path: data["serverkey_private.asc"]
           value: ""
 
   - it: should create an non-empty gpg secret by default
@@ -90,10 +90,10 @@ tests:
       gpgServerKeyPrivate: "test"
     asserts:
       - equal:
-          path: data.serverkey\.asc
+          path: data["serverkey.asc"]
           value: "test"
       - equal:
-          path: data.serverkey_private\.asc
+          path: data["serverkey_private.asc"]
           value: "test"
 
   - it: should have a lifecycle that installs before upgrade and before install
@@ -101,5 +101,5 @@ tests:
       - secret-gpg.yaml
     asserts:
       - equal:
-          path: metadata.annotations.helm\.sh\/hook
+          path: metadata.annotations["helm.sh/hook"]
           value: pre-install, pre-upgrade
