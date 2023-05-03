@@ -30,6 +30,6 @@ dependencies:
     repository: "https://charts.bitnami.com/bitnami"
     condition: redisDependencyEnabled
   - name: mariadb
-    version: 11.3.5
+    version: 11.5.7
     repository: "https://charts.bitnami.com/bitnami"
     condition: mariadbDependencyEnabled
