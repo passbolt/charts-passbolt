@@ -122,7 +122,7 @@ spec:
             {{- end }}
           resources:
             {{- toYaml .Values.app.resources | nindent 12 }}
-        {{- if .Values.app.cache.redis.sentinelProxy }}
+        {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
         - name: {{ $fullName }}-redisproxy
           {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 10 }}
           volumeMounts:
