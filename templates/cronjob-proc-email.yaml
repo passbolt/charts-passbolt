@@ -81,7 +81,7 @@ spec:
             - name: {{ $Name }}-sec-gpg
               secret:
                 secretName: {{ $Name }}-sec-gpg
-            {{- if .Values.app.cache.redis.sentinelProxy }}
+            {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
             - name: {{ $fullName }}-sec-redis-proxy
               secret:
                 secretName: {{ $Name }}-sec-redis-proxy

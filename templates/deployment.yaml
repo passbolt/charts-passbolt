@@ -170,7 +170,7 @@ spec:
           secret:
             secretName: {{ $Name }}-sec-jwt
         {{- end }}
-        {{- if .Values.app.cache.redis.sentinelProxy }}
+        {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
         - name: {{ $fullName }}-sec-redis-proxy
           secret:
             secretName: {{ $Name }}-sec-redis-proxy
