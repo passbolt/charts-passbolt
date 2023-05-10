@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.3.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.3.1...HEAD)
+
+## [0.3.1] - 2023-05-10
+
+### Fixed
+
+- Fix issue when disable sentinel proxy on api [#17](https://github.com/passbolt/charts-passbolt/pull/17)
+
+### Added
+- Added tests for disabled redis proxy
+
 
 ## [0.3.0] - 2023-05-03
 
