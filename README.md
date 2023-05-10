@@ -4,7 +4,7 @@
     <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
 </h3>
 
-![Version: 0.3.0](https://img.shields.io/badge/Version-0.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.12.2-1-ce](https://img.shields.io/badge/AppVersion-3.12.2--1--ce-informational?style=flat-square)
+![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 3.12.2-1-ce](https://img.shields.io/badge/AppVersion-3.12.2--1--ce-informational?style=flat-square)
 
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
@@ -54,7 +54,7 @@ This chart supports the deployment of Community edition and Professional edition
 
 - Kubernetes 1.19+ or 1.23+ if you want to use hpa
 - Helm 3.x
-- Passbolt docker >= 3.12.0-3
+- Passbolt docker >= 3.12.2-1
 
 ## Installing the chart
 
@@ -107,7 +107,7 @@ chart and deletes the release.
 | app.cache.redis.sentinelProxy.image.tag                       | string | `"latest"`                                                                                                                                                                   | Configure redis sentinel image tag                                                                                                                                        |
 | app.image.pullPolicy                                          | string | `"IfNotPresent"`                                                                                                                                                             | Configure pasbolt deployment image pullPolicy                                                                                                                             |
 | app.image.repository                                          | string | `"passbolt/passbolt"`                                                                                                                                                        | Configure pasbolt deployment image repsitory                                                                                                                              |
-| app.image.tag                                                 | string | `"3.12.0-3-ce"`                                                                                                                                                              | Overrides the image tag whose default is the chart appVersion.                                                                                                            |
+| app.image.tag                                                 | string | `"3.12.2-1-ce"`                                                                                                                                                              | Overrides the image tag whose default is the chart appVersion.                                                                                                            |
 | app.initImage.pullPolicy                                      | string | `"IfNotPresent"`                                                                                                                                                             | Configure pasbolt deployment image pullPolicy                                                                                                                             |
 | app.initImage.repository                                      | string | `"mariadb"`                                                                                                                                                                  | Configure pasbolt deployment image repsitory                                                                                                                              |
 | app.initImage.tag                                             | string | `"latest"`                                                                                                                                                                   | Overrides the image tag whose default is the chart appVersion.                                                                                                            |
