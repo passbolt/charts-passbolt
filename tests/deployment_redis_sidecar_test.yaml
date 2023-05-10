@@ -49,6 +49,24 @@ tests:
           count: 1
           any: true
 
+  - it: should not contain a redis proxy secret volume
+    templates:
+      - deployment.yaml
+    set:
+      redisDependencyEnabled: false
+      mariadbDependencyEnabled: true
+      mariadb.architecture: standalone
+      app.cache.redis.enabled: false
+      app.cache.redis.sentinelProxy.enabled: false
+    asserts:
+      - contains:
+          path: spec.template.spec.volumes
+          content:
+            secret:
+              secretName: test-passbolt-sec-redis-proxy
+          count: 0
+          any: true
+
   - it: should contain a volumes section
     templates:
       - deployment.yaml
@@ -81,3 +99,4 @@ tests:
     asserts:
       - isNotEmpty:
           path: spec.template.metadata.annotations.checksum/sec-redis-proxy
+
