@@ -1,0 +1,17 @@
+---
+suite: service
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should have annotations
+    templates:
+      - service.yaml
+    set:
+      service.annotations:
+        test-annotations: "test-value"
+    asserts:
+      - equal:
+          path: metadata.annotations.test-annotations
+          value: "test-value"
