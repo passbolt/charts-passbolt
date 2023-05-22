@@ -14,7 +14,8 @@ function install_helm_plugin() {
   local plugin_name=$1
   local plugin_url=$2
   echo "Installing helm plugin $plugin_name"
-  helm plugin install "$plugin_url" > /dev/null
+  # TODO: remove this version pin when helm-gcs publishes correctly 0.4.3
+  helm plugin install "$plugin_url" --version 0.4.1 > /dev/null
 }
 
 function ensure_helm_plugin() {
