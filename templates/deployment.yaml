@@ -46,7 +46,7 @@ spec:
           command:
           - "sh"
           - "-c"
-          - cp -r /usr/share/php/passbolt/webroot/img/public/* /data/public/
+          - cp -r /usr/share/php/passbolt/webroot/img/public/* /data/
           volumeMounts:
           - name: data
             mountPath: /data
@@ -134,7 +134,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.app.persistence.enabled }}
-            - mountPath: /var/www/passbolt/webroot/img/public/
+            - mountPath: /usr/share/php/passbolt/webroot/img/public/
               name: data
               subPath: public
             {{- end }}
