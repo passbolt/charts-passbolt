@@ -91,3 +91,10 @@ Show error message if the user didn't set the gpg key after upgrade
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "passbolt.claimName" -}}
+{{- if and .Values.app.persistence.enabled (not .Values.app.persistence.existingClaim) }}
+{{- printf "%s-%s" (include "passbolt.fullname" .) "data" -}}
+{{- else }}
+{{- printf "%s" .Values.app.persistence.existingClaim -}}
+{{- end }}

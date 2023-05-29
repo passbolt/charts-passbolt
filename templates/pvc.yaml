@@ -1,0 +1,26 @@
+{{- $type := "depl" -}}
+{{- $action := "srv" -}}
+
+{{- if and .Values.app.persistence.enabled (not .Values.app.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "passbolt.claimName" . }}
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.app.persistence.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.app.persistence.size | quote }}
+{{- if .Values.app.persistence.storageClass }}
+{{- if (eq "-" .Values.app.persistence.storageClass) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.app.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end }}
