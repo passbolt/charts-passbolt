@@ -46,10 +46,11 @@ spec:
           command:
           - "sh"
           - "-c"
-          - cp -r /var/www/passbolt/webroot/img/* /data/img/
+          - cp -r /usr/share/php/passbolt/webroot/img/public/* /data/public/
           volumeMounts:
           - name: data
             mountPath: /data
+            subPath: public
         {{- end }}
         - name: {{ $fullName }}-init
           {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.initImage) | nindent 10 }}
@@ -133,9 +134,9 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.app.persistence.enabled }}
-            - mountPath: /var/www/passbolt/webroot/img
+            - mountPath: /var/www/passbolt/webroot/img/public/
               name: data
-              subPath: img
+              subPath: public
             {{- end }}
           resources:
             {{- toYaml .Values.app.resources | nindent 12 }}

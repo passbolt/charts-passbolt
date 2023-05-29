@@ -98,3 +98,4 @@ Show error message if the user didn't set the gpg key after upgrade
 {{- else }}
 {{- printf "%s" .Values.app.persistence.existingClaim -}}
 {{- end }}
+{{- end }}
