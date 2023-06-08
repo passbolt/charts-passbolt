@@ -318,3 +318,9 @@ tolerations: []
 
 # -- Configure passbolt deployment affinity
 affinity: {}
+
+# -- Add additional volumes, e.g. for overwriting config files
+extraVolumes: ""
+
+# -- Add additional volume mounts, e.g. for overwriting config files
+extraVolumeMounts: ""
