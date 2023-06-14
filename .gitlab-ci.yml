@@ -19,7 +19,7 @@ test Helm Charts:
   stage: test
   script:
     - helm dependency update
-    - helm plugin install https://github.com/quintush/helm-unittest
+    - helm plugin install https://github.com/helm-unittest/helm-unittest
     - helm unittest --color -d .
 
 publish:
