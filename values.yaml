@@ -88,6 +88,8 @@ mariadb:
 ## Passbolt container and sidecar parameters
 app:
   initImage:
+    # -- Configure pasbolt deployment init container image client for database
+    client: mariadb
     # -- Configure pasbolt deployment image repsitory
     repository: mariadb
     # -- Configure pasbolt deployment image pullPolicy

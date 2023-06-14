@@ -54,7 +54,7 @@ spec:
               connect-timeout=2
               EOF
               userhost="%"
-              while ! mysql --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
+              while ! {{ .Values.app.initImage.client }} --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
                 echo "Waiting for database connection..."
                 sleep 2
               done
