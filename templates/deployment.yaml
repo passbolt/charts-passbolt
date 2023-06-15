@@ -54,7 +54,7 @@ spec:
               connect-timeout=2
               EOF
               userhost="%"
-              while ! mysql --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
+              while ! {{ .Values.app.initImage.client }} --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
                 echo "Waiting for database connection..."
                 sleep 2
               done
@@ -120,6 +120,9 @@ spec:
               mountPath: {{ quote .Values.jwtPath }}
               readOnly: true
             {{- end }}
+            {{- with .Values.extraVolumeMounts }}
+            {{- tpl . $ | nindent 12 }}
+            {{- end }}
           resources:
             {{- toYaml .Values.app.resources | nindent 12 }}
         {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
@@ -175,3 +178,6 @@ spec:
           secret:
             secretName: {{ $Name }}-sec-redis-proxy
         {{- end -}}
+        {{- with .Values.extraVolumes }}
+        {{- tpl . $ | nindent 8 }}
+        {{- end }}

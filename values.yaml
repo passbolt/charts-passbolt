@@ -88,6 +88,8 @@ mariadb:
 ## Passbolt container and sidecar parameters
 app:
   initImage:
+    # -- Configure pasbolt deployment init container image client for database
+    client: mariadb
     # -- Configure pasbolt deployment image repsitory
     repository: mariadb
     # -- Configure pasbolt deployment image pullPolicy
@@ -318,3 +320,9 @@ tolerations: []
 
 # -- Configure passbolt deployment affinity
 affinity: {}
+
+# -- Add additional volumes, e.g. for overwriting config files
+extraVolumes: ""
+
+# -- Add additional volume mounts, e.g. for overwriting config files
+extraVolumeMounts: ""
