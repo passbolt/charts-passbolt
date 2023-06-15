@@ -3,7 +3,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.3.2...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.3.3...HEAD)
+
+## [0.3.3] - 2023-06-15
+
+### Fixed
+- Added capability of using specific client on init database container, fixes [#26](https://github.com/passbolt/charts-passbolt/issues/26)
+
+### Added
+- Allow mounting custom volumes [#25](https://github.com/passbolt/charts-passbolt/pull/25)
+- Bumped passbolt docker version to 4.0.2-2-ce that comes with support for debian bookworm and php 8.2.
 
 ## [0.3.2] - 2023-05-19
 

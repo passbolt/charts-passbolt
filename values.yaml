@@ -88,6 +88,8 @@ mariadb:
 ## Passbolt container and sidecar parameters
 app:
   initImage:
+    # -- Configure pasbolt deployment init container image client for database
+    client: mariadb
     # -- Configure pasbolt deployment image repsitory
     repository: mariadb
     # -- Configure pasbolt deployment image pullPolicy
@@ -100,7 +102,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.0.0-2-ce
+    tag: 4.0.2-2-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -318,3 +320,9 @@ tolerations: []
 
 # -- Configure passbolt deployment affinity
 affinity: {}
+
+# -- Add additional volumes, e.g. for overwriting config files
+extraVolumes: ""
+
+# -- Add additional volume mounts, e.g. for overwriting config files
+extraVolumeMounts: ""
