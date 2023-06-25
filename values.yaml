@@ -202,12 +202,13 @@ passboltEnv:
     # PASSBOLT_GPG_SERVER_KEY_FINGERPRINT:
     # -- Configure passbolt security salt.
     # SECURITY_SALT:
-  # -- Environment variables from configmaps to add to the passbolt pods
+  # -- Environment variables to add to the passbolt pods
   extraEnv: []
   # -- Environment variables from secrets or configmaps to add to the passbolt pods
   extraEnvFrom:
-    - secretRef:
-        name: passbolt-secret
+    []
+    # - secretRef:
+    #     name: passbolt-secret
 ## Passbolt deployment parameters
 
 # -- If autoscaling is disabled this will define the number of pods to run
