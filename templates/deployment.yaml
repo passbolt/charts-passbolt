@@ -134,7 +134,7 @@ spec:
               name: {{ $fullName }}-sec-redis-proxy
               readOnly: true
           resources:
-            {{- toYaml .Values.redisProxyResources | nindent 12 }}
+            {{- toYaml .Values.app.cache.redis.sentinelProxy.resources | nindent 12 }}
         {{- end -}}
       {{- with .Values.nodeSelector }}
       nodeSelector:
