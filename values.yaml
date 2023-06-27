@@ -120,6 +120,8 @@ app:
           repository: haproxy
           # -- Configure redis sentinel image tag
           tag: "latest"
+        # -- Configure redis sentinel container resources
+        resources: {}
         # -- Configure the passbolt deployment resources
   resources: {}
 
