@@ -3,20 +3,35 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/v0.3.3...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.0...HEAD)
+
+## [0.4.0] - 2023-06-28
+
+This release includes breaking changes .Values.redisProxyResources now is .Values.app.cache.redis.sentinelProxy.resources
+
+### Fixed
+
+- [#29](https://github.com/passbolt/charts-passbolt/issues/29) Missing redis resources field
+
+### Added
+
+- [#30](https://github.com/passbolt/charts-passbolt/pull/30) Inject variables to pods from existing K8s secrets and inject extra env variables.
 
 ## [0.3.3] - 2023-06-15
 
 ### Fixed
+
 - Added capability of using specific client on init database container, fixes [#26](https://github.com/passbolt/charts-passbolt/issues/26)
 
 ### Added
+
 - Allow mounting custom volumes [#25](https://github.com/passbolt/charts-passbolt/pull/25)
 - Bumped passbolt docker version to 4.0.2-2-ce that comes with support for debian bookworm and php 8.2.
 
 ## [0.3.2] - 2023-05-19
 
 ### Added
+
 - [#18](https://github.com/passbolt/charts-passbolt/pull/18) Allow setting annotations on service
 - Passbolt v4 as default application deployment version. Please read: https://help.passbolt.com/releases/ce/get-up-stand-up
 
@@ -27,6 +42,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Fix issue when disable sentinel proxy on api [#17](https://github.com/passbolt/charts-passbolt/pull/17)
 
 ### Added
+
 - Added tests for disabled redis proxy
 
 
@@ -49,9 +65,11 @@ It also merges some PR to add more control over the bitnami charts used by defau
 Thanks to @plusiv and @cm3brian for their contributions!
 
 ### Added
+
 - [#10](https://github.com/passbolt/charts-passbolt/pull/10) feat: add mariadb persistence options
 
 ### Fixed
+
 - [#11](https://github.com/passbolt/charts-passbolt/issues/11) Incorrect/not guaranteed refs present
 
 ## [0.2.0] - 2023-03-17
@@ -69,10 +87,12 @@ The downside however is that now this chart requires passbolt-3.12.0-3 as minima
 We have also include a few contributions from the community, thanks to all of you who helped during this release!
 
 ### Added
+
 - [#6](https://github.com/passbolt/charts-passbolt/pull/6) make kubectl more flexible
 - Support for rootless images in HA scenarios
 
 ### Fixed
+
 - [#9](https://github.com/passbolt/charts-passbolt/pull/9) set default value for EMAIL_TRANSPORT_DEFAULT_HOST
 
 ## [0.1.4] - 2023-03-06
