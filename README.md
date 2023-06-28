@@ -82,7 +82,7 @@ To uninstall/delete the chart from your cluster:
 
 ```bash
 helm delete my-release
-````
+```
 
 The above command deletes all the kubernetes components associated with the
 chart and deletes the release.
@@ -90,7 +90,7 @@ chart and deletes the release.
 ## Requirements
 
 | Repository                                            | Name             | Version |
-|-------------------------------------------------------|------------------|---------|
+| ----------------------------------------------------- | ---------------- | ------- |
 | https://charts.bitnami.com/bitnami                    | mariadb          | 11.5.7  |
 | https://charts.bitnami.com/bitnami                    | redis            | 17.3.8  |
 | https://download.passbolt.com/charts/passbolt-library | passbolt-library | 0.2.7   |
@@ -98,7 +98,7 @@ chart and deletes the release.
 ## Values
 
 | Key                                                           | Type   | Default                                                                                                                                                                      | Description                                                                                                                                                               |
-|---------------------------------------------------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | affinity                                                      | object | `{}`                                                                                                                                                                         | Configure passbolt deployment affinity                                                                                                                                    |
 | app.cache.redis.enabled                                       | bool   | `true`                                                                                                                                                                       | By enabling redis the chart will mount a configuration file on /etc/passbolt/app.php That instructs passbolt to store sessions on redis and to use it as a general cache. |
 | app.cache.redis.sentinelProxy.enabled                         | bool   | `true`                                                                                                                                                                       | Inject a haproxy sidecar container configured as a proxy to redis sentinel Make sure that CACHE_CAKE_DEFAULT_SERVER is set to '127.0.0.1' to use the proxy                |
@@ -190,6 +190,8 @@ chart and deletes the release.
 | passboltEnv.secret.DATASOURCES_DEFAULT_USERNAME               | string | `"CHANGEME"`                                                                                                                                                                 | Configure passbolt default database username                                                                                                                              |
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_PASSWORD           | string | `"CHANGEME"`                                                                                                                                                                 | Configure passbolt default email service password                                                                                                                         |
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_USERNAME           | string | `"CHANGEME"`                                                                                                                                                                 | Configure passbolt default email service username                                                                                                                         |
+| passboltEnv.extraEnv                                          | array  | `[]`                                                                                                                                                                         | Configure passbolt extra environment variables                                                                                                                            |
+| passboltEnv.extraEnvFrom                                      | array  | `[]`                                                                                                                                                                         | Configure passbolt environment variables from existing configMaps and secrets                                                                                             |
 | podAnnotations                                                | object | `{}`                                                                                                                                                                         | Map of annotation for passbolt server pod                                                                                                                                 |
 | podSecurityContext                                            | object | `{}`                                                                                                                                                                         | Security Context configuration for passbolt server pod                                                                                                                    |
 | rbacEnabled                                                   | bool   | `true`                                                                                                                                                                       | Enable role based access control                                                                                                                                          |
