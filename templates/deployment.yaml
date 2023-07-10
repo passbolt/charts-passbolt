@@ -61,11 +61,17 @@ spec:
           env:
             - name: DATASOURCES_DEFAULT_HOST
               value: {{ include "passbolt.databaseServiceName" . }}
+            {{- with .Values.passboltEnv.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ $Name }}-cm-env
             - secretRef:
                 name: {{ $Name }}-sec-env
+            {{- with .Values.passboltEnv.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
       containers:
         - name: {{ $fullName }}
           command:
@@ -91,11 +97,17 @@ spec:
           env:
             - name: DATASOURCES_DEFAULT_HOST
               value: {{ include "passbolt.databaseServiceName" . }}
+            {{- with .Values.passboltEnv.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ $Name }}-cm-env
             - secretRef:
                 name: {{ $Name }}-sec-env
+            {{- with .Values.passboltEnv.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           volumeMounts:
             {{- if .Values.app.cache.redis.enabled }}
             - mountPath: "/etc/passbolt/app.php"
@@ -134,7 +146,7 @@ spec:
               name: {{ $fullName }}-sec-redis-proxy
               readOnly: true
           resources:
-            {{- toYaml .Values.redisProxyResources | nindent 12 }}
+            {{- toYaml .Values.app.cache.redis.sentinelProxy.resources | nindent 12 }}
         {{- end -}}
       {{- with .Values.nodeSelector }}
       nodeSelector:

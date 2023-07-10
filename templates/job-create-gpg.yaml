@@ -72,11 +72,17 @@ spec:
           env:
             - name: DATASOURCES_DEFAULT_HOST
               value: {{ include "passbolt.databaseServiceName" . }}
+            {{- with .Values.passboltEnv.extraEnv }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ $Name }}-cm-env
             - secretRef:
                 name: {{ $Name }}-sec-env
+            {{- with .Values.passboltEnv.extraEnvFrom }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
           volumeMounts:
             - name: {{ $fullName }}-vol-success
               mountPath: /tmp/pod
