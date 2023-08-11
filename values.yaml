@@ -102,7 +102,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.0.2-2-ce
+    tag: 4.1.2-1-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -123,12 +123,14 @@ app:
         # -- Configure redis sentinel container resources
         resources: {}
         # -- Configure the passbolt deployment resources
+  extraPodLabels: {}
   resources: {}
 
 # -- Enable email cron
 cronJobEmail:
   enabled: true
   schedule: "* * * * *"
+  extraPodLabels: {}
 
 ## Passbolt environment parameters
 
@@ -150,6 +152,9 @@ jwtPath: /etc/passbolt/jwt
 jwtServerPrivate:
 # -- JWT server public key in base64
 jwtServerPublic:
+
+jobCreateGpgKeys:
+  extraPodLabels: {}
 
 passboltEnv:
   plain:

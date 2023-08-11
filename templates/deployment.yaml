@@ -20,6 +20,9 @@ spec:
     metadata:
       labels:
         {{- include "passbolt-library.selectorLabels" . | nindent 8 }}
+        {{- with .Values.app.extraPodLabels }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/sec-env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
         checksum/sec-gpg: {{ include (print $.Template.BasePath "/secret-gpg.yaml") . | sha256sum }}

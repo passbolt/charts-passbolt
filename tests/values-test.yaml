@@ -44,6 +44,8 @@ mariadb:
 ## Passbolt container and sidecar parameters
 app:
   initImage:
+    # -- Configure pasbolt deployment init container image client for database
+    client: mariadb
     # -- Configure pasbolt deployment image repsitory
     repository: mariadb
     # -- Configure pasbolt deployment image pullPolicy
@@ -56,7 +58,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 3.9.0-2-ce
+    tag: 4.1.2-1-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -74,20 +76,24 @@ app:
           repository: haproxy
           # -- Configure redis sentinel image tag
           tag: "latest"
+        # -- Configure redis sentinel container resources
+        resources: {}
         # -- Configure the passbolt deployment resources
+  podLabels: {}
   resources: {}
 
 # -- Enable email cron
 cronJobEmail:
   enabled: true
   schedule: "* * * * *"
+  podLabels: {}
 
 ## Passbolt environment parameters
 
 # -- Pro subscription key in base64 only if you are using pro version
-subscriptionKey:
+# subscriptionKey:
 # -- Configure passbolt subscription key path
-subscription_keyPath: /etc/passbolt/subscription_key.txt
+# subscription_keyPath: /etc/passbolt/subscription_key.txt
 
 # -- Configure passbolt gpg directory
 gpgPath: /etc/passbolt/gpg
@@ -102,6 +108,9 @@ jwtPath: /etc/passbolt/jwt
 jwtServerPrivate:
 # -- JWT server public key in base64
 jwtServerPublic:
+
+jobCreateGpgKeys:
+  podLabels: {}
 
 passboltEnv:
   plain:
@@ -128,7 +137,7 @@ passboltEnv:
     # -- Configure passbolt default email from
     EMAIL_DEFAULT_FROM: no-reply@passbolt.local
     # -- Configure passbolt default email host
-    EMAIL_TRANSPORT_DEFAULT_HOST:
+    EMAIL_TRANSPORT_DEFAULT_HOST: 127.0.0.1
     # -- Toggle passbolt tls
     EMAIL_TRANSPORT_DEFAULT_TLS: true
     # -- Configure passbolt jwt private key path
@@ -211,14 +220,12 @@ networkPolicy:
   # -- Configure network policies namespaceLabel for namespaceSelector
   namespaceLabel: ingress-nginx
 
-
 # -- Configure image pull secrets
 imagePullSecrets: []
 # -- Value to override the chart name on default
 nameOverride: ""
 # -- Value to override the whole fullName
 fullnameOverride: ""
-
 
 serviceAccount:
   # -- Specifies whether a service account should be created
@@ -242,6 +249,8 @@ service:
   targetPort: 443
   # -- Configure passbolt service port name
   name: https
+  # -- Annotations to add to the service
+  annotations: {}
 
 ingress:
   # -- Enable passbolt ingress
@@ -269,3 +278,9 @@ tolerations: []
 
 # -- Configure passbolt deployment affinity
 affinity: {}
+
+# -- Add additional volumes, e.g. for overwriting config files
+extraVolumes: ""
+
+  # -- Add additional volume mounts, e.g. for overwriting config files
+extraVolumeMounts: ""
