@@ -19,6 +19,9 @@ spec:
         metadata:
           labels:
            {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 12 }}
+           {{- with .Values.cronJobEmail.extraPodLabels }}
+             {{- toYaml . | nindent 12 }}
+           {{- end }}
         spec:
           serviceAccountName: {{ $Name }}-sa-common
           restartPolicy: OnFailure

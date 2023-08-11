@@ -18,6 +18,9 @@ spec:
     metadata:
       labels:
       {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 8 }}
+      {{- with .Values.jobCreateGpgKeys.extraPodLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       serviceAccountName: {{ $Name }}-sa-{{ $action }}
       restartPolicy: OnFailure

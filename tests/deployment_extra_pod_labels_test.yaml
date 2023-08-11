@@ -1,0 +1,37 @@
+---
+suite: extra pod labels
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: deployment should have extra labels
+    templates:
+      - deployment.yaml
+    set:
+      app.extraPodLabels:
+        test-label: "test-value"
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels.test-label
+          value: "test-value"
+  - it: job create gpgp keys should have extra labels
+    templates:
+      - job-create-gpg.yaml
+    set:
+      jobCreateGpgKeys.extraPodLabels:
+        test-label: "test-value"
+    asserts:
+      - equal:
+          path: spec.template.metadata.labels.test-label
+          value: "test-value"
+  - it: cronjob should have extra labels
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      cronJobEmail.extraPodLabels:
+        test-label: "test-value"
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.metadata.labels.test-label
+          value: "test-value"
