@@ -5,6 +5,18 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.0...HEAD)
 
+## [0.4.1] - 2023-06-11
+
+This release adds the ability to inject extra pod labels on passbolt pods and bumps the redis chart version.
+
+### Added
+
+- [#40](https://github.com/passbolt/charts-passbolt/issues/40) Added ability to inject extra pod labels
+
+### Fixed
+
+- [#41](https://github.com/passbolt/charts-passbolt/issues/41) Update Redis chart to v17.15.2 
+
 ## [0.4.0] - 2023-06-28
 
 This release includes breaking changes .Values.redisProxyResources now is .Values.app.cache.redis.sentinelProxy.resources
