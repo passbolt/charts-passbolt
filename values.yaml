@@ -102,7 +102,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.1.2-1-ce
+    tag: 4.2.0-1-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
