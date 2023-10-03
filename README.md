@@ -75,7 +75,6 @@ Once the chart is deployed, you can create your first user by running the follow
 kubectl exec -it <passbolt-pod-name> -- su -c "bin/cake passbolt register_user -u <email> -f <firstname> -l <lastname> -r admin" -s /bin/bash www-data
 ```
 
-
 ## Uninstalling the chart
 
 To uninstall/delete the chart from your cluster:
@@ -90,7 +89,7 @@ chart and deletes the release.
 ## Requirements
 
 | Repository                                            | Name             | Version |
-|-------------------------------------------------------|------------------|---------|
+| ----------------------------------------------------- | ---------------- | ------- |
 | https://charts.bitnami.com/bitnami                    | mariadb          | 11.5.7  |
 | https://charts.bitnami.com/bitnami                    | redis            | 17.15.2 |
 | https://download.passbolt.com/charts/passbolt-library | passbolt-library | 0.2.7   |
@@ -98,7 +97,7 @@ chart and deletes the release.
 ## Values
 
 | Key                                                           | Type   | Default                                                                                                                                                                      | Description                                                                                                                                                               |
-|---------------------------------------------------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------------------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | affinity                                                      | object | `{}`                                                                                                                                                                         | Configure passbolt deployment affinity                                                                                                                                    |
 | app.cache.redis.enabled                                       | bool   | `true`                                                                                                                                                                       | By enabling redis the chart will mount a configuration file on /etc/passbolt/app.php That instructs passbolt to store sessions on redis and to use it as a general cache. |
 | app.cache.redis.sentinelProxy.enabled                         | bool   | `true`                                                                                                                                                                       | Inject a haproxy sidecar container configured as a proxy to redis sentinel Make sure that CACHE_CAKE_DEFAULT_SERVER is set to '127.0.0.1' to use the proxy                |
@@ -213,3 +212,10 @@ chart and deletes the release.
 | serviceAccount.create                                         | bool   | `true`                                                                                                                                                                       | Specifies whether a service account should be created                                                                                                                     |
 | tolerations                                                   | list   | `[]`                                                                                                                                                                         | Configure passbolt deployment tolerations                                                                                                                                 |
 
+## Updating REAME.md
+
+We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release
+
+```
+helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md 
+```
