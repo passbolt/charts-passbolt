@@ -1,0 +1,105 @@
+# Passbolt Helm chart
+
+<h3 align="center">
+    <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
+</h3>
+
+{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
+
+Passbolt is an open source, security first password manager with strong focus on
+collaboration.
+
+## TL;DR
+
+The following command is not recommended for production deployments as it will
+use default passwords for internal databases:
+
+```bash
+helm repo add my-repo https://download.passbolt.com/charts/passbolt
+helm install my-release my-repo/passbolt
+```
+
+Production workloads should change the fields with values 'CHANGEME' on values.yaml
+and deploy the chart as follows:
+
+```bash
+helm repo add my-repo https://download.passbolt.com/charts/passbolt
+helm install my-release my-repo/passbolt -f values.yaml
+```
+
+Or using `--set` flags to modify certain chart options:
+
+```bash
+helm repo add my-repo https://download.passbolt.com/charts/passbolt
+helm install my-release my-repo/passbolt \
+  --set redis.auth.password=my_redis_password \
+  --set passboltEnv.CACHE_CAKE_DEFAULT_PASSWORD=my_redis_password \
+  --set mariadb.auth.password=my_mariadb_password \
+  --set passboltEnv.secret.DATASOURCES_DEFAULT_PASSWORD=my_mariadb_password
+```
+
+## Introduction
+
+This chart deploys [passbolt](https://www.passbolt.com) on [kubernetes](https://kubernetes.io) using the [Helm](https://helm.sh/) package manager.
+
+Passbolt comes in three editions:
+
+- [Community edition](https://www.passbolt.com/ce/docker)
+- [Professional edition](https://signup.passbolt.com/pricing/pro)
+- [Cloud edition](https://signup.passbolt.com/pricing/cloud)
+
+This chart supports the deployment of Community edition and Professional edition.
+
+## Prerequisites
+
+- Kubernetes 1.19+ or 1.23+ if you want to use hpa
+- Helm 3.x
+- Passbolt docker >= 3.12.2-1
+
+## Installing the chart
+
+Installing the chart under the name `my-release`:
+
+```bash
+helm install my-release my-repo
+```
+
+The above command deploys passbolt with default settings on your kubernetes cluster.
+Check the [configuration](#Configuration) section to check which parameters you can fine tune.
+
+## Creating first user
+
+Once the chart is deployed, you can create your first user by running the following command:
+
+```bash
+kubectl exec -it <passbolt-pod-name> -- su -c "bin/cake passbolt register_user -u <email> -f <firstname> -l <lastname> -r admin" -s /bin/bash www-data
+```
+
+## Uninstalling the chart
+
+To uninstall/delete the chart from your cluster:
+
+```bash
+helm delete my-release
+```
+
+The above command deletes all the kubernetes components associated with the
+chart and deletes the release.
+
+## Requirements
+
+| Repository                                            | Name             | Version |
+|-------------------------------------------------------|------------------|---------|
+| https://charts.bitnami.com/bitnami                    | mariadb          | 11.5.7  |
+| https://charts.bitnami.com/bitnami                    | redis            | 17.15.2 |
+| https://download.passbolt.com/charts/passbolt-library | passbolt-library | 0.2.7   |
+
+{{ template "chart.valuesSection" . }}
+
+## Updating REAME.md
+
+We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release 
+
+```
+helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md  
+```
