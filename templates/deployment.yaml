@@ -34,16 +34,14 @@ spec:
         checksum/sec-redis-proxy: {{ include (print $.Template.BasePath "/secret-redis-proxy.yaml") . | sha256sum }}
         {{- end }}
     spec:
-      {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "passbolt.pullSecrets" ( dict "images" (list .Values.imagePullSecrets ) "global" .Values.global) | nindent 6 }}
       serviceAccountName: {{ $Name }}-sa-common
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: {{ $fullName }}-init
-          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.initImage) | nindent 10 }}
+          image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.initImage "global" .Values.global) }}
+          imagePullPolicy: {{ .Values.app.initImage.pullPolicy }}
           command:
             - "/bin/bash"
           args:
@@ -85,7 +83,8 @@ spec:
               set -e
               > /etc/supervisor/conf.d/cron.conf
               /docker-entrypoint.sh
-          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
+          image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
+          imagePullPolicy: .Values.app.image.pullPolicy
           ports:
           - name: https
             containerPort: {{ .Values.service.targetPort }}
@@ -142,7 +141,8 @@ spec:
             {{- toYaml .Values.app.resources | nindent 12 }}
         {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
         - name: {{ $fullName }}-redisproxy
-          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 10 }}
+          image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.cache.redis.sentinelProxy.image "global" .Values.global) }}
+          imagePullPolicy: .Values.app.cache.redis.sentinelProxy.pullPolicy
           volumeMounts:
             - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
               subPath: haproxy.cfg
