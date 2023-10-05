@@ -8,6 +8,10 @@
 # -- Install redis as a depending chart
 redisDependencyEnabled: true
 
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
 # Configure redis dependency chart
 redis:
   auth:
@@ -90,6 +94,7 @@ app:
   initImage:
     # -- Configure pasbolt deployment init container image client for database
     client: mariadb
+    registry: ""
     # -- Configure pasbolt deployment image repsitory
     repository: mariadb
     # -- Configure pasbolt deployment image pullPolicy
@@ -98,6 +103,7 @@ app:
     tag: latest
   image:
     # -- Configure pasbolt deployment image repsitory
+    registry: ""
     repository: passbolt/passbolt
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
@@ -116,6 +122,7 @@ app:
         enabled: true
         # -- Configure redis sentinel proxy image
         image:
+          registry: ""
           # -- Configure redis sentinel image repository
           repository: haproxy
           # -- Configure redis sentinel image tag
