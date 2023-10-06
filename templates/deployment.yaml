@@ -166,7 +166,7 @@ spec:
       volumes:
         - name: {{ $fullName }}-sec-tls
           secret:
-            secretName: {{ $Name }}-sec-tls
+            secretName: {{ include "passbolt.container.tls.secretName" (dict "name" $Name "ingressTLS" .Values.ingress.tls "globalTLS" $.Values.tls ) }}
         - name: {{ $fullName }}-sec-gpg
           secret:
             secretName: {{ $Name }}-sec-gpg

@@ -314,6 +314,11 @@ service:
   # -- Annotations to add to the service
   annotations: {}
 
+
+tls:
+  autogenerate: true
+  #existingSecret: ""
+
 ingress:
   # -- Enable passbolt ingress
   enabled: false
@@ -328,8 +333,10 @@ ingress:
           pathType: ImplementationSpecific
   # -- Configure passbolt ingress tls
   tls:
+    # If secretname is not empty, the tls entry will use it, otherwise will 
+    # have a default name based on the release
     # @ignored
-    - secretName: tls
+    - secretName: "tls"
       hosts:
         - passbolt.local
 # -- Configure passbolt deployment nodeSelector
