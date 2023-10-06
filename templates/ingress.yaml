@@ -33,7 +33,7 @@ spec:
         {{- range .hosts }}
         - {{ . | quote }}
         {{- end }}
-      secretName: {{ $Name }}-sec-{{ .secretName }}
+      secretName: {{ include "passbolt.tls.secretName" (dict "name" $Name "tls" . "globalTLS" $.Values.tls ) }}
     {{- end }}
   {{- end }}
   rules:
