@@ -22,11 +22,12 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "passbolt.pullSecrets" ( dict "images" (list .Values.imagePullSecrets ) "global" .Values.global) | nindent 6 }}
       serviceAccountName: {{ $Name }}-sa-{{ $action }}
       restartPolicy: OnFailure
       containers:
         - name: {{ $fullName }}
-          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 10 }}
+          image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
           command:
             - "/bin/bash"
           args:

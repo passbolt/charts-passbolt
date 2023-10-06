@@ -8,6 +8,10 @@
 # -- Install redis as a depending chart
 redisDependencyEnabled: true
 
+global:
+  imageRegistry: ""
+  imagePullSecrets: []
+
 # Configure redis dependency chart
 redis:
   auth:
@@ -90,6 +94,7 @@ app:
   initImage:
     # -- Configure pasbolt deployment init container image client for database
     client: mariadb
+    registry: ""
     # -- Configure pasbolt deployment image repsitory
     repository: mariadb
     # -- Configure pasbolt deployment image pullPolicy
@@ -98,11 +103,12 @@ app:
     tag: latest
   image:
     # -- Configure pasbolt deployment image repsitory
+    registry: ""
     repository: passbolt/passbolt
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.2.0-1-ce
+    tag: 4.3.0-1-ce
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
@@ -116,6 +122,7 @@ app:
         enabled: true
         # -- Configure redis sentinel proxy image
         image:
+          registry: ""
           # -- Configure redis sentinel image repository
           repository: haproxy
           # -- Configure redis sentinel image tag
@@ -307,6 +314,11 @@ service:
   # -- Annotations to add to the service
   annotations: {}
 
+
+tls:
+  autogenerate: true
+  #existingSecret: ""
+
 ingress:
   # -- Enable passbolt ingress
   enabled: false
@@ -321,8 +333,10 @@ ingress:
           pathType: ImplementationSpecific
   # -- Configure passbolt ingress tls
   tls:
+    # If secretname is not empty, the tls entry will use it, otherwise will 
+    # have a default name based on the release
     # @ignored
-    - secretName: tls
+    - secretName: "tls"
       hosts:
         - passbolt.local
 # -- Configure passbolt deployment nodeSelector

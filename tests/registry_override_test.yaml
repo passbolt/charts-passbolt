@@ -1,0 +1,100 @@
+---
+suite: registry override
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should set image just with repository and tag
+    templates:
+      - deployment.yaml
+    set:
+      app.image.tag: testingtag
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: passbolt/passbolt:testingtag
+          count: 1
+          any: true
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: haproxy:latest
+          count: 1
+          any: true
+
+  - it: should set image adding a registry on all images using the global.imageRegistry field
+    templates:
+      - deployment.yaml
+    set:
+      app.image.tag: testingtag
+      global.imageRegistry: testingRegistry
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: testingRegistry/passbolt/passbolt:testingtag
+          count: 1
+          any: true
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: testingRegistry/haproxy:latest
+          count: 1
+          any: true
+
+  - it: should set image adding a registry just on the images that have a .registry field set
+    templates:
+      - deployment.yaml
+    set:
+      app.image.tag: testingtag
+      app.image.registry: testingRegistry
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: testingRegistry/passbolt/passbolt:testingtag
+          count: 1
+          any: true
+
+  - it: should set image just with repository and tag on the job-create-gpg
+    templates:
+      - job-create-gpg.yaml
+    set:
+      app.image.tag: testingtag
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: passbolt/passbolt:testingtag
+          count: 1
+          any: true
+
+  - it: should set image adding a registry on all images using the global.imageRegistry field on job-create-gpg
+    templates:
+      - job-create-gpg.yaml
+    set:
+      app.image.tag: testingtag
+      global.imageRegistry: testingRegistry
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: testingRegistry/passbolt/passbolt:testingtag
+          count: 1
+          any: true
+
+  - it: should set image adding a registry when app.image.registry field is not empty on job-create-gpg
+    templates:
+      - job-create-gpg.yaml
+    set:
+      app.image.tag: testingtag
+      app.image.registry: testingRegistry
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            image: testingRegistry/passbolt/passbolt:testingtag
+          count: 1
+          any: true

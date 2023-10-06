@@ -91,3 +91,62 @@ Show error message if the user didn't set the gpg key after upgrade
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{- define "passbolt.tls.secretName" -}}
+{{- if .globalTLS.existingSecret -}}
+  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- else }}
+  {{- printf "%s-sec-%s" .name .tls.secretName -}}
+{{- end }}
+{{- end }}
+
+{{- define "passbolt.container.tls.secretName" -}}
+{{- $name := .name }}
+{{- if .globalTLS.existingSecret -}}
+  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- else }}
+  {{- with (index .ingressTLS 0 ) -}}
+    {{- printf "%s-sec-%s" $name .secretName -}}
+  {{- end }}
+{{- end }}
+{{- end }}
+
+{{- define "passbolt.image" -}}
+{{- $registryName := .imageRoot.registry -}}
+{{- $repositoryName := .imageRoot.repository -}}
+{{- $separator := ":" -}}
+{{- $termination := .imageRoot.tag | toString -}}
+{{- if .global }}
+  {{- if .global.imageRegistry }}
+    {{- $registryName = .global.imageRegistry -}}
+  {{- end -}}
+{{- end -}}
+{{- if $registryName }}
+    {{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
+{{- else -}}
+    {{- printf "%s%s%s"  $repositoryName $separator $termination -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "passbolt.pullSecrets" -}}
+  {{- $pullSecrets := list }}
+
+  {{- if .global }}
+    {{- range .global.imagePullSecrets -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- range .images -}}
+    {{- range . -}}
+      {{- $pullSecrets = append $pullSecrets . -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if (not (empty $pullSecrets)) }}
+imagePullSecrets:
+    {{- range $pullSecrets | uniq }}
+  - name: {{ . }}
+    {{- end }}
+  {{- end }}
+{{- end -}}

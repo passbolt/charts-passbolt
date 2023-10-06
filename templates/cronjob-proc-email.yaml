@@ -23,6 +23,7 @@ spec:
              {{- toYaml . | nindent 12 }}
            {{- end }}
         spec:
+          {{- include "passbolt.pullSecrets" ( dict "images" (list .Values.imagePullSecrets ) "global" .Values.global) | nindent 10 }}
           serviceAccountName: {{ $Name }}-sa-common
           restartPolicy: OnFailure
           securityContext:
