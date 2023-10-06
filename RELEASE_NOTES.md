@@ -12,4 +12,4 @@ versions in favour of the new tls{} value to specify secrets.
 [Deprecation warning]: ingress.hosts will be deprecated in future
 versions too, new values will be announced.
 
-For more information please check our
+For more information please check our [changelog](https://github.com/passbolt/charts-passbolt/blob/0.4.3/CHANGELOG.md)

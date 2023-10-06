@@ -3,7 +3,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.3...HEAD)
+
+## [0.4.3] - 2023-10-06
+
+### Added
+- New values tls.existingSecret and tls.autogenerate to control injecting ssl certificates in passbolt containers and ingress
+
+### Fixed
+- [#51](https://github.com/passbolt/charts-passbolt/issues/51) ability to use external tls secret
+- [#49](https://github.com/passbolt/charts-passbolt/issues/49) ability to use custom registries and custom pullSecrets
+
+## [0.4.2] - 2023-08-31
+
+### Added
+- Bump passbolt version 4.1.2-1-ce
 
 ## [0.4.1] - 2023-06-11
 
