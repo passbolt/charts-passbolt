@@ -92,6 +92,25 @@ Show error message if the user didn't set the gpg key after upgrade
 {{- end }}
 {{- end }}
 
+{{- define "passbolt.tls.secretName" -}}
+{{- if .globalTLS.existingSecret -}}
+  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- else }}
+  {{- printf "%s-sec-%s" .name .tls.secretName -}}
+{{- end }}
+{{- end }}
+
+{{- define "passbolt.container.tls.secretName" -}}
+{{- $name := .name }}
+{{- if .globalTLS.existingSecret -}}
+  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- else }}
+  {{- with (index .ingressTLS 0 ) -}}
+    {{- printf "%s-sec-%s" $name .secretName -}}
+  {{- end }}
+{{- end }}
+{{- end }}
+
 {{- define "passbolt.image" -}}
 {{- $registryName := .imageRoot.registry -}}
 {{- $repositoryName := .imageRoot.repository -}}

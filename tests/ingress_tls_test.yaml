@@ -1,0 +1,44 @@
+---
+suite: ingress tls secretName
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should set tls secretName as the given value
+    templates:
+      - ingress.yaml
+    set:
+      ingress.enabled: true
+      ingress.tls[0].secretName: supersecretname
+    asserts:
+      - contains:
+          path: spec.tls
+          content:
+            secretName: test-passbolt-sec-supersecretname
+          any: true
+  - it: should set a default tls secretName 
+    templates:
+      - ingress.yaml
+    set:
+      ingress.enabled: true
+      ingress.tls[0].secretName: tls
+    asserts:
+      - contains:
+          path: spec.tls
+          content:
+              secretName: test-passbolt-sec-tls
+          any: true
+  - it: should set override secretName with a given name
+    templates:
+      - ingress.yaml
+    set:
+      ingress.enabled: true
+      ingress.tls[0].secretName: tls
+      tls.existingSecret: supersecret
+    asserts:
+      - contains:
+          path: spec.tls
+          content:
+              secretName: supersecret
+          any: true
