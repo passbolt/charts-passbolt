@@ -1,0 +1,32 @@
+---
+suite: image pull policy
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should have the correct pull policy
+    templates:
+      - deployment.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+      app.cache.redis.sentinelProxy.pullPolicy: always
+      app.image.pullPolicy: always
+      app.initImage.pullPolicy: always
+    asserts:
+      - contains:
+          path: spec.template.spec.containers
+          content:
+            imagePullPolicy: always
+          count: 2
+          any: true
+      - contains:
+          path: spec.template.spec.initContainers
+          content:
+            imagePullPolicy: always
+          any: true

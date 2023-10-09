@@ -314,9 +314,10 @@ service:
   # -- Annotations to add to the service
   annotations: {}
 
-
 tls:
+  # -- Generates a secret with a self-signed cerfificate that is injected on ingress and passbolt container
   autogenerate: true
+  # -- Name of an existing kubernetes secret that contains a SSL certificate to inject on ingress and passbolt container
   #existingSecret: ""
 
 ingress:
@@ -333,7 +334,7 @@ ingress:
           pathType: ImplementationSpecific
   # -- Configure passbolt ingress tls
   tls:
-    # If secretname is not empty, the tls entry will use it, otherwise will 
+    # If secretname is not empty, the tls entry will use it, otherwise will
     # have a default name based on the release
     # @ignored
     - secretName: "tls"
