@@ -99,4 +99,3 @@ tests:
     asserts:
       - isNotEmpty:
           path: spec.template.metadata.annotations.checksum/sec-redis-proxy
-

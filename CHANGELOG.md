@@ -3,7 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.3...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.4...HEAD)
+
+## [0.4.4] - 2023-10-09
+
+### Fixed
+- [#52](https://github.com/passbolt/charts-passbolt/issues/52) pullPolicy incorrect rendering
 
 ## [0.4.3] - 2023-10-06
 
@@ -29,7 +34,7 @@ This release adds the ability to inject extra pod labels on passbolt pods and bu
 
 ### Fixed
 
-- [#41](https://github.com/passbolt/charts-passbolt/issues/41) Update Redis chart to v17.15.2 
+- [#41](https://github.com/passbolt/charts-passbolt/issues/41) Update Redis chart to v17.15.2
 
 ## [0.4.0] - 2023-06-28
 
