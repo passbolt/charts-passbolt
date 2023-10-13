@@ -33,7 +33,7 @@ Or using `--set` flags to modify certain chart options:
 helm repo add my-repo https://download.passbolt.com/charts/passbolt
 helm install my-release my-repo/passbolt \
   --set redis.auth.password=my_redis_password \
-  --set passboltEnv.CACHE_CAKE_DEFAULT_PASSWORD=my_redis_password \
+  --set passboltEnv.secret.CACHE_CAKE_DEFAULT_PASSWORD=my_redis_password \
   --set mariadb.auth.password=my_mariadb_password \
   --set passboltEnv.secret.DATASOURCES_DEFAULT_PASSWORD=my_mariadb_password
 ```
