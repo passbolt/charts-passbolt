@@ -1,0 +1,58 @@
+---
+suite: deployment initContainer database
+release:
+  name: test
+tests:
+  - it: image should be postgresql when initImage is empty and app.database.kind is postgresql
+    templates:
+      - deployment.yaml
+    set:
+      app.initImage: null # this means emtpy haha
+      app.database.kind: "postgresql"
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: postgres
+      - matchRegex:
+          path: spec.template.spec.initContainers[0].args[1]
+          pattern: 'client="pg_isready"'
+  - it: image should be match what is defined on the app.initImage field and the dbclient should match app.initImage.client
+    templates:
+      - deployment.yaml
+    set:
+      app.initImage.repository: databaseImage
+      app.initImage.tag: test
+      app.initImage.client: test
+      app.database.kind: "postgresql"
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "databaseImage:test"
+      - matchRegex:
+          path: spec.template.spec.initContainers[0].args[1]
+          pattern: 'client="test"'
+  - it: image should be mariadb by default and database client is mariadb
+    templates:
+      - deployment.yaml
+    set:
+      app.initImage: null
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "mariadb"
+      - matchRegex:
+          path: spec.template.spec.initContainers[0].args[1]
+          pattern: 'client="mariadb"'
+  - it: image should be mariadb by default with registry override option and database client is mariadb
+    templates:
+      - deployment.yaml
+    set:
+      app.initImage: null
+      global.imageRegistry: registry.test
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].image
+          value: "registry.test/mariadb"
+      - matchRegex:
+          path: spec.template.spec.initContainers[0].args[1]
+          pattern: 'client="mariadb"'

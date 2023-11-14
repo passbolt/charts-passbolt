@@ -65,11 +65,19 @@ Create the name of the service account to use
 Render the value of the database service
 */}}
 {{- define "passbolt.databaseServiceName" -}}
+{{- if and ( eq .Values.mariadbDependencyEnabled true ) (or ( eq .Values.app.database.kind "mariadb") ( eq .Values.app.database.kind "mysql") ) }}
 {{- if eq .Values.mariadb.architecture "replication" }}
 {{- default ( printf "%s-%s-primary" .Release.Name "mariadb" ) .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
 {{- else }}
 {{- default ( printf "%s-%s" .Release.Name "mariadb" ) .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
 {{- end -}}
+{{- else if and ( eq .Values.postgresqlDependencyEnabled true ) ( eq .Values.app.database.kind "postgresql" ) }}
+{{- default ( printf "%s-postgresql" .Release.Name ) .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
+{{- else if ( hasKey .Values.passboltEnv.plain "DATASOURCES_DEFAULT_HOST" )  -}}
+{{- printf "%s" .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST }}
+{{- else }}
+{{- fail "DATASOURCES_DEFAULT_HOST can't be empty when mariadbDependencyEnabled and postgresqlDependencyEnabled are disabled"}}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -116,16 +124,47 @@ Show error message if the user didn't set the gpg key after upgrade
 {{- $repositoryName := .imageRoot.repository -}}
 {{- $separator := ":" -}}
 {{- $termination := .imageRoot.tag | toString -}}
-{{- if .global }}
-  {{- if .global.imageRegistry }}
+{{- if .global -}}
+  {{- if .global.imageRegistry -}}
     {{- $registryName = .global.imageRegistry -}}
   {{- end -}}
 {{- end -}}
-{{- if $registryName }}
+{{- if $registryName -}}
     {{- printf "%s/%s%s%s" $registryName $repositoryName $separator $termination -}}
 {{- else -}}
     {{- printf "%s%s%s"  $repositoryName $separator $termination -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "passbolt.initImage" -}}
+{{- $registryName := "" -}}
+{{- $repositoryName := "" -}}
+{{- $image := "" -}}
+{{- $imagePullPolicy := "" -}}
+{{- if .Values.app.initImage }}
+  {{- $image = (include "passbolt.image" (dict "imageRoot" .Values.app.initImage "global" .Values.global)) }}
+  {{- $imagePullPolicy = (default "IfNotPresent" .Values.app.initImage.pullPolicy) }}
+{{- else -}}
+  {{- if .Values.global -}}
+    {{- if .Values.global.imageRegistry -}}
+      {{- $registryName = .Values.global.imageRegistry -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if or (eq .Values.app.database.kind "mariadb" ) ( eq .Values.app.database.kind "mysql" ) }}
+    {{- $repositoryName = "mariadb" -}}
+  {{- else if eq .Values.app.database.kind "postgresql" }}
+    {{- $repositoryName = "postgres" -}}
+  {{- end }}
+  {{- if not (eq $registryName "") }}
+    {{- $image = printf "%s/%s" $registryName $repositoryName }}
+    {{- $imagePullPolicy = default "IfNotPresent" .Values.global.imagePullPolicy }}
+  {{- else }}
+    {{- $image = printf "%s" $repositoryName }}
+    {{- $imagePullPolicy = default "IfNotPresent" .Values.global.imagePullPolicy }}
+  {{- end -}}
+{{- end -}}
+image: {{ printf "%s" $image }}
+imagePullPolicy: {{ printf "%s" $imagePullPolicy }}
 {{- end -}}
 
 {{- define "passbolt.pullSecrets" -}}
@@ -149,4 +188,14 @@ imagePullSecrets:
   - name: {{ . }}
     {{- end }}
   {{- end }}
+{{- end -}}
+
+{{- define "passbolt.databaseClient" -}}
+{{- $client := "mariadb" -}}
+{{- if .Values.app.initImage -}}
+  {{- $client = (default $client .Values.app.initImage.client ) }}
+{{- else if eq .Values.app.database.kind "postgresql" -}}
+  {{- $client = "pg_isready" -}}
+{{- end -}}
+{{- printf "%s" $client }}
 {{- end -}}
