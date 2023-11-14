@@ -1,0 +1,33 @@
+---
+suite: images
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should have the correct pull policy
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      redis.auth.enabled: true
+      redis.replica.replicaCount: 2
+      autoscaling.enabled: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.image.repository: haproxy
+      app.cache.redis.sentinelProxy.image.tag: latest
+      app.cache.redis.sentinelProxy.pullPolicy: always
+      app.image.pullPolicy: always
+      app.initImage.pullPolicy: always
+    asserts:
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers
+          content:
+            image: passbolt/passbolt:4.1.2-1-ce
+          count: 1
+          any: true
+      - contains:
+          path: spec.jobTemplate.spec.template.spec.containers
+          content:
+            image: haproxy:latest
+          count: 1
+          any: true

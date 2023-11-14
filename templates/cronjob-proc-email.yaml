@@ -31,7 +31,8 @@ spec:
             fsGroup: 33
           containers:
             - name: {{ $fullName }}
-          {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.image) | nindent 14 }}
+              image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
+              imagePullPolicy: {{ .Values.app.image.pullPolicy }}
               command:
                 - "/bin/bash"
               args:
@@ -63,7 +64,8 @@ spec:
                   readOnly: true
             {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
             - name: {{ $fullName }}-redisproxy
-              {{ include "passbolt-library.container-repositories.tpl" (dict "Values" . "Image" .Values.app.cache.redis.sentinelProxy.image) | nindent 14 }}
+              image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.cache.redis.sentinelProxy.image "global" .Values.global) }}
+              imagePullPolicy: {{ .Values.app.cache.redis.sentinelProxy.pullPolicy }}
               command:
                 - "/bin/bash"
               args:
