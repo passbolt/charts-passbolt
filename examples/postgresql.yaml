@@ -12,4 +12,3 @@ postgresql:
 app:
   database:
     kind: postgresql
-
