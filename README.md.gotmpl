@@ -11,12 +11,19 @@ collaboration.
 
 ## TL;DR
 
-The following command is not recommended for production deployments as it will
+The following commands are not recommended for production deployments as they will
 use default passwords for internal databases:
 
 ```bash
 helm repo add my-repo https://download.passbolt.com/charts/passbolt
 helm install my-release my-repo/passbolt
+```
+
+In case you prefer to use postgresql intead of mariadb, a sample config is provided in the examples directory:
+
+```
+helm repo add my-repo https://download.passbolt.com/charts/passbolt
+helm install my-release my-repo/passbolt -f examples/postgresql.yaml
 ```
 
 Production workloads should change the fields with values 'CHANGEME' on values.yaml

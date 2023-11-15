@@ -16,3 +16,7 @@ metadata:
     {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
 data:
 {{ include "passbolt-library.configmap-envvar.tpl" .Values.passboltEnv.plain | nindent 2 }}
+{{- if eq .Values.app.database.kind "postgresql" }}
+    DATASOURCES_DEFAULT_DRIVER: 'Cake\Database\Driver\Postgres'
+    DATASOURCES_DEFAULT_ENCODING: "utf8"
+{{- end -}}

@@ -7,6 +7,20 @@
 
 # -- Install redis as a depending chart
 redisDependencyEnabled: true
+# -- Install mariadb as a depending chart
+mariadbDependencyEnabled: true
+# -- Install mariadb as a depending chart
+postgresqlDependencyEnabled: false
+
+# Configure postgresql as a dependency chart
+#postgresql:
+#  auth:
+#    # -- Configure postgresql auth username
+#    username: CHANGEME
+#    # -- Configure postgresql auth password
+#    password: CHANGEME
+#    # -- Configure postgresql auth database
+#    database: passbolt
 
 global:
   imageRegistry: ""
@@ -25,8 +39,6 @@ redis:
 
 ## MariaDB dependency parameters
 
-# -- Install mariadb as a depending chart
-mariadbDependencyEnabled: true
 # Configure mariadb as a dependency chart
 mariadb:
   # -- Configure mariadb architecture
@@ -91,16 +103,16 @@ mariadb:
 
 ## Passbolt container and sidecar parameters
 app:
-  initImage:
-    # -- Configure pasbolt deployment init container image client for database
-    client: mariadb
-    registry: ""
-    # -- Configure pasbolt deployment image repsitory
-    repository: mariadb
-    # -- Configure pasbolt deployment image pullPolicy
-    pullPolicy: IfNotPresent
-    # -- Overrides the image tag whose default is the chart appVersion.
-    tag: latest
+  #initImage:
+  #  # -- Configure pasbolt deployment init container image client for database
+  #  client: mariadb
+  #  registry: ""
+  #  # -- Configure pasbolt deployment image repsitory
+  #  repository: mariadb
+  #  # -- Configure pasbolt deployment image pullPolicy
+  #  pullPolicy: IfNotPresent
+  #  # -- Overrides the image tag whose default is the chart appVersion.
+  #  tag: latest
   image:
     # -- Configure pasbolt deployment image repsitory
     registry: ""
@@ -108,7 +120,10 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.3.0-1-ce
+    tag: 4.4.0-1-ce
+  # Allowed options: mariadb, mysql or postgresql
+  database:
+    kind: mariadb
   cache:
     # Use CACHE_CAKE_DEFAULT_* variables to configure the connection to redis instance
     # on the passboltEnv configuration section
