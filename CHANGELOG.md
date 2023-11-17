@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.5.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.6.0...HEAD)
+
+## [0.6.0] - 2023-11-17
+
+### Fixed
+
+- [#33](https://github.com/passbolt/charts-passbolt/issues/33) Helm charts generating incorrect jwt key and pem
 
 ## [0.5.0] - 2023-11-15
 
