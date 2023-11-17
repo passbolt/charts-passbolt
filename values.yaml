@@ -171,9 +171,12 @@ gpgServerKeyPublic: ""
 # -- Configure passbolt jwt directory
 jwtPath: /etc/passbolt/jwt
 # -- JWT server private key in base64
-jwtServerPrivate:
+jwtServerPrivate: ""
 # -- JWT server public key in base64
-jwtServerPublic:
+jwtServerPublic: ""
+jwtCreateKeysForced: false
+jobCreateJwtKeys:
+  extraPodLabels: {}
 
 jobCreateGpgKeys:
   extraPodLabels: {}

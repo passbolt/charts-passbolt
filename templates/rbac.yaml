@@ -19,6 +19,7 @@ rules:
   - {{ $Name }}-cm-env
   - {{ $Name }}-sec-env
   - {{ $Name }}-sec-gpg
+  - {{ $Name }}-sec-jwt
   - {{ $Name }}-sec-tls
   - {{ $Name }}-sec-tls-ing
   - {{ $Name }}-sec-subscription
@@ -71,6 +72,54 @@ rules:
 ---
 {{ $type := "rolebind" -}}
 {{- $action := "create-gpg-keys" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action }}
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ $fullName }}
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-1"
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: {{ $Name }}-sa-{{ $action }}
+roleRef:
+  kind: Role
+  name: {{ $Name }}-role-{{ $action }}
+  apiGroup: rbac.authorization.k8s.io
+---
+{{ $type := "role" -}}
+{{- $action := "create-jwt-keys" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ $fullName }}
+  annotations:
+    helm.sh/hook: pre-install, pre-upgrade
+    helm.sh/hook-weight: "-1"
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+rules:
+- apiGroups: [""]
+  resources: [ "configmaps", "secrets" ]
+  resourceNames:
+  - {{ $Name }}-cm-env
+  - {{ $Name }}-sec-jwt
+  - {{ $Name }}-sec-env
+  - {{ $Name }}-sec-redis-proxy
+  verbs: ["get", "patch"]
+---
+{{ $type := "rolebind" -}}
+{{- $action := "create-jwt-keys" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
 {{- $fullName := printf "%s-%s-%s" $Name $type $action }}
 kind: RoleBinding
