@@ -81,22 +81,37 @@ Render the value of the database service
 {{- end }}
 
 {{/*
-Show error message if the user didn't set the gpg key after upgrade
+Show error message if the user didn't set the needed values during upgrade
 */}}
-{{- define "passbolt.validateGpgKey" -}}
+{{- define "passbolt.validateValues" -}}
+{{- $arguments := "" }}
+{{- $message := "" -}}
+{{- $header := "" -}}
 {{ if and $.Release.IsUpgrade (or ( not $.Values.gpgServerKeyPublic ) ( not $.Values.gpgServerKeyPrivate )) }}
 {{- $secretName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "sec" "gpg" -}}
 {{- $dpName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
 {{- $containerName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
-{{- $message := "" -}}
-{{- $message := printf "  GPG key values should not be empty after during upgrade process. Please update your values file or add the following arguments to the helm upgrade commmand:" -}}
-{{- $message := printf "%s\n%s" $message (printf "  export PRIVATE_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey_private\\.asc") -}}
-{{- $message := printf "%s\n%s" $message (printf "  export PUBLIC_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey\\.asc") -}}
-{{- $message := printf "%s\n%s" $message (printf "  export FINGERPRINT=$(kubectl exec deploy/%s -c %s -- grep PASSBOLT_GPG_SERVER_KEY_FINGERPRINT /etc/environment | awk -F= '{gsub(/\"/, \"\"); print $2}')" $dpName $containerName) -}}
-{{- $message := printf "%s\n%s" $message (printf "  And add '--set %s=$%s --set %s=$%s --set %s=$%s' to the upgrade command." "gpgServerKeyPrivate" "PRIVATE_KEY" "gpgServerKeyPublic" "PUBLIC_KEY" "passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT" "FINGERPRINT" ) -}}
-{{if $message }}
-{{ printf "\nDATA VALIDATION ERROR:\n%s" $message | fail }}
+{{- $header = printf "GPG" -}}
+{{- $message = printf "%s\n%s" $message (printf "  export PRIVATE_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey_private\\.asc") -}}
+{{- $message = printf "%s\n%s" $message (printf "  export PUBLIC_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey\\.asc") -}}
+{{- $message = printf "%s\n%s" $message (printf "  export FINGERPRINT=$(kubectl exec deploy/%s -c %s -- grep PASSBOLT_GPG_SERVER_KEY_FINGERPRINT /etc/environment | awk -F= '{gsub(/\"/, \"\"); print $2}')" $dpName $containerName) -}}
+{{- $arguments = printf "%s %s" $arguments (printf "--set %s=$%s --set %s=$%s --set %s=$%s" "gpgServerKeyPrivate" "PRIVATE_KEY" "gpgServerKeyPublic" "PUBLIC_KEY" "passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT" "FINGERPRINT" ) -}}
 {{- end }}
+{{ if and $.Release.IsUpgrade .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtCreateKeysForced ) (or ( not $.Values.jwtServerPublic ) ( not $.Values.jwtServerPrivate )) }}
+{{- if eq $header "" }}
+{{- $header = printf "JWT" -}}
+{{- else }}
+{{- $header = printf "%s and JWT" $header -}}
+{{- end -}}
+{{- $secretName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "sec" "jwt" -}}
+{{- $message = printf "%s\n%s" $message (printf "  export JWT_PRIVATE_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "jwt\\.key") -}}
+{{- $message = printf "%s\n%s" $message (printf "  export JWT_PUBLIC_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "jwt\\.pem") -}}
+{{- $arguments = printf "%s %s" $arguments (printf "--set %s=$%s --set %s=$%s" "jwtServerPrivate" "JWT_PRIVATE_KEY" "jwtServerPublic" "JWT_PUBLIC_KEY" ) -}}
+{{- end }}
+{{if $message }}
+{{- $header = printf "  %s key values should not be empty after during upgrade process. Please update your values file or add the following arguments to the helm upgrade commmand:" $header -}}
+{{- $message = printf "%s%s\n%s" $header $message (printf "  And add '%s' to the upgrade command." $arguments ) -}}
+{{ printf "\nDATA VALIDATION ERROR:\n%s" $message | fail }}
 {{- end }}
 {{- end }}
 

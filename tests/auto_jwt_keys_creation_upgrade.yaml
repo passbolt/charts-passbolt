@@ -1,0 +1,18 @@
+---
+suite: automated jwt keys creation upgrade
+release:
+  name: test
+  upgrade: true
+values:
+  - values-test.yaml
+tests:
+  - it: should create a jwt job with pre-upgrade hook
+    templates:
+      - job-create-jwt.yaml
+    set:
+      jwtServerPublic: ""
+      jwtServerPrivate: ""
+    asserts:
+      - equal:
+          path: metadata.annotations["helm.sh/hook"]
+          value: "pre-upgrade"
