@@ -4,19 +4,26 @@
     <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
 </h3>
 
-![Version: 0.4.4](https://img.shields.io/badge/Version-0.4.4-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.3.0-1-ce](https://img.shields.io/badge/AppVersion-4.3.0--1--ce-informational?style=flat-square)
+![Version: 0.6.1](https://img.shields.io/badge/Version-0.6.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.4.0-1-ce](https://img.shields.io/badge/AppVersion-4.4.0--1--ce-informational?style=flat-square)
 
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
 
 ## TL;DR
 
-The following command is not recommended for production deployments as it will
+The following commands are not recommended for production deployments as they will
 use default passwords for internal databases:
 
 ```bash
 helm repo add my-repo https://download.passbolt.com/charts/passbolt
 helm install my-release my-repo/passbolt
+```
+
+In case you prefer to use postgresql intead of mariadb, a sample config is provided in the examples directory:
+
+```
+helm repo add my-repo https://download.passbolt.com/charts/passbolt
+helm install my-release my-repo/passbolt -f examples/postgresql.yaml
 ```
 
 Production workloads should change the fields with values 'CHANGEME' on values.yaml
@@ -105,16 +112,12 @@ chart and deletes the release.
 | app.cache.redis.sentinelProxy.image.repository | string | `"haproxy"` | Configure redis sentinel image repository |
 | app.cache.redis.sentinelProxy.image.tag | string | `"latest"` | Configure redis sentinel image tag |
 | app.cache.redis.sentinelProxy.resources | object | `{}` | Configure redis sentinel container resources |
+| app.database.kind | string | `"mariadb"` |  |
 | app.extraPodLabels | object | `{}` |  |
 | app.image.pullPolicy | string | `"IfNotPresent"` | Configure pasbolt deployment image pullPolicy |
 | app.image.registry | string | `""` | Configure pasbolt deployment image repsitory |
 | app.image.repository | string | `"passbolt/passbolt"` |  |
-| app.image.tag | string | `"4.3.0-1-ce"` | Overrides the image tag whose default is the chart appVersion. |
-| app.initImage.client | string | `"mariadb"` | Configure pasbolt deployment init container image client for database |
-| app.initImage.pullPolicy | string | `"IfNotPresent"` | Configure pasbolt deployment image pullPolicy |
-| app.initImage.registry | string | `""` |  |
-| app.initImage.repository | string | `"mariadb"` | Configure pasbolt deployment image repsitory |
-| app.initImage.tag | string | `"latest"` | Overrides the image tag whose default is the chart appVersion. |
+| app.image.tag | string | `"4.4.0-1-ce"` | Overrides the image tag whose default is the chart appVersion. |
 | app.resources | object | `{}` |  |
 | autoscaling.enabled | bool | `false` | Enable autoscaling on passbolt deployment |
 | autoscaling.maxReplicas | int | `100` | Configure autoscaling maximum replicas |
@@ -135,9 +138,11 @@ chart and deletes the release.
 | ingress.hosts | list | `[]` | Configure passbolt ingress hosts |
 | ingress.tls | list | `[]` | Configure passbolt ingress tls |
 | jobCreateGpgKeys.extraPodLabels | object | `{}` |  |
+| jobCreateJwtKeys.extraPodLabels | object | `{}` |  |
+| jwtCreateKeysForced | bool | `false` | Forces overwrite JWT keys |
 | jwtPath | string | `"/etc/passbolt/jwt"` | Configure passbolt jwt directory |
-| jwtServerPrivate | string | `nil` | JWT server private key in base64 |
-| jwtServerPublic | string | `nil` | JWT server public key in base64 |
+| jwtServerPrivate | string | `""` | JWT server private key in base64 |
+| jwtServerPublic | string | `""` | JWT server public key in base64 |
 | livenessProbe | object | `{"initialDelaySeconds":20,"periodSeconds":10}` | Configure passbolt container livenessProbe |
 | mariadb.architecture | string | `"replication"` | Configure mariadb architecture |
 | mariadb.auth.database | string | `"passbolt"` | Configure mariadb auth database |
@@ -200,6 +205,7 @@ chart and deletes the release.
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_USERNAME | string | `"CHANGEME"` | Configure passbolt default email service username |
 | podAnnotations | object | `{}` | Map of annotation for passbolt server pod |
 | podSecurityContext | object | `{}` | Security Context configuration for passbolt server pod |
+| postgresqlDependencyEnabled | bool | `false` | Install mariadb as a depending chart |
 | rbacEnabled | bool | `true` | Enable role based access control |
 | readinessProbe | object | `{"initialDelaySeconds":5,"periodSeconds":10}` | Configure passbolt container RadinessProbe |
 | redis.auth.enabled | bool | `true` | Enable redis authentication |

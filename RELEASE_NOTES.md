@@ -1,5 +1,3 @@
-This is a small hotfix release that fixes issues reported
-by the community regarding the imagePullPolicy on the
-deployment resource.
+Announcing the immediate availability of passbolt's official helm chart 0.6.1.
 
-For more information please check our [changelog](https://github.com/passbolt/charts-passbolt/blob/0.4.4/CHANGELOG.md)
+This release removes a leak of the pgpass to the stdout when installing psql.

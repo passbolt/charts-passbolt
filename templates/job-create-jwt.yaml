@@ -1,6 +1,6 @@
-{{- if or ( not .Values.gpgServerKeyPublic ) ( not .Values.gpgServerKeyPrivate ) }}
+{{- if and .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED (or ( not .Values.jwtServerPrivate ) ( not .Values.jwtServerPublic )) }}
 {{- $type := "job" -}}
-{{- $action := "create-gpg-keys" -}}
+{{- $action := "create-jwt-keys" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
 {{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
 apiVersion: batch/v1
@@ -11,14 +11,18 @@ metadata:
     {{- include "passbolt-library.labels" . | nindent 4 }}
     {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
   annotations:
+    {{- if .Release.IsInstall }}
     helm.sh/hook: pre-install
+    {{- else if .Values.jwtCreateKeysForced }}
+    helm.sh/hook: pre-upgrade
+    {{- end }}
     helm.sh/hook-weight: "0"
 spec:
   template:
     metadata:
       labels:
       {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 8 }}
-      {{- with .Values.jobCreateGpgKeys.extraPodLabels }}
+      {{- with .Values.jobCreateJwtKeys.extraPodLabels }}
         {{- toYaml . | nindent 8 }}
       {{- end }}
     spec:
@@ -35,43 +39,17 @@ spec:
             - "-c"
             - |
               set -e
-              key_email="${PASSBOLT_KEY_EMAIL:-passbolt@yourdomain.com}"
-              key_name="${PASSBOLT_KEY_NAME:-Passbolt default user}"
-              key_length="${PASSBOLT_KEY_LENGTH:-3072}"
-              subkey_length="${PASSBOLT_SUBKEY_LENGTH:-4096}"
-              expiration="${PASSBOLT_KEY_EXPIRATION:-0}"
-              su -c "gpg --homedir $GNUPGHOME --batch --no-tty --gen-key <<EOF
-                Key-Type: default
-                Key-Length: $key_length
-                Subkey-Type: default
-                Subkey-Length: $subkey_length
-                Name-Real: $key_name
-                Name-Email: $key_email
-                Expire-Date: $expiration
-                %no-protection
-                %commit
-              EOF" -ls /bin/bash www-data || \
-              gpg --homedir $GNUPGHOME --batch --no-tty --gen-key <<EOF
-                Key-Type: default
-                Key-Length: $key_length
-                Subkey-Type: default
-                Subkey-Length: $subkey_length
-                Name-Real: $key_name
-                Name-Email: $key_email
-                Expire-Date: $expiration
-                %no-protection
-                %commit
-              EOF
 
-              PRIVATE_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export-secret-keys $key_email | base64 -w0)"
-              PUBLIC_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export $key_email | base64 -w0)"
+              /usr/share/php/passbolt/bin/cake passbolt create_jwt_keys
+              PRIVATE_JWT_KEY="$(cat {{ .Values.jwtPath }}/jwt.key | base64 -w0 )"
+              PUBLIC_JWT_KEY="$(cat {{ .Values.jwtPath }}/jwt.pem | base64 -w0 )"
 
               cd /tmp
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
-              ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey_private.asc", "value" : '"${PRIVATE_SERVERKEY}"'}]'
-              ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey.asc", "value" : '"${PUBLIC_SERVERKEY}"'}]'
+              ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PUBLIC_JWT_KEY}"'}]'
+              ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.pem", "value" : '"${PUBLIC_JWT_KEY}"'}]'
               touch /tmp/pod/success
               echo "Success"
           env:

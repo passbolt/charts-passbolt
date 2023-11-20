@@ -1,11 +1,11 @@
 ---
-suite: default config cache pointing to proxy
+suite: default config
 release:
   name: test
 values:
   - values-test.yaml
 tests:
-  - it: default should point to localhost for cache
+  - it: should point to localhost for cache
     templates:
       - configmap-env.yaml
     set:
@@ -19,3 +19,24 @@ tests:
       - equal:
           path: data.CACHE_CAKE_DEFAULT_SERVER
           value: 127.0.0.1
+  - it: should not have a custom database driver
+    templates:
+      - configmap-env.yaml
+    set:
+      app.database.kind: "mariadb"
+      postgresqlDependencyEnabled: false
+      mariadbDependencyEnabled: true
+    asserts:
+      - isNull:
+          path: data.DATASOURCES_DEFAULT_DRIVER
+  - it: should have a postgresql database driver when postgresql is enabled
+    templates:
+      - configmap-env.yaml
+    set:
+      app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: true
+      mariadbDependencyEnabled: false
+    asserts:
+      - equal:
+          path: data.DATASOURCES_DEFAULT_DRIVER
+          value: 'Cake\Database\Driver\Postgres'

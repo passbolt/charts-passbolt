@@ -3,25 +3,49 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.4.4...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.6.1...HEAD)
+
+## [0.6.1] - 2023-11-20
+### Fixed
+
+- Removed debug line from deployment.yaml that leaks pgpassword to stdout
+## [0.6.0] - 2023-11-17
+
+### Fixed
+
+- [#33](https://github.com/passbolt/charts-passbolt/issues/33) Helm charts generating incorrect jwt key and pem
+
+## [0.5.0] - 2023-11-15
+
+### Fixed
+
+- [#56](https://github.com/passbolt/charts-passbolt/issues/56) Cronjob "cron-proc-email" and few other resources doesn't take imageRegistry global parameter
+
+### Added
+
+- [#55](https://github.com/passbolt/charts-passbolt/issues/55) Deploying with postgres db
 
 ## [0.4.4] - 2023-10-09
 
 ### Fixed
+
 - [#52](https://github.com/passbolt/charts-passbolt/issues/52) pullPolicy incorrect rendering
 
 ## [0.4.3] - 2023-10-06
 
 ### Added
+
 - New values tls.existingSecret and tls.autogenerate to control injecting ssl certificates in passbolt containers and ingress
 
 ### Fixed
+
 - [#51](https://github.com/passbolt/charts-passbolt/issues/51) ability to use external tls secret
 - [#49](https://github.com/passbolt/charts-passbolt/issues/49) ability to use custom registries and custom pullSecrets
 
 ## [0.4.2] - 2023-08-31
 
 ### Added
+
 - Bump passbolt version 4.1.2-1-ce
 
 ## [0.4.1] - 2023-06-11
@@ -75,7 +99,6 @@ This release includes breaking changes .Values.redisProxyResources now is .Value
 ### Added
 
 - Added tests for disabled redis proxy
-
 
 ## [0.3.0] - 2023-05-03
 

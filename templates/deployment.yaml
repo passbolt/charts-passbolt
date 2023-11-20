@@ -40,13 +40,15 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
         - name: {{ $fullName }}-init
-          image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.initImage "global" .Values.global) }}
-          imagePullPolicy: {{ .Values.app.initImage.pullPolicy }}
+          {{ include "passbolt.initImage" . | nindent 10 }}
           command:
             - "/bin/bash"
           args:
             - "-c"
             - |
+              set -e 
+              client="{{- include "passbolt.databaseClient" . }}"
+              {{- if or ( eq .Values.app.database.kind "mysql" ) ( eq .Values.app.database.kind "mariadb" ) }}
               cat <<-EOF > /tmp/defaultsfile.cnf
               [client]
               user=${DATASOURCES_DEFAULT_USERNAME}
@@ -55,10 +57,25 @@ spec:
               connect-timeout=2
               EOF
               userhost="%"
-              while ! {{ .Values.app.initImage.client }} --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
+              client="{{- include "passbolt.databaseClient" . }}"
+              while ! ${client} --defaults-file=/tmp/defaultsfile.cnf -e "SELECT 1" > /dev/null 2>&1; do
                 echo "Waiting for database connection..."
                 sleep 2
               done
+              {{- end -}}
+              {{ if eq .Values.app.database.kind "postgresql" }}
+              apt update
+              apt install -y postgresql-client
+              cat <<-EOF > /tmp/.pgpass
+              ${DATASOURCES_DEFAULT_HOST}:5432:*:${DATASOURCES_DEFAULT_USERNAME}:${DATASOURCES_DEFAULT_PASSWORD}
+              EOF
+              chmod 600 /tmp/.pgpass
+              export PGPASSFILE='/tmp/.pgpass'
+              while ! ${client} -h ${DATASOURCES_DEFAULT_HOST} ; do
+                echo "Waiting for postgresql database connection..."
+                sleep 2
+              done
+              {{- end }}
           env:
             - name: DATASOURCES_DEFAULT_HOST
               value: {{ include "passbolt.databaseServiceName" . }}

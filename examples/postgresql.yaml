@@ -1,0 +1,14 @@
+postgresqlDependencyEnabled: true
+mariadbDependencyEnabled: false
+
+postgresql:
+  auth:
+    # -- Configure postgresql auth username
+    username: CHANGEME
+    # -- Configure postgresql auth password
+    password: CHANGEME
+    # -- Configure postgresql auth database
+    database: passbolt
+app:
+  database:
+    kind: postgresql
