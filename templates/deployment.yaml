@@ -70,7 +70,6 @@ spec:
               ${DATASOURCES_DEFAULT_HOST}:5432:*:${DATASOURCES_DEFAULT_USERNAME}:${DATASOURCES_DEFAULT_PASSWORD}
               EOF
               chmod 600 /tmp/.pgpass
-              cat /tmp/.pgpass
               export PGPASSFILE='/tmp/.pgpass'
               while ! ${client} -h ${DATASOURCES_DEFAULT_HOST} ; do
                 echo "Waiting for postgresql database connection..."
