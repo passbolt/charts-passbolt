@@ -3,8 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.6.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.6.1...HEAD)
 
+## [0.6.1] - 2023-11-20
+### Fixed
+
+- Removed debug line from deployment.yaml that leaks pgpassword to stdout
 ## [0.6.0] - 2023-11-17
 
 ### Fixed
