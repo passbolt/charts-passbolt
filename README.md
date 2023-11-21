@@ -129,6 +129,7 @@ chart and deletes the release.
 | fullnameOverride | string | `""` | Value to override the whole fullName |
 | global.imagePullSecrets | list | `[]` |  |
 | global.imageRegistry | string | `""` |  |
+| gpgExistingSecret | string | `""` | Name of the existing secret for the GPG server keypair. The secret must contain the `serverkey.asc` and `serverkey_private.asc` keys. |
 | gpgPath | string | `"/etc/passbolt/gpg"` | Configure passbolt gpg directory |
 | gpgServerKeyPrivate | string | `""` | Gpg server private key in base64 |
 | gpgServerKeyPublic | string | `""` | Gpg server public key in base64 |
