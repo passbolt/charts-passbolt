@@ -369,7 +369,7 @@ tolerations: []
 affinity: {}
 
 # -- Add additional volumes, e.g. for overwriting config files
-extraVolumes: ""
+extraVolumes: []
 
 # -- Add additional volume mounts, e.g. for overwriting config files
-extraVolumeMounts: ""
+extraVolumeMounts: []

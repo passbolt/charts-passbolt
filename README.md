@@ -124,8 +124,8 @@ chart and deletes the release.
 | autoscaling.minReplicas | int | `1` | Configure autoscaling minimum replicas |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` | Configure autoscaling target CPU uptilization percentage |
 | cronJobEmail | object | `{"enabled":true,"extraPodLabels":{},"schedule":"* * * * *"}` | Enable email cron |
-| extraVolumeMounts | string | `""` | Add additional volume mounts, e.g. for overwriting config files |
-| extraVolumes | string | `""` | Add additional volumes, e.g. for overwriting config files |
+| extraVolumeMounts | list | `[]` | Add additional volume mounts, e.g. for overwriting config files |
+| extraVolumes | list | `[]` | Add additional volumes, e.g. for overwriting config files |
 | fullnameOverride | string | `""` | Value to override the whole fullName |
 | global.imagePullSecrets | list | `[]` |  |
 | global.imageRegistry | string | `""` |  |
