@@ -1,0 +1,40 @@
+name: Push & PR to the main branch
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: ./.github/actions/setup_helm
+
+      - name: Run linter
+        run: helm lint
+
+  unit-test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Helm
+        uses: ./.github/actions/setup_helm
+
+      - name: Install Helm unit test plugin
+        run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
+
+      - name: Run unit tests
+        run: helm unittest .

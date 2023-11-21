@@ -1,0 +1,28 @@
+name: Setup Helm
+
+inputs:
+  helm-version:
+    description: The version of Helm to setup
+    default: v3.12.0
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Helm
+      uses: azure/setup-helm@v3
+      id: install-helm
+      with:
+         version: ${{ inputs.helm-version }}
+
+    - name: Add and update repos
+      run: |
+        helm repo add bitnami https://charts.bitnami.com/bitnami
+        helm repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
+        helm repo update
+      shell: bash
+
+    - name: Build chart dependencies
+      run: helm dependency build
+      shell: bash
