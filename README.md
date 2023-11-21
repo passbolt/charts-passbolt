@@ -184,8 +184,10 @@ chart and deletes the release.
 | passboltEnv.plain.CACHE_CAKE_DEFAULT_SERVER | string | `"127.0.0.1"` | Configure passbolt cake cache server |
 | passboltEnv.plain.DEBUG | bool | `false` | Toggle passbolt debug mode |
 | passboltEnv.plain.EMAIL_DEFAULT_FROM | string | `"no-reply@passbolt.local"` | Configure passbolt default email from |
+| passboltEnv.plain.EMAIL_DEFAULT_FROM_NAME | string | `"Passbolt"` | Configure passbolt default email from name |
 | passboltEnv.plain.EMAIL_TRANSPORT_DEFAULT_HOST | string | `"127.0.0.1"` | Configure passbolt default email host |
 | passboltEnv.plain.EMAIL_TRANSPORT_DEFAULT_PORT | int | `587` | Configure passbolt default email service port |
+| passboltEnv.plain.EMAIL_TRANSPORT_DEFAULT_TIMEOUT | int | `30` | Configure passbolt default email timeout |
 | passboltEnv.plain.EMAIL_TRANSPORT_DEFAULT_TLS | bool | `true` | Toggle passbolt tls |
 | passboltEnv.plain.KUBECTL_DOWNLOAD_CMD | string | `"curl -LO \"https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl\""` | Download Command for kubectl |
 | passboltEnv.plain.PASSBOLT_JWT_SERVER_KEY | string | `"/var/www/passbolt/config/jwt/jwt.key"` | Configure passbolt jwt private key path |

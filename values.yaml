@@ -206,8 +206,12 @@ passboltEnv:
     PASSBOLT_PLUGINS_LICENSE_LICENSE: /etc/passbolt/subscription_key.txt
     # -- Configure passbolt default email from
     EMAIL_DEFAULT_FROM: no-reply@passbolt.local
+    # -- Configure passbolt default email from name
+    EMAIL_DEFAULT_FROM_NAME: Passbolt
     # -- Configure passbolt default email host
     EMAIL_TRANSPORT_DEFAULT_HOST: 127.0.0.1
+    # -- Configure passbolt default email timeout
+    EMAIL_TRANSPORT_DEFAULT_TIMEOUT: 30
     # -- Toggle passbolt tls
     EMAIL_TRANSPORT_DEFAULT_TLS: true
     # -- Configure passbolt jwt private key path
