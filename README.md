@@ -214,9 +214,14 @@ chart and deletes the release.
 | redisDependencyEnabled | bool | `true` | Install redis as a depending chart |
 | replicaCount | int | `2` | If autoscaling is disabled this will define the number of pods to run |
 | service.annotations | object | `{}` | Annotations to add to the service |
-| service.name | string | `"https"` | Configure passbolt service port name |
-| service.port | int | `443` | Configure passbolt service port |
-| service.targetPort | int | `443` | Configure passbolt service targetPort |
+| service.ports | object | `{"http":{"name":"http","port":80,"targetPort":80},"https":{"name":"https","port":443,"targetPort":443}}` | Configure the service ports |
+| service.ports.http.name | string | `"http"` | Configure passbolt HTTP service port name |
+| service.ports.http.port | int | `80` | Configure passbolt HTTP service port |
+| service.ports.http.targetPort | int | `80` | Configure passbolt HTTP service targetPort |
+| service.ports.https | object | `{"name":"https","port":443,"targetPort":443}` | Configure the HTTPS port |
+| service.ports.https.name | string | `"https"` | Configure passbolt HTTPS service port name |
+| service.ports.https.port | int | `443` | Configure passbolt HTTPS service port |
+| service.ports.https.targetPort | int | `443` | Configure passbolt HTTPS service targetPort |
 | service.type | string | `"ClusterIP"` | Configure passbolt service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
