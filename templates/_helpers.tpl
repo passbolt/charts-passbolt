@@ -97,7 +97,7 @@ Show error message if the user didn't set the needed values during upgrade
 {{- $message = printf "%s\n%s" $message (printf "  export FINGERPRINT=$(kubectl exec deploy/%s -c %s -- grep PASSBOLT_GPG_SERVER_KEY_FINGERPRINT /etc/environment | awk -F= '{gsub(/\"/, \"\"); print $2}')" $dpName $containerName) -}}
 {{- $arguments = printf "%s %s" $arguments (printf "--set %s=$%s --set %s=$%s --set %s=$%s" "gpgServerKeyPrivate" "PRIVATE_KEY" "gpgServerKeyPublic" "PUBLIC_KEY" "passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT" "FINGERPRINT" ) -}}
 {{- end }}
-{{ if and $.Release.IsUpgrade .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtCreateKeysForced ) (or ( not $.Values.jwtServerPublic ) ( not $.Values.jwtServerPrivate )) }}
+{{ if and $.Release.IsUpgrade .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtCreateKeysForced ) ( not .Values.jwtExistingSecret ) (or ( not $.Values.jwtServerPublic ) ( not $.Values.jwtServerPrivate )) }}
 {{- if eq $header "" }}
 {{- $header = printf "JWT" -}}
 {{- else }}
@@ -220,5 +220,13 @@ imagePullSecrets:
   {{- printf "%s" .Values.gpgExistingSecret -}}
 {{- else }}
   {{- printf "%s-sec-gpg" .name -}}
+{{- end }}
+{{- end }}
+
+{{- define "passbolt.jwt.secretName" -}}
+{{- if .Values.jwtExistingSecret -}}
+  {{- printf "%s" .Values.jwtExistingSecret -}}
+{{- else }}
+  {{- printf "%s-sec-jwt" .name -}}
 {{- end }}
 {{- end }}

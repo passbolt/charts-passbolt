@@ -1,4 +1,4 @@
-{{- if and .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED (or ( not .Values.jwtServerPrivate ) ( not .Values.jwtServerPublic )) }}
+{{- if and .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtExistingSecret ) (or ( not .Values.jwtServerPrivate ) ( not .Values.jwtServerPublic )) }}
 {{- $type := "job" -}}
 {{- $action := "create-jwt-keys" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
@@ -48,8 +48,8 @@ spec:
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
-              ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PUBLIC_JWT_KEY}"'}]'
-              ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.pem", "value" : '"${PUBLIC_JWT_KEY}"'}]'
+              ./kubectl patch secret {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PUBLIC_JWT_KEY}"'}]'
+              ./kubectl patch secret {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/jwt.pem", "value" : '"${PUBLIC_JWT_KEY}"'}]'
               touch /tmp/pod/success
               echo "Success"
           env:

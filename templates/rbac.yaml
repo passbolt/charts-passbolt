@@ -19,7 +19,7 @@ rules:
   - {{ $Name }}-cm-env
   - {{ $Name }}-sec-env
   - {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
-  - {{ $Name }}-sec-jwt
+  - {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
   - {{ $Name }}-sec-tls
   - {{ $Name }}-sec-tls-ing
   - {{ $Name }}-sec-subscription
@@ -113,7 +113,7 @@ rules:
   resources: [ "configmaps", "secrets" ]
   resourceNames:
   - {{ $Name }}-cm-env
-  - {{ $Name }}-sec-jwt
+  - {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
   - {{ $Name }}-sec-env
   - {{ $Name }}-sec-redis-proxy
   verbs: ["get", "patch"]

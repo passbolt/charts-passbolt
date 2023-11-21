@@ -17,7 +17,7 @@ tests:
           kind: Job
           name: test-passbolt-job-create-jwt-keys
 
-  - it: should not create a gpg job
+  - it: should not create a gpg job if key values are supplied
     templates:
       - job-create-jwt.yaml
     set:
@@ -34,6 +34,15 @@ tests:
       jwtServerPublic: "test"
       jwtServerPrivate: "test"
       passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not create a gpg job if an existing secret is supplied
+    templates:
+      - job-create-jwt.yaml
+    set:
+      jwtExistingSecret: "my-jwt-secret"
     asserts:
       - hasDocuments:
           count: 0
