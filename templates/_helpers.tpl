@@ -87,7 +87,7 @@ Show error message if the user didn't set the needed values during upgrade
 {{- $arguments := "" }}
 {{- $message := "" -}}
 {{- $header := "" -}}
-{{ if and $.Release.IsUpgrade (or ( not $.Values.gpgServerKeyPublic ) ( not $.Values.gpgServerKeyPrivate )) }}
+{{ if and $.Release.IsUpgrade ( not $.Values.gpgExistingSecret ) (or ( not $.Values.gpgServerKeyPublic ) ( not $.Values.gpgServerKeyPrivate )) }}
 {{- $secretName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "sec" "gpg" -}}
 {{- $dpName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
 {{- $containerName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
@@ -214,3 +214,11 @@ imagePullSecrets:
 {{- end -}}
 {{- printf "%s" $client }}
 {{- end -}}
+
+{{- define "passbolt.gpg.secretName" -}}
+{{- if .Values.gpgExistingSecret -}}
+  {{- printf "%s" .Values.gpgExistingSecret -}}
+{{- else }}
+  {{- printf "%s-sec-gpg" .name -}}
+{{- end }}
+{{- end }}

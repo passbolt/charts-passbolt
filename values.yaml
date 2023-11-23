@@ -167,6 +167,8 @@ gpgPath: /etc/passbolt/gpg
 gpgServerKeyPrivate: ""
 # -- Gpg server public key in base64
 gpgServerKeyPublic: ""
+# -- Name of the existing secret for the GPG server keypair. The secret must contain the `serverkey.asc` and `serverkey_private.asc` keys.
+gpgExistingSecret: ""
 
 # -- Configure passbolt jwt directory
 jwtPath: /etc/passbolt/jwt
