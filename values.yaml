@@ -103,6 +103,10 @@ mariadb:
 
 ## Passbolt container and sidecar parameters
 app:
+  # -- Configure pasbolt deployment init container that waits for database
+  databaseInitContainer:
+    # -- Toggle pasbolt deployment init container that waits for database
+    enabled: true
   #initImage:
   #  # -- Configure pasbolt deployment init container image client for database
   #  client: mariadb
