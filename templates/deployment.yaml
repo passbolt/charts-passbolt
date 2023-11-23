@@ -41,6 +41,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
+        {{- if .Values.app.databaseInitContainer.enabled }}
         - name: {{ $fullName }}-init
           {{ include "passbolt.initImage" . | nindent 10 }}
           command:
@@ -92,6 +93,7 @@ spec:
             {{- with .Values.passboltEnv.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
+        {{- end }}
       containers:
         - name: {{ $fullName }}
           command:
