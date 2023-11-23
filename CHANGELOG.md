@@ -3,12 +3,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.6.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.7.0...HEAD)
+
+## [0.7.0] - 2023-11-23
+
+### Added
+
+- [#60](https://github.com/passbolt/charts-passbolt/pull/60) feat: add value for supplying an existing secret containing the GPG server keypair
+- [#59](https://github.com/passbolt/charts-passbolt/pull/59) feat: add email from name and email transport timeout to the plain env
+
+### Fixed
+
+- [#65](https://github.com/passbolt/charts-passbolt/issues/65) Passbolt server cannot start with Istio injection enabled
 
 ## [0.6.1] - 2023-11-20
+
 ### Fixed
 
 - Removed debug line from deployment.yaml that leaks pgpassword to stdout
+
 ## [0.6.0] - 2023-11-17
 
 ### Fixed
