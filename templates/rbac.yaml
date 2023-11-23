@@ -18,7 +18,7 @@ rules:
   - {{ $Name }}-sec-redis-proxy
   - {{ $Name }}-cm-env
   - {{ $Name }}-sec-env
-  - {{ $Name }}-sec-gpg
+  - {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
   - {{ $Name }}-sec-jwt
   - {{ $Name }}-sec-tls
   - {{ $Name }}-sec-tls-ing
@@ -65,7 +65,7 @@ rules:
   resources: [ "configmaps", "secrets" ]
   resourceNames:
   - {{ $Name }}-cm-env
-  - {{ $Name }}-sec-gpg
+  - {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
   - {{ $Name }}-sec-env
   - {{ $Name }}-sec-redis-proxy
   verbs: ["get", "patch"]
