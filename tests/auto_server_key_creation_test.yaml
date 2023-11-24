@@ -17,13 +17,22 @@ tests:
           kind: Job
           name: test-passbolt-job-create-gpg-keys
 
-  - it: should not create a gpg job
+  - it: should not create a gpg job when key values are supplied
     templates:
       - job-create-gpg.yaml
     set:
       passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT: "test"
       gpgServerKeyPublic: "test"
       gpgServerKeyPrivate: "test"
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should not create a gpg job when an existing secret is supplied
+    templates:
+      - job-create-gpg.yaml
+    set:
+      gpgExistingSecret: "my-gpg-secret"
     asserts:
       - hasDocuments:
           count: 0

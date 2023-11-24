@@ -1,4 +1,4 @@
-{{- if or ( not .Values.gpgServerKeyPublic ) ( not .Values.gpgServerKeyPrivate ) }}
+{{- if and ( not .Values.gpgExistingSecret ) ( or ( not .Values.gpgServerKeyPublic ) ( not .Values.gpgServerKeyPrivate ) ) }}
 {{- $type := "job" -}}
 {{- $action := "create-gpg-keys" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
@@ -70,8 +70,8 @@ spec:
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
-              ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey_private.asc", "value" : '"${PRIVATE_SERVERKEY}"'}]'
-              ./kubectl patch secret {{ $Name }}-sec-gpg --type='json' -p='[{"op": "replace", "path" : "/data/serverkey.asc", "value" : '"${PUBLIC_SERVERKEY}"'}]'
+              ./kubectl patch secret {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/serverkey_private.asc", "value" : '"${PRIVATE_SERVERKEY}"'}]'
+              ./kubectl patch secret {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/serverkey.asc", "value" : '"${PUBLIC_SERVERKEY}"'}]'
               touch /tmp/pod/success
               echo "Success"
           env:
