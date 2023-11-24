@@ -59,7 +59,7 @@ spec:
               volumeMounts:
                 - name: {{ $Name }}-vol-success
                   mountPath: /tmp/pod
-                - name: {{ $Name }}-sec-gpg
+                - name: {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
                   mountPath: {{ .Values.gpgPath }}
                   readOnly: true
             {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
@@ -90,9 +90,9 @@ spec:
             - name: {{ $fullName }}-sec-gcs
               secret:
                 secretName: {{ $Name }}-sec-gcs
-            - name: {{ $Name }}-sec-gpg
+            - name: {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
               secret:
-                secretName: {{ $Name }}-sec-gpg
+                secretName: {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
             {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
             - name: {{ $fullName }}-sec-redis-proxy
               secret:
