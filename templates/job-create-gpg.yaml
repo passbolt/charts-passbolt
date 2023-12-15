@@ -26,7 +26,7 @@ spec:
       serviceAccountName: {{ $Name }}-sa-{{ $action }}
       restartPolicy: OnFailure
       containers:
-        - name: {{ $fullName }}
+        - name: create-gpg-keys
           image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           command:
@@ -89,9 +89,9 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           volumeMounts:
-            - name: {{ $fullName }}-vol-success
+            - name: vol-success
               mountPath: /tmp/pod
       volumes:
-        - name: {{ $fullName }}-vol-success
+        - name: vol-success
           emptyDir: {}
 {{- end }}
