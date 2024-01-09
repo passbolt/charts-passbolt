@@ -60,7 +60,10 @@ tests:
     asserts:
       - matchRegex:
           path: spec.template.spec.containers[0].args[1]
-          pattern: ./kubectl patch secret test-passbolt-sec-jwt*
+          pattern: .*./kubectl patch secret test-passbolt-sec-jwt .*PRIVATE_JWT_KEY*
+      - matchRegex:
+          path: spec.template.spec.containers[0].args[1]
+          pattern: .*./kubectl patch secret test-passbolt-sec-jwt .*PUBLIC_JWT_KEY*
 
   - it: should have a jwt-secret with smaller weight than jwt secret job
     templates:
