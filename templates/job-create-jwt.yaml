@@ -45,7 +45,8 @@ spec:
               PUBLIC_JWT_KEY="$(cat {{ .Values.jwtPath }}/jwt.pem | base64 -w0 )"
 
               cd /tmp
-              kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
+              cpuArch=${CPU_ARCH:-$(eval "case `uname -m` in 'x86_64') echo 'amd64';;'aarch64') echo 'arm64';;esac")}
+              kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${cpuArch}/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
               ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PUBLIC_JWT_KEY}"'}]'
