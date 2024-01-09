@@ -48,7 +48,7 @@ spec:
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
-              ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PUBLIC_JWT_KEY}"'}]'
+              ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PRIVATE_JWT_KEY}"'}]'
               ./kubectl patch secret {{ $Name }}-sec-jwt --type='json' -p='[{"op": "replace", "path" : "/data/jwt.pem", "value" : '"${PUBLIC_JWT_KEY}"'}]'
               touch /tmp/pod/success
               echo "Success"
