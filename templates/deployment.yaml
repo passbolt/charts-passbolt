@@ -29,7 +29,7 @@ spec:
         checksum/sec-gpg: {{ include (print $.Template.BasePath "/secret-gpg.yaml") . | sha256sum }}
         {{- end }}
         checksum/cm-env: {{ include (print $.Template.BasePath "/configmap-env.yaml") . | sha256sum }}
-        {{- if .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED }}
+        {{- if and .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtExistingSecret ) }}
         checksum/sec-jwt: {{ include (print $.Template.BasePath "/secret-jwt.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
@@ -151,7 +151,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED }}
-            - name: {{ $fullName }}-sec-jwt
+            - name: {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
               mountPath: {{ quote .Values.jwtPath }}
               readOnly: true
             {{- end }}
@@ -205,9 +205,9 @@ spec:
                 path: subscription_key.txt
         {{- end }}
         {{- if .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED }}
-        - name: {{ $fullName }}-sec-jwt
+        - name: {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
           secret:
-            secretName: {{ $Name }}-sec-jwt
+            secretName: {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
         {{- end }}
         {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
         - name: {{ $fullName }}-sec-redis-proxy
