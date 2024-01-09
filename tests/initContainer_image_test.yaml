@@ -9,6 +9,8 @@ tests:
     set:
       app.initImage: null # this means emtpy haha
       app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: true
+      mariadbDependencyEnabled: false
     asserts:
       - equal:
           path: spec.template.spec.initContainers[0].image
@@ -16,7 +18,7 @@ tests:
       - matchRegex:
           path: spec.template.spec.initContainers[0].args[1]
           pattern: 'client="pg_isready"'
-  - it: image should be match what is defined on the app.initImage field and the dbclient should match app.initImage.client
+  - it: image should match what is defined on the app.initImage field and the dbclient should match app.initImage.client
     templates:
       - deployment.yaml
     set:
@@ -24,6 +26,8 @@ tests:
       app.initImage.tag: test
       app.initImage.client: test
       app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: true
+      mariadbDependencyEnabled: false
     asserts:
       - equal:
           path: spec.template.spec.initContainers[0].image
