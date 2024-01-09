@@ -124,7 +124,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.4.0-1-ce
+    tag: 4.4.2-1-ce
   # Allowed options: mariadb, mysql or postgresql
   database:
     kind: mariadb
@@ -174,6 +174,8 @@ gpgServerKeyPublic: ""
 # -- Name of the existing secret for the GPG server keypair. The secret must contain the `serverkey.asc` and `serverkey_private.asc` keys.
 gpgExistingSecret: ""
 
+# -- Name of the existing secret for the JWT server keypair. The secret must contain the `jwt.key` and `jwt.pem` keys.
+jwtExistingSecret: ""
 # -- Configure passbolt jwt directory
 jwtPath: /etc/passbolt/jwt
 # -- JWT server private key in base64
