@@ -12,6 +12,9 @@ tests:
     set:
       jwtServerPublic: ""
       jwtServerPrivate: ""
+      jwtCreateKeysForced: true
+      gpgServerKeyPrivate: "test"
+      gpgServerKeyPublic: "test"
     asserts:
       - equal:
           path: metadata.annotations["helm.sh/hook"]

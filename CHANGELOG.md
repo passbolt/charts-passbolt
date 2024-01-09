@@ -5,6 +5,17 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.7.0...HEAD)
 
+## [0.7.1] - 2024-01-09
+
+### Added
+
+- [#67](https://github.com/passbolt/charts-passbolt/pull/67) feat: add value for supplying an existing secret containing the JWT server keypair
+- [#74](https://github.com/passbolt/charts-passbolt/pull/74) Per architecture kubectl download
+
+### Fixed
+
+- [#71](https://github.com/passbolt/charts-passbolt/pull/71) fix: set JWT private key in the secret
+
 ## [0.7.0] - 2023-11-23
 
 ### Added

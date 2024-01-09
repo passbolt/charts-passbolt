@@ -104,6 +104,8 @@ gpgServerKeyPublic: ""
 # -- Name of the existing secret for the GPG server keypair. The secret must contain the `serverkey.asc` and `serverkey_private.asc` keys.
 gpgExistingSecret: ""
 
+# -- Name of the existing secret for the JWT server keypair. The secret must contain the `jwt.key` and `jwt.pem` keys.
+jwtExistingSecret: ""
 # -- Configure passbolt jwt directory
 jwtPath: /etc/passbolt/jwt
 # -- JWT server private key in base64
