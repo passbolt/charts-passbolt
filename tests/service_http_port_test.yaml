@@ -1,0 +1,36 @@
+---
+suite: service ports
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should match ports with the ones in values
+    templates:
+      - service.yaml
+    set:
+      service.ports.https.port: 5443
+      service.ports.https.targetPort: 5443
+      service.ports.https.name: myhttps
+      service.ports.http.port: 5080
+      service.ports.http.targetPort: 5080
+      service.ports.http.name: myhttp
+    asserts:
+      - contains:
+          path: spec.ports
+          content:
+            port: 5443
+            targetPort: 5443
+            protocol: TCP
+            name: myhttps
+          count: 1
+          any: true
+      - contains:
+          path: spec.ports
+          content:
+            port: 5080
+            targetPort: 5080
+            protocol: TCP
+            name: myhttp
+          count: 1
+          any: true

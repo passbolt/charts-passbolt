@@ -1,0 +1,21 @@
+---
+suite: ingress service port
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should set the port of the backend to the configured HTTP port
+    templates:
+      - ingress.yaml
+    set:
+      service.ports.http.port: 5080
+      ingress.enabled: true
+    asserts:
+      - isSubset:
+          path: spec.rules[0].http.paths[0].backend.service
+          content:
+            name: test-passbolt
+            port:
+              number: 5080
+          any: true

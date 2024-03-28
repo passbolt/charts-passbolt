@@ -5,22 +5,24 @@ release:
 values:
   - values-test.yaml
 tests:
-  - it: should match port with the one in values
+  - it: should match ports with the ones in values
     templates:
       - deployment.yaml
     set:
-      service.targetPort: 5000
-      redis.auth.enabled: true
-      redis.replica.replicaCount: 2
-      autoscaling.enabled: false
-      app.cache.redis.sentinelProxy.enabled: false
-      app.cache.redis.sentinelProxy.image.repository: haproxy
-      app.cache.redis.sentinelProxy.image.tag: latest
+      service.ports.https.targetPort: 5443
+      service.ports.http.targetPort: 5080
     asserts:
       - contains:
           path: spec.template.spec.containers[0].ports
           content:
             name: https
-            containerPort: 5000
+            containerPort: 5443
+          count: 1
+          any: true
+      - contains:
+          path: spec.template.spec.containers[0].ports
+          content:
+            name: http
+            containerPort: 5080
           count: 1
           any: true
