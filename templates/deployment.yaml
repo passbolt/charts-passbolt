@@ -83,7 +83,7 @@ spec:
             - name: DATASOURCES_DEFAULT_HOST
               value: {{ include "passbolt.databaseServiceName" . }}
             - name: DATASOURCES_DEFAULT_PORT
-              value: {{ .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
+              value: {{ include "passbolt.databasePort" . }}
             {{- with .Values.passboltEnv.extraEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

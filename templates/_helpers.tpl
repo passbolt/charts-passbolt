@@ -81,6 +81,25 @@ Render the value of the database service
 {{- end }}
 
 {{/*
+Render the value of the database port
+*/}}
+{{- define "passbolt.databasePort" -}}
+{{- if and ( eq .Values.mariadbDependencyEnabled true ) (or ( eq .Values.app.database.kind "mariadb") ( eq .Values.app.database.kind "mysql") ) }}
+{{- if eq .Values.mariadb.architecture "replication" }}
+{{- default 3306 .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
+{{- else }}
+{{- default ( printf "%s-%s" .Release.Name "mariadb" ) .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
+{{- end -}}
+{{- else if and ( eq .Values.postgresqlDependencyEnabled true ) ( eq .Values.app.database.kind "postgresql" ) }}
+{{- default 5432 .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
+{{- else if ( hasKey .Values.passboltEnv.plain "DATASOURCES_DEFAULT_PORT" )  -}}
+{{- printf "%s" .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT }}
+{{- else }}
+{{- fail "DATASOURCES_DEFAULT_PORT can't be empty when mariadbDependencyEnabled and postgresqlDependencyEnabled are disabled"}}
+{{- end }}
+{{- end }}
+
+{{/*
 Show error message if the user didn't set the needed values during upgrade
 */}}
 {{- define "passbolt.validateValues" -}}
