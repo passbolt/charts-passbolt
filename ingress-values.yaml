@@ -1,0 +1,24 @@
+tls:
+  autogenerate: false
+  existingSecret: local-tls-secret
+ingress:
+  # -- Enable passbolt ingress
+  enabled: true
+  # -- Configure passbolt ingress annotations
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  # -- Configure passbolt ingress hosts
+  hosts:
+    # @ignored
+    - host: "passbolt.local"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  # -- Configure passbolt ingress tls
+  #tls:
+  #  # If secretname is not empty, the tls entry will use it, otherwise will
+  #  # have a default name based on the release
+  #  # @ignored
+  #  - secretName: "tls"
+  #    hosts:
+  #      - passbolt.local

@@ -23,3 +23,6 @@
 .gitlab-ci.yml
 .gitlab-ci/
 tests/
+kind
+kubectl
+passbolt
