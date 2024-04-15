@@ -1,3 +1,8 @@
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
 stages:
   - test
   - deploy
@@ -5,7 +10,7 @@ stages:
 
 lint Helm Charts:
   image:
-    name: registry.gitlab.com/passbolt/passbolt-ci-docker-images/helm:latest
+    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm
     entrypoint: ["/bin/sh", "-c"]
   stage: test
   script:
@@ -14,7 +19,7 @@ lint Helm Charts:
 
 test Helm Charts:
   image:
-    name: registry.gitlab.com/passbolt/passbolt-ci-docker-images/helm:latest
+    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm
     entrypoint: ["/bin/sh", "-c"]
   stage: test
   script:
@@ -22,9 +27,19 @@ test Helm Charts:
     - helm plugin install https://github.com/helm-unittest/helm-unittest
     - helm unittest --color -d .
 
+integration Tests Helm Charts:
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
+  services:
+    - name: docker:dind
+      alias: docker
+  script:
+    - |
+      apk add -U curl
+      bash spec/fixtures/create-cluster-with-passbolt.sh
+
 publish:
   stage: publish
-  image: registry.gitlab.com/passbolt/passbolt-ci-docker-images/helm:latest
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm
   variables:
     REPO_BUCKET: "download.passbolt.com"
     REPO_DIR: "charts"
