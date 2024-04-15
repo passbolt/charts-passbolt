@@ -5,7 +5,7 @@ set -eo pipefail
 
 HELM_VERSION="v3.14.4"
 HELM_BINARY="helm"
-KIND_VERSION="v0.22.0"
+KIND_VERSION="v0.19.0" # 0.19 because the new ones fail on .gitlab-ci
 KIND_BINARY="kind"
 KIND_CLUSTER_CONFIG_FILE="spec/fixtures/kind-config.yaml"
 KIND_CLUSTER_NAME="charts-passbolt-integration"
