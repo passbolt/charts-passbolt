@@ -39,7 +39,7 @@ integration Tests Helm Charts:
       sleep 10
       bash spec/fixtures/create-cluster-with-passbolt.sh
       curl -fsSL https://git.io/shellspec | sh -s -- --yes
-      /root/.local/bin/shellspec
+      bash /root/.local/bin/shellspec
 
 publish:
   stage: publish
