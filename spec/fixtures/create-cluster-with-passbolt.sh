@@ -91,6 +91,7 @@ function installNginxIngress {
 }
 
 function installPassboltChart {
+	"$HELM_BINARY" dependency build
 	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default
 	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
