@@ -30,7 +30,7 @@ function registerPassboltUser {
 
 	createGPGKey
 
-	curl "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
+	curl -s "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
 		-H "authority: ${PASSBOLT_FQDN}" \
 		-H "accept: application/json" \
 		-H "content-type: application/json" \

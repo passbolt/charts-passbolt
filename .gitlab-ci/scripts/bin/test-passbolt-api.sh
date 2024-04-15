@@ -80,7 +80,7 @@ curl "https://${PASSBOLT_FQDN}/setup/complete/${USER_UUID}" \
 	-H "accept: application/json" \
 	-H "content-type: application/json" \
 	--data-raw "{\"authenticationtoken\":{\"token\":\"${USER_TOKEN}\"},\"gpgkey\":{\"armored_key\":\"$(sed -z 's/\n/\\n/g' public.asc)\"}}" \
-	--compressed
+	--compressed 2>/dev/null
 
 rm -rf ${TMPGNUPGHOME}
 
