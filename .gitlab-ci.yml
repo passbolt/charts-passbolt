@@ -28,7 +28,7 @@ test Helm Charts:
     - helm unittest --color -d .
 
 integration Tests Helm Charts:
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/debian:latest
   services:
     - name: docker:dind
       alias: docker
