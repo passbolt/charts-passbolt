@@ -28,13 +28,13 @@ test Helm Charts:
     - helm unittest --color -d .
 
 integration Tests Helm Charts:
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/debian:latest
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
   services:
     - name: docker:dind
       alias: docker
   script:
     - |
-      apt update && apt install -y curl jq
+      apk update && apk add -U curl bash jq
       bash spec/fixtures/create-cluster-with-passbolt.sh
 
 publish:
