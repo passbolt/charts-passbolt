@@ -5,3 +5,4 @@ secret.asc
 public.asc
 passbolt
 mkcert
+helm

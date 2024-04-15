@@ -24,6 +24,7 @@
 .gitlab-ci/
 tests/
 kind
+helm
 kubectl
 passbolt
 spec
