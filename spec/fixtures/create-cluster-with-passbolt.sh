@@ -10,6 +10,7 @@ KIND_BINARY="kind"
 KIND_CLUSTER_CONFIG_FILE="spec/fixtures/kind-config.yaml"
 KIND_CLUSTER_NAME="charts-passbolt-integration"
 KUBECTL_BINARY="kubectl"
+MKCERT_BINARY="mkcert"
 K8S_LOCAL_TLS_SECRET="local-tls-secret"
 PASSBOLT_CLI_BINARY="passbolt"
 PASSBOLT_CLI_VERSION="0.3.1"
@@ -40,6 +41,14 @@ function getHelm {
 	fi
 }
 
+function getMkcert {
+	if ! command -v "$MKCERT_BINARY" >/dev/null; then
+		curl -JLO "https://dl.filippo.io/mkcert/latest?for=linux/amd64"
+		chmod +x mkcert-v*-linux-amd64
+		mv mkcert-v*-linux-amd64 mkcert
+	fi
+}
+
 function getPassboltGoCli {
 	if ! command -v "$PASSBOLT_CLI_BINARY" >/dev/null; then
 		version="$PASSBOLT_CLI_VERSION"
@@ -53,6 +62,7 @@ function installDependencies {
 	getKind
 	getKubectl
 	getHelm
+	getMkcert
 }
 
 function createKindCluster {
@@ -64,13 +74,13 @@ function createAndInstallSSLCertificates {
 	domain="${1-passbolt.local}"
 	ssl_key_path="$SSL_KEY_PATH"
 	ssl_cert_path="$SSL_CERT_PATH"
-	mkcert -install
-	mkcert -cert-file "$ssl_cert_path" -key-file "$ssl_key_path" "$domain"
+	"$MKCERT_BINARY" -install
+	"$MKCERT_BINARY" -cert-file "$ssl_cert_path" -key-file "$ssl_key_path" "$domain"
 }
 
 function createSecretWithTLS {
 	secret_name="$K8S_LOCAL_TLS_SECRET"
-	kubectl create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path"
+	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path"
 }
 
 function installNginxIngress {
