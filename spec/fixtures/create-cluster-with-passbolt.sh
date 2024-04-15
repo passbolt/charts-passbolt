@@ -65,6 +65,7 @@ function installDependencies {
 	getKubectl
 	getHelm
 	getMkcert
+	getPassboltGoCli
 }
 
 function createKindCluster {
