@@ -27,3 +27,4 @@ kind
 kubectl
 passbolt
 spec
+mkcert

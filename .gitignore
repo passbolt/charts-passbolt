@@ -4,3 +4,4 @@ values-sec.yaml
 secret.asc
 public.asc
 passbolt
+mkcert
