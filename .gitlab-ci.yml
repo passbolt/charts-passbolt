@@ -3,6 +3,10 @@ variables:
   DOCKER_DRIVER: overlay2
   DOCKER_TLS_CERTDIR: ""
 
+services:
+  - name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
+    alias: docker
+
 stages:
   - test
   - deploy
@@ -29,9 +33,6 @@ test Helm Charts:
 
 integration Tests Helm Charts:
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
-  services:
-    - name: docker:dind
-      alias: docker
   script:
     - |
       apk update && apk add -U curl bash jq
