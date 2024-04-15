@@ -34,7 +34,7 @@ integration Tests Helm Charts:
       alias: docker
   script:
     - |
-      apk add -U curl
+      apt update && apt install -y curl jq
       bash spec/fixtures/create-cluster-with-passbolt.sh
 
 publish:

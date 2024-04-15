@@ -26,3 +26,4 @@ tests/
 kind
 kubectl
 passbolt
+spec
