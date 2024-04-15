@@ -36,6 +36,7 @@ integration Tests Helm Charts:
   script:
     - |
       apk update && apk add -U curl bash jq
+      sleep 30
       bash spec/fixtures/create-cluster-with-passbolt.sh
 
 publish:
