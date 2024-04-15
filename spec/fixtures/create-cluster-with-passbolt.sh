@@ -82,7 +82,7 @@ function createAndInstallSSLCertificates {
 
 function createSecretWithTLS {
 	secret_name="$K8S_LOCAL_TLS_SECRET"
-	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path"
+	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
 }
 
 function installNginxIngress {
@@ -91,8 +91,8 @@ function installNginxIngress {
 }
 
 function installPassboltChart {
-	"$HELM_BINARY" install passbolt . -f ingress-values.yaml
-	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s
+	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default
+	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
 
 function createInfraAndInstallPassboltChart {
