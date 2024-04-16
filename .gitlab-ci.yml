@@ -37,7 +37,6 @@ integration Tests Helm Charts:
     - |
       apk update && apk add -U curl bash jq
       sleep 10 # Wait for docker service
-      bash spec/fixtures/create-cluster-with-passbolt.sh
       curl -fsSL https://git.io/shellspec | sh -s -- --yes
       bash /root/.local/bin/shellspec -f debug
 
