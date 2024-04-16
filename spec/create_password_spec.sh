@@ -18,6 +18,7 @@ function testCreateAndDecryptPassword {
 	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX registrao
 
 	./passbolt configure --serverAddress "https://${PASSBOLT_FQDN}" --userPassword "$PASSPHRASE" --userPrivateKeyFile 'secret.asc'
+	./passbolt create resource --name "$name" Resource --password "$secret" -j
 	id=$(createPassword "pass" "${value}")
 	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX despois de crear
 	result=$(./passbolt get resource --id $(echo $id | jq -r .id) -j | jq -r .password)
