@@ -27,8 +27,8 @@ function createGPGKey {
     %commit
 EOF
 
-	gpg --passphrase ${PASSPHRASE} --batch --pinentry-mode=loopback --armor --homedir ${TMPGNUPGHOME} --export-secret-keys ${EMAIL} 2>/dev/null >secret.asc
-	gpg --homedir ${TMPGNUPGHOME} --armor --export ${email} 2>/dev/null >public.asc
+	gpg --passphrase ${PASSPHRASE} --batch --pinentry-mode=loopback --armor --homedir ${TMPGNUPGHOME} --export-secret-keys ${EMAIL} >/dev/null >secret.asc
+	gpg --homedir ${TMPGNUPGHOME} --armor --export ${email} >/dev/null >public.asc
 	ls -lash
 
 }
