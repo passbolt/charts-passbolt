@@ -39,6 +39,7 @@ integration Tests Helm Charts:
       sleep 10 # Wait for docker service
       bash spec/fixtures/create-cluster-with-passbolt.sh
       curl -fsSL https://git.io/shellspec | sh -s -- --yes
+      sleep 3000
       bash /root/.local/bin/shellspec -f debug
 
 publish:
