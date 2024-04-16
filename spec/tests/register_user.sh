@@ -24,12 +24,18 @@ function registerPassboltUser {
 	lastname=$2
 	email=$3
 
-	registration_url=$(./kubectl exec -it deployment/passbolt-depl-srv -n default -- su -c "bin/cake passbolt register_user -u $email -f $firstname -l $lastname -r admin" -s /bin/bash www-data 2>/dev/null | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*")
+	registration_url=$("$KUBECTL_BINARY" exec -it deployment/passbolt-depl-srv -n default -- su -c "bin/cake passbolt register_user -u $email -f $firstname -l $lastname -r admin" -s /bin/bash www-data 2>/dev/null | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*")
 	user_uuid=$(echo "${registration_url}" | cut -d/ -f6)
 	user_token=$(echo "${registration_url}" | cut -d/ -f7)
 
 	createGPGKey
 
+	echo curl -s "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
+		-H "authority: ${PASSBOLT_FQDN}" \
+		-H "accept: application/json" \
+		-H "content-type: application/json" \
+		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(awk '{printf "%s\\n", $0}' public.asc)\"}}" \
+		--compressed
 	curl -s "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
 		-H "authority: ${PASSBOLT_FQDN}" \
 		-H "accept: application/json" \

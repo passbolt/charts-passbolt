@@ -8,14 +8,19 @@ function environment {
 }
 Describe 'create_password.sh'
 Before 'environment'
+Include spec/fixtures/create-cluster-with-passbolt.sh
 Include spec/tests/register_user.sh
 Include spec/tests/create_password.sh
+function ensureClusterAndPassboltApi {
+	installDependencies
+	createInfraAndInstallPassboltChart
+}
 function testCreateAndDecryptPassword {
 	value="$1"
 	registerPassboltUser $FIRSTNAME $LASTNAME $EMAIL
 
 	id=$(createPassword "pass" "${value}")
-	result=$(./passbolt get resource --id $(echo $id | jq -r .id) -j | jq -r .password)
+	result=$("$PASSBOLT_CLI_BINARY" get resource --id $(echo $id | jq -r .id) -j | jq -r .password)
 	if [[ "$value" == "$result" ]]; then
 		return 0
 	fi

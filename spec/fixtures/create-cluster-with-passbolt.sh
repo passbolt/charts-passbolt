@@ -113,5 +113,5 @@ function createInfraAndInstallPassboltChart {
 	fi
 }
 
-installDependencies
-createInfraAndInstallPassboltChart
+#installDependencies
+#createInfraAndInstallPassboltChart
