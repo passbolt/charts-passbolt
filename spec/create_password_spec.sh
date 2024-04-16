@@ -14,6 +14,8 @@ function testCreateAndDecryptPassword {
 	value="$1"
 	registerPassboltUser $FIRSTNAME $LASTNAME $EMAIL
 
+	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX registrao
+
 	id=$(createPassword "pass" "${value}")
 	result=$(./passbolt get resource --id $(echo $id | jq -r .id) -j | jq -r .password)
 	if [[ "$value" == "$result" ]]; then
