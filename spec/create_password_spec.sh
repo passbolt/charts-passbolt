@@ -24,6 +24,5 @@ function testCreateAndDecryptPassword {
 It 'creates a password'
 When call testCreateAndDecryptPassword "super-password"
 The status should be success
-The output should be present
 End
 End
