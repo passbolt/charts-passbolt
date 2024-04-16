@@ -49,7 +49,7 @@ function registerPassboltUser {
 		-H "accept: application/json" \
 		-H "content-type: application/json" \
 		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(awk '{printf "%s\\n", $0}' public.asc)\"}}" \
-		--compressed >/dev/null
+		--compressed
 }
 
 function createPassword {
