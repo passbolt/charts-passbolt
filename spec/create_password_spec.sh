@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 SPECS_DIR=$(dirname "$0")
 
 source "$SPECS_DIR"/fixtures/install_dependencies.sh
