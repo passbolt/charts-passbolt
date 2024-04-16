@@ -12,6 +12,7 @@ Include spec/tests/register_user.sh
 Include spec/tests/create_password.sh
 function testCreateAndDecryptPassword {
 	value="$1"
+	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX antes de registrao
 	registerPassboltUser $FIRSTNAME $LASTNAME $EMAIL
 
 	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX registrao
