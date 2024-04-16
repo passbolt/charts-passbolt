@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 SPECS_DIR=$(dirname "$0")
 

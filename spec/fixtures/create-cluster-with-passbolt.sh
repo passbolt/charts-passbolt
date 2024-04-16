@@ -19,10 +19,7 @@ function createAndInstallSSLCertificates {
 	ssl_key_path="$SSL_KEY_PATH"
 	ssl_cert_path="$SSL_CERT_PATH"
 	"$MKCERT_BINARY" -install
-	ls -lash
 	"$MKCERT_BINARY" -cert-file "$ssl_cert_path" -key-file "$ssl_key_path" "$domain"
-	echo despois
-	ls -lash
 }
 
 function createSecretWithTLS {
