@@ -44,14 +44,12 @@ function registerPassboltUser {
 
 	createGPGKey
 
-	echo curl -s "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
+	curl -s "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
 		-H "authority: ${PASSBOLT_FQDN}" \
 		-H "accept: application/json" \
 		-H "content-type: application/json" \
 		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(awk '{printf "%s\\n", $0}' public.asc)\"}}" \
 		--compressed
-	echo waitign for user
-	sleep 3000
 
 }
 

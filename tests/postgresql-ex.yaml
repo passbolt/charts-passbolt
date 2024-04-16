@@ -1,0 +1,17 @@
+# values.yaml for existing PostgreSQL
+postgresqlDependencyEnabled: false
+mariadbDependencyEnabled: false
+
+app:
+  database:
+    kind: postgresql
+
+passboltEnv:
+  plain:
+    DATASOURCES_DEFAULT_HOST: my-passbolt-postgresql
+    #DATASOURCES_DEFAULT_PORT: <POSTGRESQL_SERVER_ADDRESS_PORT> (if it is not 5432)
+  secret:
+    DATASOURCES_DEFAULT_DATABASE: passbolt_db
+    DATASOURCES_DEFAULT_USERNAME: passbolt_user
+    DATASOURCES_DEFAULT_PASSWORD: passbolt_password
+    #DATASOURCES_DEFAULT_SCHEMA: <POSTGRESQL_PASSBOLT_SCHEMA>

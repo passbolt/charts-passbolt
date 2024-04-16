@@ -7,6 +7,7 @@ source $(dirname $0)/install_dependencies.sh
 
 SSL_KEY_PATH="/tmp/ssl.key"
 SSL_CERT_PATH="/tmp/ssl.crt"
+PASSBOLT_FQDN=passbolt.local
 
 function createKindCluster {
 	echo "Creating kind cluster: $KIND_CLUSTER_NAME"
@@ -42,7 +43,11 @@ function installPassboltChart {
 		"$HELM_BINARY" dependency build
 	fi
 	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default
-	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
+	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n defaultfixfix
+}
+
+function addEtcHostsEntry {
+	echo "127.0.0.1 $PASSBOLT_FQDN" >>/etc/hosts
 }
 
 function createInfraAndInstallPassboltChart {
@@ -52,6 +57,7 @@ function createInfraAndInstallPassboltChart {
 		createSecretWithTLS
 		installNginxIngress
 		installPassboltChart
+		addEtcHostsEntry
 	else
 		echo "Cluster $KIND_CLUSTER_NAME already exists"
 	fi
