@@ -88,6 +88,7 @@ function createAndInstallSSLCertificates {
 
 function createSecretWithTLS {
 	secret_name="$K8S_LOCAL_TLS_SECRET"
+	echo "$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
 	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
 }
 
