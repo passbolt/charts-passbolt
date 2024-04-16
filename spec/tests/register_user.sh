@@ -24,7 +24,7 @@ function registerPassboltUser {
 	lastname=$2
 	email=$3
 
-	registration_url=$(kubectl exec -it deployment/passbolt-depl-srv -- su -c "bin/cake passbolt register_user -u $EMAIL -f $FIRSTNAME -l $LASTNAME -r admin" -s /bin/bash www-data 2>/dev/null | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*")
+	registration_url=$(kubectl exec -it deployment/passbolt-depl-srv -n default -- su -c "bin/cake passbolt register_user -u $EMAIL -f $FIRSTNAME -l $LASTNAME -r admin" -s /bin/bash www-data 2>/dev/null | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-]*")
 	user_uuid=$(echo "${registration_url}" | cut -d/ -f6)
 	user_token=$(echo "${registration_url}" | cut -d/ -f7)
 
