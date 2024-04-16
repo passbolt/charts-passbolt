@@ -34,6 +34,6 @@ function registerPassboltUser {
 		-H "authority: ${PASSBOLT_FQDN}" \
 		-H "accept: application/json" \
 		-H "content-type: application/json" \
-		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(sed -z 's/\n/\\n/g' public.asc)\"}}" \
+		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(awk '{printf "%s\\n", $0}' public.asc)\"}}" \
 		--compressed
 }
