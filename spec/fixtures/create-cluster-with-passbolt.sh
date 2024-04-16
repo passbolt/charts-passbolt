@@ -92,9 +92,11 @@ function installNginxIngress {
 }
 
 function installPassboltChart {
-	"$HELM_BINARY" repo add bitnami https://charts.bitnami.com/bitnami
-	"$HELM_BINARY" repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
-	"$HELM_BINARY" dependency build
+	if [[ ! -z "$GITLAB_CI" ]]; then
+		"$HELM_BINARY" repo add bitnami https://charts.bitnami.com/bitnami
+		"$HELM_BINARY" repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
+		"$HELM_BINARY" dependency build
+	fi
 	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default
 	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
