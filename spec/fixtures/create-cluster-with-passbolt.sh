@@ -43,7 +43,7 @@ function installPassboltChart {
 		"$HELM_BINARY" dependency build
 	fi
 	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default
-	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n defaultfixfix
+	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
 
 function addEtcHostsEntry {
