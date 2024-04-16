@@ -66,6 +66,11 @@ function installDependencies {
 	getHelm
 	getMkcert
 	getPassboltGoCli
+	echo "$KUBECTL_BINARY"
+	echo "$HELM_BINARY"
+	echo "$MKCERT_BINARY"
+	echo "$PASSBOLT_CLI_BINARY"
+	echo "$KIND_BINARY"
 }
 
 function createKindCluster {

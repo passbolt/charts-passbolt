@@ -1,3 +1,8 @@
+Describe 'create_password.sh'
+Before 'environment'
+Include spec/fixtures/create-cluster-with-passbolt.sh
+Include spec/tests/register_user.sh
+Include spec/tests/create_password.sh
 function environment {
 	TMPGNUPGHOME=$(mktemp -d)
 	PASSPHRASE="strong-passphrase"
@@ -6,12 +11,8 @@ function environment {
 	FIRSTNAME="John"
 	LASTNAME="Doe"
 }
-Describe 'create_password.sh'
-Before 'environment'
-Include spec/fixtures/create-cluster-with-passbolt.sh
-Include spec/tests/register_user.sh
-Include spec/tests/create_password.sh
 function ensureClusterAndPassboltApi {
+	environment
 	installDependencies
 	createInfraAndInstallPassboltChart
 }
@@ -26,6 +27,7 @@ function testCreateAndDecryptPassword {
 	fi
 	return 1
 }
+Before ensureClusterAndPassboltApi
 It 'creates a password'
 When call testCreateAndDecryptPassword "super-password"
 The status should be success
