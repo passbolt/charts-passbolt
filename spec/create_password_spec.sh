@@ -51,6 +51,8 @@ function registerPassboltUser {
 		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(awk '{printf "%s\\n", $0}' public.asc)\"}}" \
 		--compressed
 	echo waitign for user
+	sleep 3000
+
 }
 
 function createPassword {
