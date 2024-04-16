@@ -18,6 +18,7 @@ function testCreateAndDecryptPassword {
 	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX registrao
 
 	id=$(createPassword "pass" "${value}")
+	echo XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX despois de crear
 	result=$(./passbolt get resource --id $(echo $id | jq -r .id) -j | jq -r .password)
 	if [[ "$value" == "$result" ]]; then
 		return 0
