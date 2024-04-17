@@ -14,20 +14,6 @@ function createKindCluster {
 	"$KIND_BINARY" create cluster --config "$KIND_CLUSTER_CONFIG_FILE" --name "$KIND_CLUSTER_NAME"
 }
 
-function createAndInstallSSLCertificates {
-	domain="${1-passbolt.local}"
-	ssl_key_path="$SSL_KEY_PATH"
-	ssl_cert_path="$SSL_CERT_PATH"
-	"$MKCERT_BINARY" -install
-	"$MKCERT_BINARY" -cert-file "$ssl_cert_path" -key-file "$ssl_key_path" "$domain"
-}
-
-function createSecretWithTLS {
-	secret_name="$K8S_LOCAL_TLS_SECRET"
-	echo "$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
-	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
-}
-
 function installNginxIngress {
 	"$KUBECTL_BINARY" apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 	"$KUBECTL_BINARY" rollout status deployment ingress-nginx-controller --timeout=120s -n ingress-nginx
@@ -43,10 +29,6 @@ function installPassboltChart {
 	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
 
-function addEtcHostsEntry {
-	echo "127.0.0.1 $PASSBOLT_FQDN" >>/etc/hosts
-}
-
 function createInfraAndInstallPassboltChart {
 	if ! "$KUBECTL_BINARY" config view -o jsonpath='{.contexts[*].name}' | grep -q "$KIND_CLUSTER_NAME"; then
 		createKindCluster
@@ -54,10 +36,11 @@ function createInfraAndInstallPassboltChart {
 		createSecretWithTLS
 		installNginxIngress
 		installPassboltChart
-		addEtcHostsEntry
+		#addEtcHostsEntry
 	else
 		echo "Cluster $KIND_CLUSTER_NAME already exists"
 	fi
 }
 
+installDependencies
 createInfraAndInstallPassboltChart

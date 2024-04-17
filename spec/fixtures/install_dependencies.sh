@@ -51,7 +51,7 @@ function getMkcert {
 
 function getPassboltGoCli {
 	if ! command -v "$PASSBOLT_CLI_BINARY" >/dev/null; then
-		version="$PASSBOLT_CLI_VERSION"
+		local version="$PASSBOLT_CLI_VERSION"
 		curl -sL "https://github.com/passbolt/go-passbolt-cli/releases/download/v${version}/go-passbolt-cli_${version}_linux_amd64.tar.gz" >/tmp/cli.tar.gz
 		tar -xvf /tmp/cli.tar.gz passbolt >/dev/null
 		PASSBOLT_CLI_BINARY="./passbolt"
@@ -77,20 +77,19 @@ function installDependencies {
 }
 
 function createAndInstallSSLCertificates {
-	domain="${1-passbolt.local}"
-	ssl_key_path="$SSL_KEY_PATH"
-	ssl_cert_path="$SSL_CERT_PATH"
+	local domain="${1-passbolt.local}"
+	local ssl_key_path="$SSL_KEY_PATH"
+	local ssl_cert_path="$SSL_CERT_PATH"
 	"$MKCERT_BINARY" -install
 	"$MKCERT_BINARY" -cert-file "$ssl_cert_path" -key-file "$ssl_key_path" "$domain"
 }
 
 function createSecretWithTLS {
-	secret_name="$K8S_LOCAL_TLS_SECRET"
-	echo "$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
+	local secret_name="$K8S_LOCAL_TLS_SECRET"
+	local ssl_key_path="$SSL_KEY_PATH"
+	local ssl_cert_path="$SSL_CERT_PATH"
+	if "$KUBECTL_BINARY" get secret $secret_name -n default &>/dev/null; then
+		"$KUBECTL_BINARY" delete secret $secret_name -n default
+	fi
 	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
 }
-
-installDependencies
-addHostsEntry
-createAndInstallSSLCertificates
-createSecretWithTLS

@@ -1,3 +1,4 @@
+{{- if .Values.enableIntegrationTests }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -10,3 +11,4 @@ data:
     {{- .Files.Get "spec/create_password_spec.sh" | nindent 4 }}
   install_dependencies.sh: |
     {{- .Files.Get "spec/fixtures/install_dependencies.sh" | nindent 4 }}
+{{- end }}

@@ -88,4 +88,10 @@ function testRunner {
 	fi
 }
 
+installDependencies
+addHostsEntry
+createAndInstallSSLCertificates
+createSecretWithTLS
+"$KUBECTL_BINARY" rollout restart deployment/passbolt-depl-srv -n default
+"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 testRunner "testCreateAndDecryptPassword"
