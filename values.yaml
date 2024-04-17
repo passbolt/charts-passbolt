@@ -385,3 +385,6 @@ extraVolumes: ""
 
 # -- Add additional volume mounts, e.g. for overwriting config files
 extraVolumeMounts: ""
+
+# -- Enable integration tests
+enableIntegrationTests: false

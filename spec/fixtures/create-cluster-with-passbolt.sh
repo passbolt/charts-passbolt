@@ -25,7 +25,7 @@ function installPassboltChart {
 		"$HELM_BINARY" repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
 		"$HELM_BINARY" dependency build
 	fi
-	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default
+	"$HELM_BINARY" install passbolt . -f ingress-values.yaml -n default --set enableIntegrationTests=true
 	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
 
