@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "passbolt-integration-tests"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  #serviceAccountName: -sa-common
+  containers:
+    - name: tests
+      image: alpine
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - |
+          set -e
+          apk update && apk add -U curl bash jq gpg gpg-agent
+          bash /tests/run_tests.sh
+      volumeMounts:
+        - name: integration-tests
+          mountPath: "/tests/run_tests.sh"
+          subPath: run_tests.sh
+          readOnly: true
+        - name: integration-tests
+          mountPath: "/tests/fixtures/install_dependencies.sh"
+          subPath: install_dependencies.sh
+          readOnly: true
+  restartPolicy: Never
+  volumes:
+    - name: integration-tests
+      configMap:
+        name: "{{ .Release.Name }}-integration-script"

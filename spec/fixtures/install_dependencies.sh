@@ -11,6 +11,7 @@ MKCERT_BINARY="mkcert"
 K8S_LOCAL_TLS_SECRET="local-tls-secret"
 PASSBOLT_CLI_BINARY="passbolt"
 PASSBOLT_CLI_VERSION="0.3.1"
+PASSBOLT_FQDN=passbolt.local
 SSL_KEY_PATH="/tmp/ssl.key"
 SSL_CERT_PATH="/tmp/ssl.crt"
 
@@ -57,6 +58,11 @@ function getPassboltGoCli {
 	fi
 }
 
+function addHostsEntry {
+	echo "Adding hosts entry to ingress cluster ip..."
+	echo "$("$KUBECTL_BINARY" get service/ingress-nginx-controller -o jsonpath='{.spec.clusterIP}' -n ingress-nginx) $PASSBOLT_FQDN" >>/etc/hosts
+}
+
 function installDependencies {
 	getKind
 	getKubectl
@@ -70,4 +76,21 @@ function installDependencies {
 	export KIND_BINARY="$KIND_BINARY"
 }
 
+function createAndInstallSSLCertificates {
+	domain="${1-passbolt.local}"
+	ssl_key_path="$SSL_KEY_PATH"
+	ssl_cert_path="$SSL_CERT_PATH"
+	"$MKCERT_BINARY" -install
+	"$MKCERT_BINARY" -cert-file "$ssl_cert_path" -key-file "$ssl_key_path" "$domain"
+}
+
+function createSecretWithTLS {
+	secret_name="$K8S_LOCAL_TLS_SECRET"
+	echo "$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
+	"$KUBECTL_BINARY" create secret tls $secret_name --cert="$ssl_cert_path" --key="$ssl_key_path" -n default
+}
+
 installDependencies
+addHostsEntry
+createAndInstallSSLCertificates
+createSecretWithTLS

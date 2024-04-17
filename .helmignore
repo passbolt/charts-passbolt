@@ -22,10 +22,9 @@
 # Gitlab
 .gitlab-ci.yml
 .gitlab-ci/
-tests/
+./tests/
 kind
 helm
 kubectl
 passbolt
-spec
 mkcert

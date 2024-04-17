@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}-integration-script"
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }} 
+data:
+  run_tests.sh: |
+    {{- .Files.Get "spec/create_password_spec.sh" | nindent 4 }}
+  install_dependencies.sh: |
+    {{- .Files.Get "spec/fixtures/install_dependencies.sh" | nindent 4 }}
