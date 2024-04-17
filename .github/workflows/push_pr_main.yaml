@@ -46,7 +46,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Helm unit test plugin
+      - name: Create kind cluster and install passbolt chart
         run: bash spec/fixtures/create-cluster-with-passbolt.sh
 
       - name: Run helm tests

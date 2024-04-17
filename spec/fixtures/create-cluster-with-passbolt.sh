@@ -20,7 +20,7 @@ function installNginxIngress {
 }
 
 function installPassboltChart {
-	if [[ ! -z "$GITLAB_CI" ]]; then
+	if [[ ! -z "$GITLAB_CI" && ! -z "$GITHUB_WORKFLOW" ]]; then
 		"$HELM_BINARY" repo add bitnami https://charts.bitnami.com/bitnami
 		"$HELM_BINARY" repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
 		"$HELM_BINARY" dependency build
