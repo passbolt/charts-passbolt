@@ -8,7 +8,7 @@ metadata:
     {{- include "passbolt-library.selectorLabels" . | nindent 4 }} 
 data:
   run_tests.sh: |
-    {{- .Files.Get "spec/create_password_spec.sh" | nindent 4 }}
+    {{- .Files.Get "spec/run_tests.sh" | nindent 4 }}
   install_dependencies.sh: |
     {{- .Files.Get "spec/fixtures/install_dependencies.sh" | nindent 4 }}
 {{- end }}
