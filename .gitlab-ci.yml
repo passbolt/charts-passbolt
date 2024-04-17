@@ -35,7 +35,7 @@ integration Tests Helm Charts:
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
   script:
     - |
-      apk update && apk add -U curl bash jq gpg gpg-agent
+      apk update && apk add -U curl bash
       sleep 10 # Wait for docker service
       bash spec/fixtures/create-cluster-with-passbolt.sh
       ./helm test passbolt -n default --logs

@@ -38,3 +38,16 @@ jobs:
 
       - name: Run unit tests
         run: helm unittest --color .
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Helm unit test plugin
+        run: bash spec/fixtures/create-cluster-with-passbolt.sh
+
+      - name: Run helm tests
+        run: helm test passbolt -n default --logs
