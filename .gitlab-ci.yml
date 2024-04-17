@@ -38,7 +38,7 @@ integration Tests Helm Charts:
       apk update && apk add -U curl bash jq gpg gpg-agent
       sleep 10 # Wait for docker service
       bash spec/fixtures/create-cluster-with-passbolt.sh
-      ./helm test passbolt -n default
+      ./helm test passbolt -n default --logs
 
 publish:
   stage: publish
