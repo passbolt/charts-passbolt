@@ -19,9 +19,13 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port | default 443 }}
-      targetPort: {{ .Values.service.targetPort | default 443 }}
+    - port: {{ .Values.service.ports.https.port | default 443 }}
+      targetPort: {{ .Values.service.ports.https.targetPort | default 443 }}
       protocol: TCP
-      name: {{ .Values.service.name | default "https" }}
+      name: {{ .Values.service.ports.https.name | default "https" }}
+    - port: {{ .Values.service.ports.http.port | default 80 }}
+      targetPort: {{ .Values.service.ports.http.targetPort | default 80 }}
+      protocol: TCP
+      name: {{ .Values.service.ports.http.name | default "http" }}
   selector:
     {{- include "passbolt-library.selectorLabels" . | nindent 4 }}

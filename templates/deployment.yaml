@@ -110,10 +110,10 @@ spec:
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
           ports:
           - name: https
-            containerPort: {{ .Values.service.targetPort }}
+            containerPort: {{ .Values.service.ports.https.targetPort }}
             protocol: TCP
           - name: http
-            containerPort: 80
+            containerPort: {{ .Values.service.ports.http.targetPort }}
             protocol: TCP
           livenessProbe:
             {{- toYaml .Values.livenessProbe | nindent 12 }}
