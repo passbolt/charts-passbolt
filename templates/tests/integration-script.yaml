@@ -1,0 +1,12 @@
+{{- if ( and .Values.integrationTests .Values.integrationTests.enabled ) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}-integration-script"
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }} 
+data:
+  run_tests.sh: |
+    {{- .Files.Get "tests/integration/run_integration_tests.sh" | nindent 4 }}
+{{- end }}
