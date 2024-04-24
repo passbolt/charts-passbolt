@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/setup_helm
 
       - name: Run linter
-        run: helm lint
+        run: bash run_tests.sh --lint
 
   unit-test:
     name: Unit Tests
@@ -37,4 +37,14 @@ jobs:
         run: helm plugin install https://github.com/helm-unittest/helm-unittest.git
 
       - name: Run unit tests
-        run: helm unittest --color .
+        run: bash run_tests.sh --unit
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run integration tests
+        run: bash run_tests.sh --integration
