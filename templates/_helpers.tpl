@@ -81,6 +81,25 @@ Render the value of the database service
 {{- end }}
 
 {{/*
+Render the value of the database port
+*/}}
+{{- define "passbolt.databasePort" -}}
+{{- if and ( eq .Values.mariadbDependencyEnabled true ) (or ( eq .Values.app.database.kind "mariadb") ( eq .Values.app.database.kind "mysql") ) }}
+{{- if eq .Values.mariadb.architecture "replication" }}
+{{- default 3306 .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
+{{- else }}
+{{- default ( printf "%s-%s" .Release.Name "mariadb" ) .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
+{{- end -}}
+{{- else if and ( eq .Values.postgresqlDependencyEnabled true ) ( eq .Values.app.database.kind "postgresql" ) }}
+{{- default 5432 .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
+{{- else if ( hasKey .Values.passboltEnv.plain "DATASOURCES_DEFAULT_PORT" )  -}}
+{{- printf "%s" .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT }}
+{{- else }}
+{{- fail "DATASOURCES_DEFAULT_PORT can't be empty when mariadbDependencyEnabled and postgresqlDependencyEnabled are disabled"}}
+{{- end }}
+{{- end }}
+
+{{/*
 Show error message if the user didn't set the needed values during upgrade
 */}}
 {{- define "passbolt.validateValues" -}}
@@ -116,21 +135,19 @@ Show error message if the user didn't set the needed values during upgrade
 {{- end }}
 
 {{- define "passbolt.tls.secretName" -}}
-{{- if .globalTLS.existingSecret -}}
-  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- if .tls.autogenerate -}}
+  {{- printf "%s-sec-tls-ingress-%d" .name .index -}}
 {{- else }}
-  {{- printf "%s-sec-%s" .name .tls.secretName -}}
+  {{- printf "%s" .tls.existingSecret -}}
 {{- end }}
 {{- end }}
 
 {{- define "passbolt.container.tls.secretName" -}}
 {{- $name := .name }}
-{{- if .globalTLS.existingSecret -}}
-  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- if .tls.autogenerate -}}
+    {{- printf "%s-sec-tls-internal" $name -}}
 {{- else }}
-  {{- with (index .ingressTLS 0 ) -}}
-    {{- printf "%s-sec-%s" $name .secretName -}}
-  {{- end }}
+    {{- printf "%s" .tls.existingSecret -}}
 {{- end }}
 {{- end }}
 
@@ -216,7 +233,7 @@ imagePullSecrets:
 {{- end -}}
 
 {{- define "passbolt.gpg.secretName" -}}
-{{- if .Values.gpgExistingSecret -}}
+{{- if $.Values.gpgExistingSecret -}}
   {{- printf "%s" .Values.gpgExistingSecret -}}
 {{- else }}
   {{- printf "%s-sec-gpg" .name -}}
@@ -230,3 +247,26 @@ imagePullSecrets:
   {{- printf "%s-sec-jwt" .name -}}
 {{- end }}
 {{- end }}
+
+{{- define "passbolt.gen-ingress-certs" -}}
+{{- $commonName := .commonName }}
+{{- $altNames := .altNames }}
+{{- $ca := genCA "vault-ca" 365 -}}
+{{- $cert := genSignedCert $commonName nil $altNames 365 $ca -}}
+tls.crt: {{ $cert.Cert | b64enc }}
+tls.key: {{ $cert.Key | b64enc }}
+ca.crt: {{ $ca.Cert | b64enc }}
+ca.key: {{ $ca.Key | b64enc }}
+{{- end -}}
+
+{{- define "passbolt.gen-internal-certs" -}}
+{{- $commonName :=  .commonName }}
+{{- $altNames := .altNames }}
+{{- $ca := genCA "vault-ca" 365 -}}
+{{- $cert := genSignedCert $commonName nil $altNames 365 $ca -}}
+server.crt: {{ $cert.Cert | b64enc }}
+server-key.pem: {{ $cert.Key | b64enc }}
+ca.crt: {{ $ca.Cert | b64enc }}
+ca.key: {{ $ca.Key | b64enc }}
+{{- end -}}
+

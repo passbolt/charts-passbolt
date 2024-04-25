@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.7.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.7.2...HEAD)
+
+## [0.7.2] - 2024-01-23
+
+### Fixed
+
+- Passbolt postgresql secret not using DEFAULT_DATASOURCES_PORT and DEFAULT_DATASOURCES_HOST correctly when calculating DEFAULT_DATASOURCES_URL
 
 ## [0.7.1] - 2024-01-09
 

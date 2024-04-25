@@ -1,3 +1,10 @@
 charts/*
 values-sec.yaml
 *.vim
+secret.asc
+public.asc
+passbolt
+mkcert
+helm
+kubectl
+kind

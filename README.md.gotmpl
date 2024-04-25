@@ -103,7 +103,36 @@ chart and deletes the release.
 
 {{ template "chart.valuesSection" . }}
 
-## Updating REAME.md
+## Running tests
+
+In order to run the available tests, you can run the `run_tests.sh` script on the root of the project. This script runs both the unit and the integration tests.
+
+```
+$ bash run_tests.sh -h
+Run the available tests for passbolt helm charts
+
+Syntax: run_tests.sh [options]
+run_tests.sh with no arguments will run all of the available tests.
+
+options:
+-h|--help         Show this message.
+-l|--lint         Run helm lint.
+-u|--unit         Run helm unittest tests.
+-i|--integration  Run integration tests.
+-no-clean         Skip cleaning step.
+
+```
+
+### Unit tests
+
+We rely on [helm unitttest](https://github.com/helm-unittest/helm-unittest) framework, so if you want to run it on your own, follow the installation steps in their [docs](https://github.com/helm-unittest/helm-unittest?tab=readme-ov-file#install).
+
+### Integration tests
+
+The integration tests code is under the `tests/integration`. There are a list of tools that are required locally to run the integration tests ([kind](https://github.com/kubernetes-sigs/kind), [helm](https://github.com/helm/helm), [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl), [mkcert](https://github.com/FiloSottile/mkcert) and [passbolt go cli](https://github.com/passbolt/go-passbolt-cli))
+and they will be downloaded during the tests execution if they are not installed in the system. Even though, there is a cleaning step that runs at the end of the execution to clean the directory.
+
+## Updating README.md
 
 We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release 
 
