@@ -23,7 +23,7 @@ tests:
             volumeMounts:
               - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
                 subPath: haproxy.cfg
-                name: test-passbolt-depl-srv-sec-redis-proxy
+                name: sec-redis-proxy
                 readOnly: true
 
   - it: should have only one redis sidecar and mount its configuration
@@ -44,7 +44,7 @@ tests:
             volumeMounts:
               - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
                 subPath: haproxy.cfg
-                name: test-passbolt-depl-srv-sec-redis-proxy
+                name: sec-redis-proxy
                 readOnly: true
           count: 1
           any: true
