@@ -3,7 +3,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/0.7.2...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.0.0...HEAD)
+
+## [1.0.0] - 2024-04-25
+
+### Fixed
+
+- [#76](https://github.com/passbolt/charts-passbolt/pull/76) Allow use of alternate postgresql port.
+
+### Added
+
+- Integration tests were added.
+- [#69](https://github.com/passbolt/charts-passbolt/issues/69) Introduce the ability to use different tls certificates on ingress and api.
+- [#68](https://github.com/passbolt/charts-passbolt/pull/68) Use static names for pod internal references (container and volumes)
+- [#61](https://github.com/passbolt/charts-passbolt/pull/61) feat: use list instead of string for extraVolumes and extraVolumeMounts values.
+- [#62](https://github.com/passbolt/charts-passbolt/pull/62) expose the HTTP port in the service.
 
 ## [0.7.2] - 2024-01-23
 
