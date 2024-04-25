@@ -1,0 +1,38 @@
+---
+suite: ingress service port
+release:
+  name: test
+tests:
+  - it: should set the port of the backend to the configured HTTPS port
+    templates:
+      - ingress.yaml
+    set:
+      ingress.enabled: true
+    asserts:
+      - isSubset:
+          path: spec.rules[0].http.paths[0].backend.service
+          content:
+            name: test-passbolt
+            port:
+              name: https
+          any: true
+  - it: should set the port of the backend to the configured HTTP port
+    templates:
+      - ingress.yaml
+    set:
+      ingress.enabled: true
+      ingress.hosts:
+        - host: passbolt.local
+          paths:
+            - path: /
+              port: http
+              pathType: ImplementationSpecific
+
+    asserts:
+      - isSubset:
+          path: spec.rules[0].http.paths[0].backend.service
+          content:
+            name: test-passbolt
+            port:
+              name: http
+          any: true

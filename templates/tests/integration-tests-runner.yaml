@@ -1,0 +1,52 @@
+{{- if ( and .Values.integrationTests .Values.integrationTests.enabled ) }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "passbolt-integration-tests-runner"
+  annotations:
+    "helm.sh/hook": test
+spec:
+  #serviceAccountName: -sa-common
+  containers:
+    - name: tests
+      image: alpine
+      command: ["/bin/sh"]
+      args:
+        - -c
+        - |
+          set -e
+          apk update && apk add -U curl bash jq gpg gpg-agent
+          cd
+          bash /tests/run_tests.sh
+      env:
+        - name: TESTS_DEBUG
+          value: {{ quote .Values.integrationTests.debug  }}
+      volumeMounts:
+        - name: integration-tests-runner
+          mountPath: "/tests/run_tests.sh"
+          subPath: run_tests.sh
+          readOnly: true
+        - mountPath: /mkcert
+          name: mkcert
+          readOnly: true
+        - name: integration-tests
+          mountPath: "/tests/tests"
+          readOnly: true
+        - name: integration-fixtures
+          mountPath: "/tests/fixtures"
+          readOnly: true
+  restartPolicy: Never
+  volumes:
+    - name: integration-tests-runner
+      configMap:
+        name: "{{ .Release.Name }}-integration-script"
+    - name: integration-tests
+      configMap:
+        name: "{{ .Release.Name }}-integration-tests"
+    - name: integration-fixtures
+      configMap:
+        name: "{{ .Release.Name }}-integration-fixtures"
+    - name: mkcert
+      secret:
+        secretName: "{{ .Values.integrationTests.certificatesSecret }}"
+{{- end }}

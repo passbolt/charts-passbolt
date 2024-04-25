@@ -2,43 +2,68 @@
 suite: ingress tls secretName
 release:
   name: test
-values:
-  - values-test.yaml
 tests:
   - it: should set tls secretName as the given value
     templates:
       - ingress.yaml
     set:
       ingress.enabled: true
-      ingress.tls[0].secretName: supersecretname
+      ingress.tls[0]:
+        existingSecret: supersecretname
+        hosts:
+          - passbolt.local
     asserts:
       - contains:
           path: spec.tls
           content:
-            secretName: test-passbolt-sec-supersecretname
+            secretName: supersecretname
           any: true
-  - it: should set a default tls secretName 
+  - it: should set a default tls secretName
     templates:
       - ingress.yaml
     set:
       ingress.enabled: true
-      ingress.tls[0].secretName: tls
+      ingress.tls[0]:
+        autogenerate: true
+        hosts:
+          - passbolt.local
+
     asserts:
       - contains:
           path: spec.tls
           content:
-              secretName: test-passbolt-sec-tls
+            secretName: test-passbolt-sec-tls-ingress-0
           any: true
-  - it: should set override secretName with a given name
+
+  - it: should set a default tls secretName with correct index
     templates:
       - ingress.yaml
     set:
       ingress.enabled: true
-      ingress.tls[0].secretName: tls
-      tls.existingSecret: supersecret
+      ingress.tls:
+        - autogenerate: true
+          hosts:
+            - passbolt.local
+        - autogenerate: true
+          hosts:
+            - passbolt.local
+        - autogenerate: true
+          hosts:
+            - passbolt.local
+
     asserts:
       - contains:
           path: spec.tls
           content:
-              secretName: supersecret
+            secretName: test-passbolt-sec-tls-ingress-0
+          any: true
+      - contains:
+          path: spec.tls
+          content:
+            secretName: test-passbolt-sec-tls-ingress-1
+          any: true
+      - contains:
+          path: spec.tls
+          content:
+            secretName: test-passbolt-sec-tls-ingress-2
           any: true

@@ -61,7 +61,7 @@ tests:
       - contains:
           path: spec.jobTemplate.spec.template.spec.volumes
           content:
-            name: test-passbolt-vol-success
+            name: vol-success
           count: 1
           any: true
 
@@ -79,7 +79,7 @@ tests:
       - contains:
           path: spec.jobTemplate.spec.template.spec.volumes
           content:
-            name: test-passbolt-sec-gpg
+            name: sec-gpg
             secret:
               secretName: test-passbolt-sec-gpg
           count: 1
@@ -100,7 +100,7 @@ tests:
       - contains:
           path: spec.jobTemplate.spec.template.spec.volumes
           content:
-            name: my-gpg-secret
+            name: sec-gpg
             secret:
               secretName: my-gpg-secret
           count: 1

@@ -1,0 +1,16 @@
+{{- if ( and .Values.integrationTests .Values.integrationTests.enabled ) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}-integration-tests"
+data:
+{{ (.Files.Glob "tests/integration/tests/*_test.sh").AsConfig | indent 2 }}
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ .Release.Name }}-integration-fixtures"
+data:
+{{ (.Files.Glob "tests/integration/fixtures/*.sh").AsConfig | indent 2 }}
+{{- end }}

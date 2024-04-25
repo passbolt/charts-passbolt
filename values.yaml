@@ -124,7 +124,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.4.2-1-ce
+    tag: 4.6.2-1-ce
   # Allowed options: mariadb, mysql or postgresql
   database:
     kind: mariadb
@@ -151,6 +151,12 @@ app:
         # -- Configure the passbolt deployment resources
   extraPodLabels: {}
   resources: {}
+  tls:
+    # -- If autogenerate is true, the chart will generate a secret with a certificate for APP_FULL_BASE_URL hostname
+    # -- if autogenerate is false, existingSecret should be filled with an existing tls kind secret name
+    # @ignored
+    autogenerate: true
+    #existingSecret: ""
 
 # -- Enable email cron
 cronJobEmail:
@@ -336,20 +342,25 @@ podSecurityContext:
 service:
   # -- Configure passbolt service type
   type: ClusterIP
-  # -- Configure passbolt service port
-  port: 443
-  # -- Configure passbolt service targetPort
-  targetPort: 443
-  # -- Configure passbolt service port name
-  name: https
   # -- Annotations to add to the service
   annotations: {}
-
-tls:
-  # -- Generates a secret with a self-signed cerfificate that is injected on ingress and passbolt container
-  autogenerate: true
-  # -- Name of an existing kubernetes secret that contains a SSL certificate to inject on ingress and passbolt container
-  #existingSecret: ""
+  # -- Configure the service ports
+  ports:
+    # -- Configure the HTTPS port
+    https:
+      # -- Configure passbolt HTTPS service port
+      port: 443
+      # -- Configure passbolt HTTPS service targetPort
+      targetPort: 443
+      # -- Configure passbolt HTTPS service port name
+      name: https
+    http:
+      # -- Configure passbolt HTTP service port
+      port: 80
+      # -- Configure passbolt HTTP service targetPort
+      targetPort: 80
+      # -- Configure passbolt HTTP service port name
+      name: http
 
 ingress:
   # -- Enable passbolt ingress
@@ -362,13 +373,15 @@ ingress:
     - host: passbolt.local
       paths:
         - path: /
+          port: https
           pathType: ImplementationSpecific
   # -- Configure passbolt ingress tls
   tls:
-    # If secretname is not empty, the tls entry will use it, otherwise will
-    # have a default name based on the release
+    # If autogenerate is true, the chart will generate a secret for the given hosts
+    # if autogenerate is false, existingSecret should be filled with an existing tls kind secret name
     # @ignored
-    - secretName: "tls"
+    - autogenerate: true
+      # existingSecret: ""
       hosts:
         - passbolt.local
 # -- Configure passbolt deployment nodeSelector
@@ -381,7 +394,7 @@ tolerations: []
 affinity: {}
 
 # -- Add additional volumes, e.g. for overwriting config files
-extraVolumes: ""
+extraVolumes: []
 
 # -- Add additional volume mounts, e.g. for overwriting config files
-extraVolumeMounts: ""
+extraVolumeMounts: []

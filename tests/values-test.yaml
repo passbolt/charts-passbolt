@@ -251,14 +251,25 @@ podSecurityContext: {}
 service:
   # -- Configure passbolt service type
   type: ClusterIP
-  # -- Configure passbolt service port
-  port: 443
-  # -- Configure passbolt service targetPort
-  targetPort: 443
-  # -- Configure passbolt service port name
-  name: https
   # -- Annotations to add to the service
   annotations: {}
+  # -- Configure the service ports
+  ports:
+    # -- Configure the HTTPS port
+    https:
+      # -- Configure passbolt HTTPS service port
+      port: 443
+      # -- Configure passbolt HTTPS service targetPort
+      targetPort: 443
+      # -- Configure passbolt HTTPS service port name
+      name: https
+    http:
+      # -- Configure passbolt HTTP service port
+      port: 80
+      # -- Configure passbolt HTTP service targetPort
+      targetPort: 80
+      # -- Configure passbolt HTTP service port name
+      name: http
 
 ingress:
   # -- Enable passbolt ingress
@@ -288,7 +299,7 @@ tolerations: []
 affinity: {}
 
 # -- Add additional volumes, e.g. for overwriting config files
-extraVolumes: ""
+extraVolumes: []
 
   # -- Add additional volume mounts, e.g. for overwriting config files
-extraVolumeMounts: ""
+extraVolumeMounts: []

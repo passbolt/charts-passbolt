@@ -1,0 +1,16 @@
+{{- if ( and .Values.integrationTests .Values.integrationTests.enabled ) }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: "{{ .Release.Name}}-tests-role"
+rules:
+  - apiGroups: [""]
+    resources: ["services"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["create", "get", "watch", "list", "delete"]
+  - apiGroups: ["", "extensions", "apps"]
+    resources: ["deployments", "pods", "pods/attach", "pods/exec", "pods/log"]
+    verbs: ["list", "get", "watch", "create", "update", "patch", "delete"]
+{{- end }}

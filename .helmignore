@@ -22,4 +22,11 @@
 # Gitlab
 .gitlab-ci.yml
 .gitlab-ci/
-tests/
+./tests/
+./templates/tests/
+./spec/
+kind
+helm
+kubectl
+passbolt
+mkcert
