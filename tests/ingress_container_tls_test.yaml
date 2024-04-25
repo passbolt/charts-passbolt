@@ -5,25 +5,24 @@ release:
 values:
   - values-test.yaml
 tests:
-  - it: should set tls secretName as the given value
+  - it: should set container tls secretName as default value
     templates:
       - deployment.yaml
     set:
-      ingress.enabled: true
-      ingress.tls[0].secretName: supersecretname
+      app.tls.autogenerate: true
     asserts:
       - contains:
           path: spec.template.spec.volumes
           content:
             secret:
-              secretName: test-passbolt-sec-supersecretname
+              secretName: test-passbolt-sec-tls-internal
           any: true
-  - it: should set tls secretName as the given value
+  - it: should set container tls secretName as given value
     templates:
       - deployment.yaml
     set:
-      ingress.enabled: true
-      tls.existingSecret: supersecretname
+      app.tls.autogenerate: false
+      app.tls.existingSecret: supersecretname
     asserts:
       - contains:
           path: spec.template.spec.volumes

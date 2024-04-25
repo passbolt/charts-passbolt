@@ -3,9 +3,6 @@ integrationTests:
   enabled: true
   certificatesSecret: mkcert-ca
   debug: false
-tls:
-  autogenerate: false
-  existingSecret: local-tls-secret
 ingress:
   # -- Enable passbolt ingress
   enabled: true
@@ -18,4 +15,13 @@ ingress:
     - host: "passbolt.local"
       paths:
         - path: /
+          port: https
           pathType: ImplementationSpecific
+  tls:
+    - existingSecret: "local-tls-secret"
+      hosts:
+        - passbolt.local
+app:
+  tls:
+    autogenerate: false
+    existingSecret: "local-tls-secret"
