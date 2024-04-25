@@ -135,21 +135,19 @@ Show error message if the user didn't set the needed values during upgrade
 {{- end }}
 
 {{- define "passbolt.tls.secretName" -}}
-{{- if .globalTLS.existingSecret -}}
-  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- if .tls.autogenerate -}}
+  {{- printf "%s-sec-tls-ingress-%d" .name .index -}}
 {{- else }}
-  {{- printf "%s-sec-%s" .name .tls.secretName -}}
+  {{- printf "%s" .tls.existingSecret -}}
 {{- end }}
 {{- end }}
 
 {{- define "passbolt.container.tls.secretName" -}}
 {{- $name := .name }}
-{{- if .globalTLS.existingSecret -}}
-  {{- printf "%s" .globalTLS.existingSecret -}}
+{{- if .tls.autogenerate -}}
+    {{- printf "%s-sec-tls-internal" $name -}}
 {{- else }}
-  {{- with (index .ingressTLS 0 ) -}}
-    {{- printf "%s-sec-%s" $name .secretName -}}
-  {{- end }}
+    {{- printf "%s" .tls.existingSecret -}}
 {{- end }}
 {{- end }}
 
@@ -235,7 +233,7 @@ imagePullSecrets:
 {{- end -}}
 
 {{- define "passbolt.gpg.secretName" -}}
-{{- if .Values.gpgExistingSecret -}}
+{{- if $.Values.gpgExistingSecret -}}
   {{- printf "%s" .Values.gpgExistingSecret -}}
 {{- else }}
   {{- printf "%s-sec-gpg" .name -}}
@@ -249,3 +247,26 @@ imagePullSecrets:
   {{- printf "%s-sec-jwt" .name -}}
 {{- end }}
 {{- end }}
+
+{{- define "passbolt.gen-ingress-certs" -}}
+{{- $commonName := .commonName }}
+{{- $altNames := .altNames }}
+{{- $ca := genCA "vault-ca" 365 -}}
+{{- $cert := genSignedCert $commonName nil $altNames 365 $ca -}}
+tls.crt: {{ $cert.Cert | b64enc }}
+tls.key: {{ $cert.Key | b64enc }}
+ca.crt: {{ $ca.Cert | b64enc }}
+ca.key: {{ $ca.Key | b64enc }}
+{{- end -}}
+
+{{- define "passbolt.gen-internal-certs" -}}
+{{- $commonName :=  .commonName }}
+{{- $altNames := .altNames }}
+{{- $ca := genCA "vault-ca" 365 -}}
+{{- $cert := genSignedCert $commonName nil $altNames 365 $ca -}}
+server.crt: {{ $cert.Cert | b64enc }}
+server-key.pem: {{ $cert.Key | b64enc }}
+ca.crt: {{ $ca.Cert | b64enc }}
+ca.key: {{ $ca.Key | b64enc }}
+{{- end -}}
+

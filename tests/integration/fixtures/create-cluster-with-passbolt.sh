@@ -20,13 +20,39 @@ function installNginxIngress {
 	"$KUBECTL_BINARY" rollout status deployment ingress-nginx-controller --timeout=120s -n ingress-nginx
 }
 
+function upgradePassboltChart {
+	local private_key=""
+	local public_key=""
+	local fingerprint=""
+	local jwt_private_key=""
+	local jwt_public_key=""
+	private_key=$(kubectl get secret passbolt-sec-gpg --namespace default -o jsonpath="{.data.serverkey_private\.asc}")  ✔ │ 56m 0s 
+	public_key=$(kubectl get secret passbolt-sec-gpg --namespace default -o jsonpath="{.data.serverkey\.asc}")
+	fingerprint=$(kubectl exec deploy/passbolt-depl-srv -c passbolt-depl-srv -- grep PASSBOLT_GPG_SERVER_KEY_FINGERPRINT /etc/environment | awk -F= '{gsub(/"/, ""); print $2}')
+	jwt_private_key=$(kubectl get secret passbolt-sec-jwt --namespace default -o jsonpath="{.data.jwt\.key}")
+	jwt_public_key=$(kubectl get secret passbolt-sec-jwt --namespace default -o jsonpath="{.data.jwt\.pem}")
+	"$HELM_BINARY" upgrade -i passbolt . \
+		-f $HELM_TESTING_VALUES \
+		-n default \
+		--set integrationTests.debug="$DEBUG" \
+		--set gpgServerKeyPrivate="$private_key" \
+		--set gpgServerKeyPublic="$public_key" \
+		--set passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT="$fingerprint" \
+		--set jwtServerPrivate="$jwt_private_key" \
+		--set jwtServerPublic="$jwt_public_key"
+}
+
 function installPassboltChart {
 	if [[ ! -z "$GITLAB_CI" || ! -z "$GITHUB_WORKFLOW" ]]; then
 		"$HELM_BINARY" repo add bitnami https://charts.bitnami.com/bitnami
 		"$HELM_BINARY" repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
 		"$HELM_BINARY" dependency build
 	fi
-	"$HELM_BINARY" install passbolt . -f $HELM_TESTING_VALUES -n default --set integrationTests.debug="$DEBUG"
+	if "$HELM_BINARY" status passbolt; then
+		upgradePassboltChart
+	else
+		"$HELM_BINARY" install passbolt . -f $HELM_TESTING_VALUES -n default --set integrationTests.debug="$DEBUG"
+	fi
 	"$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }
 

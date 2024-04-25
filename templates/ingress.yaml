@@ -3,7 +3,6 @@
 {{- $action := "common" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
 {{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
-{{- $svcPort := .Values.service.ports.http.port -}}
 {{- if semverCompare ">=1.19-0" .Capabilities.KubeVersion.GitVersion -}}
 apiVersion: networking.k8s.io/v1
 {{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
@@ -28,12 +27,12 @@ spec:
   {{- end }}
   {{- if .Values.ingress.tls }}
   tls:
-    {{- range .Values.ingress.tls }}
+    {{- range $idx, $tls := .Values.ingress.tls }}
     - hosts:
-        {{- range .hosts }}
+        {{- range $tls.hosts }}
         - {{ . | quote }}
         {{- end }}
-      secretName: {{ include "passbolt.tls.secretName" (dict "name" $Name "tls" . "globalTLS" $.Values.tls ) }}
+      secretName: {{ include "passbolt.tls.secretName" (dict "name" $Name "tls" . "index" $idx ) }}
     {{- end }}
   {{- end }}
   rules:
@@ -51,10 +50,10 @@ spec:
               service:
                 name: {{ $Name }}
                 port:
-                  number: {{ $svcPort }}
+                  name: {{ .port }}
               {{- else }}
               serviceName: {{ $Name }}
-              servicePort: {{ $svcPort }}
+              servicePort: {{ .port }}
               {{- end }}
           {{- end }}
     {{- end }}
