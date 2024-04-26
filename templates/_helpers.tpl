@@ -93,7 +93,7 @@ Render the value of the database port
 {{- else if and ( eq .Values.postgresqlDependencyEnabled true ) ( eq .Values.app.database.kind "postgresql" ) }}
 {{- default 5432 .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
 {{- else if ( hasKey .Values.passboltEnv.plain "DATASOURCES_DEFAULT_PORT" )  -}}
-{{- printf "%s" .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT }}
+{{- printf "%s" (.Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | toString )}}
 {{- else }}
 {{- fail "DATASOURCES_DEFAULT_PORT can't be empty when mariadbDependencyEnabled and postgresqlDependencyEnabled are disabled"}}
 {{- end }}
@@ -109,7 +109,7 @@ Show error message if the user didn't set the needed values during upgrade
 {{ if and $.Release.IsUpgrade ( not $.Values.gpgExistingSecret ) (or ( not $.Values.gpgServerKeyPublic ) ( not $.Values.gpgServerKeyPrivate )) }}
 {{- $secretName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "sec" "gpg" -}}
 {{- $dpName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
-{{- $containerName := printf "%s-%s-%s" (include "passbolt-library.fullname" . ) "depl" "srv" -}}
+{{- $containerName := "passbolt" -}}
 {{- $header = printf "GPG" -}}
 {{- $message = printf "%s\n%s" $message (printf "  export PRIVATE_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey_private\\.asc") -}}
 {{- $message = printf "%s\n%s" $message (printf "  export PUBLIC_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey\\.asc") -}}

@@ -1,0 +1,39 @@
+postgresqlDependencyEnabled: true
+mariadbDependencyEnabled: false
+postgresql:
+  auth:
+    # -- Configure postgresql auth username
+    username: CHANGEME
+    # -- Configure postgresql auth password
+    password: CHANGEME
+    # -- Configure postgresql auth database
+    database: passbolt
+# -- Enable integration tests
+integrationTests:
+  enabled: true
+  certificatesSecret: mkcert-ca
+  debug: false
+ingress:
+  # -- Enable passbolt ingress
+  enabled: true
+  # -- Configure passbolt ingress annotations
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  # -- Configure passbolt ingress hosts
+  hosts:
+    # @ignored
+    - host: "passbolt.local"
+      paths:
+        - path: /
+          port: https
+          pathType: ImplementationSpecific
+  tls:
+    - existingSecret: "local-tls-secret"
+      hosts:
+        - passbolt.local
+app:
+  database:
+    kind: postgresql
+  tls:
+    autogenerate: false
+    existingSecret: "local-tls-secret"

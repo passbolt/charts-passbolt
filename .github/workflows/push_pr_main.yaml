@@ -39,8 +39,8 @@ jobs:
       - name: Run unit tests
         run: bash run_tests.sh --unit
 
-  integration-test:
-    name: Integration Tests
+  integration-tests-mariadb:
+    name: Integration Tests Mariadb
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,3 +48,13 @@ jobs:
 
       - name: Run integration tests
         run: bash run_tests.sh --integration
+
+  integration-tests-postgresql:
+    name: Integration Tests Postgresql
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run integration tests
+        run: bash run_tests.sh --integration -d postgresql
