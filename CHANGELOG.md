@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.0.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.1.0...HEAD)
+
+## [1.1.0] - 2024-04-26
+
+### Fixed
+
+- [#81](https://github.com/passbolt/charts-passbolt/issues/81) Install passbolt with an existing Postgresql server.
+
+### Added
+
+- Integration tests for passbolt with postgresql were added.
 
 ## [1.0.0] - 2024-04-25
 
