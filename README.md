@@ -4,7 +4,7 @@
     <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
 </h3>
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.6.2-1-ce](https://img.shields.io/badge/AppVersion-4.6.2--1--ce-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.6.2-1-ce](https://img.shields.io/badge/AppVersion-4.6.2--1--ce-informational?style=flat-square)
 
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
@@ -246,11 +246,12 @@ Syntax: run_tests.sh [options]
 run_tests.sh with no arguments will run all of the available tests.
 
 options:
--h|--help         Show this message.
--l|--lint         Run helm lint.
--u|--unit         Run helm unittest tests.
--i|--integration  Run integration tests.
--no-clean         Skip cleaning step.
+-h|--help                 Show this message.
+-l|--lint                 Run helm lint.
+-u|--unit                 Run helm unittest tests.
+-i|--integration          Run integration tests.
+-d|--database [option]    Database to run integration tests with [mariadb|postgresql]."
+-no-clean                 Skip cleaning step.
 
 ```
 

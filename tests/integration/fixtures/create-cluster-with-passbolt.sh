@@ -3,8 +3,9 @@
 
 set -eo pipefail
 
+DATABASE_ENGINE="${1:-mariadb}"
 KIND_CLUSTER_CONFIG_FILE="tests/integration/fixtures/kind-config.yaml"
-HELM_TESTING_VALUES="tests/integration/fixtures/testing.yaml"
+HELM_TESTING_VALUES="tests/integration/fixtures/testing-$DATABASE_ENGINE.yaml"
 KIND_CLUSTER_NAME="charts-passbolt-integration"
 K8S_LOCAL_TLS_SECRET="local-tls-secret"
 SSL_KEY_PATH="/tmp/ssl.key"
