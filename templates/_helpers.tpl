@@ -93,7 +93,7 @@ Render the value of the database port
 {{- else if and ( eq .Values.postgresqlDependencyEnabled true ) ( eq .Values.app.database.kind "postgresql" ) }}
 {{- default 5432 .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
 {{- else if ( hasKey .Values.passboltEnv.plain "DATASOURCES_DEFAULT_PORT" )  -}}
-{{- printf "%s" (.Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | toString )}}
+{{- .Values.passboltEnv.plain.DATASOURCES_DEFAULT_PORT | quote }}
 {{- else }}
 {{- fail "DATASOURCES_DEFAULT_PORT can't be empty when mariadbDependencyEnabled and postgresqlDependencyEnabled are disabled"}}
 {{- end }}

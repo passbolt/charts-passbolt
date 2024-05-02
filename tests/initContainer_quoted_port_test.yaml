@@ -1,0 +1,61 @@
+---
+suite: deployment initContainer port quoted
+release:
+  name: test
+tests:
+  - it: should contain a quoted host when postgresql dependency is enabled
+    templates:
+      - deployment.yaml
+    set:
+      app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: true
+      mariadbDependencyEnabled: false
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DATASOURCES_DEFAULT_HOST
+            value: test-postgresql
+  - it: should contain a quoted port when postgresql dependency is enabled
+    templates:
+      - deployment.yaml
+    set:
+      app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: true
+      mariadbDependencyEnabled: false
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DATASOURCES_DEFAULT_PORT
+            value: "5432"
+  - it: should contain a quoted host when using external psql installation
+    templates:
+      - deployment.yaml
+    set:
+      app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: false
+      mariadbDependencyEnabled: false
+      passboltEnv.plain.DATASOURCES_DEFAULT_HOST: 127.0.0.1
+      passboltEnv.plain.DATASOURCES_DEFAULT_PORT: 5432
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DATASOURCES_DEFAULT_HOST
+            value: "127.0.0.1"
+  - it: should contain a quoted port when using external psql installation
+    templates:
+      - deployment.yaml
+    set:
+      app.database.kind: "postgresql"
+      postgresqlDependencyEnabled: false
+      mariadbDependencyEnabled: false
+      passboltEnv.plain.DATASOURCES_DEFAULT_HOST: 127.0.0.1
+      passboltEnv.plain.DATASOURCES_DEFAULT_PORT: 5432
+    asserts:
+      - contains:
+          path: spec.template.spec.initContainers[0].env
+          content:
+            name: DATASOURCES_DEFAULT_PORT
+            value: "5432"
