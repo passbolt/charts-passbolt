@@ -1,4 +1,4 @@
-Announcing the immediate availability of passbolt's helm chart 1.1.0.
+Announcing the immediate availability of passbolt's helm chart 1.1.1
 
-This is a minor change release that fixes a bug when forcing the passboltEnv.DATASOURCES_DEFAULT_PORT on values file
-and adds the passbolt with postgresql integration tests.
+This is a minor change release that fixes bugs reported by the community when 
+using passbolt with an external postgresql database.

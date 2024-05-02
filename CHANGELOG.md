@@ -3,7 +3,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.1.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.1.1...HEAD)
+
+## [1.1.1] - 2024-05-02
+### Fixed
+- [#83](https://github.com/passbolt/charts-passbolt/issues/83) Database hostname and port should be quoted when using external databases
 
 ## [1.1.0] - 2024-04-26
 
