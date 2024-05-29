@@ -9,7 +9,7 @@
 redisDependencyEnabled: true
 # -- Install mariadb as a depending chart
 mariadbDependencyEnabled: true
-# -- Install mariadb as a depending chart
+# -- Install postgresql as a depending chart
 postgresqlDependencyEnabled: false
 
 # Configure postgresql as a dependency chart
