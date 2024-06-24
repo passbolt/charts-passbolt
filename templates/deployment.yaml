@@ -58,6 +58,7 @@ spec:
               password=${DATASOURCES_DEFAULT_PASSWORD}
               host=${DATASOURCES_DEFAULT_HOST}
               connect-timeout=2
+              ssl={{ .Values.app.database.ssl | default "off" }}
               EOF
               userhost="%"
               client="{{- include "passbolt.databaseClient" . }}"
