@@ -1,0 +1,21 @@
+---
+suite: deployment initContainer database client ssl
+release:
+  name: test
+tests:
+  - it: ssl shoudl be off by default
+    templates:
+      - deployment.yaml
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.initContainers[0].args[1]
+          pattern: "ssl=off"
+  - it: ssl shoudl be on when user enables it
+    set:
+      app.database.ssl: "on"
+    templates:
+      - deployment.yaml
+    asserts:
+      - matchRegex:
+          path: spec.template.spec.initContainers[0].args[1]
+          pattern: "ssl=on"
