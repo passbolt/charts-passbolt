@@ -19,6 +19,8 @@ function registerPassboltUser {
 		--data-raw "{\"authenticationtoken\":{\"token\":\"${user_token}\"},\"gpgkey\":{\"armored_key\":\"$(awk '{printf "%s\\n", $0}' public-${email}.asc)\"}}" \
 		--compressed >/dev/null
 	_log User "$email" succesfully registered
+	# Fixes an issue on the CI, where user with this key isn't found.
+	sleep 10
 }
 
 function configurePassbolt {

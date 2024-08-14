@@ -3,10 +3,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.1.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.1.2...HEAD)
+
+## [1.1.2] - 2024-08-14
+
+### Fixed
+
+- [#89](https://github.com/passbolt/charts-passbolt/issues/89) Installation stuck at "waiting on database connection"
 
 ## [1.1.1] - 2024-05-02
+
 ### Fixed
+
 - [#83](https://github.com/passbolt/charts-passbolt/issues/83) Database hostname and port should be quoted when using external databases
 
 ## [1.1.0] - 2024-04-26
@@ -146,7 +154,7 @@ This release includes breaking changes .Values.redisProxyResources now is .Value
 ### Added
 
 - [#18](https://github.com/passbolt/charts-passbolt/pull/18) Allow setting annotations on service
-- Passbolt v4 as default application deployment version. Please read: https://help.passbolt.com/releases/ce/get-up-stand-up
+- Passbolt v4 as default application deployment version. Please read: <https://help.passbolt.com/releases/ce/get-up-stand-up>
 
 ## [0.3.1] - 2023-05-10
 
