@@ -175,6 +175,9 @@ spec:
           resources:
             {{- toYaml .Values.app.cache.redis.sentinelProxy.resources | nindent 12 }}
         {{- end -}}
+        {{- if .Values.app.extraContainers }}
+        {{- toYaml .Values.app.extraContainers | nindent 8 }}
+        {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
