@@ -1,6 +1,7 @@
 apiVersion: v2
 name: passbolt
 description: Helm chart for passbolt PRO and CE
+kubeVersion: '>= 1.19.0-0'  
 
 # A chart can be either an 'application' or a 'library' chart.
 #
