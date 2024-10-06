@@ -264,6 +264,12 @@ passboltEnv:
     []
     # - secretRef:
     #     name: passbolt-secret
+  ## Overrides the plain value in the case of not wanting to provide the config from values
+  ## Do this ONLY if you know what you are doing
+  configMapName: ''
+  ## Overrides the secrets value in the case of not wanting to provide them in the values file.
+  ## Do this ONLY if you know what you are doing
+  secretName: ''
 ## Passbolt deployment parameters
 
 # -- If autoscaling is disabled this will define the number of pods to run

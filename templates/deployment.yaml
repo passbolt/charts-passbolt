@@ -24,11 +24,15 @@ spec:
           {{- toYaml . | nindent 8 }}
         {{- end }}
       annotations:
+        {{ if ( not $.Values.passboltEnv.secretName ) }}
         checksum/sec-env: {{ include (print $.Template.BasePath "/secret-env.yaml") . | sha256sum }}
+        {{- end }}
         {{ if ( not $.Values.gpgExistingSecret ) }}
         checksum/sec-gpg: {{ include (print $.Template.BasePath "/secret-gpg.yaml") . | sha256sum }}
         {{- end }}
+        {{ if ( not $.Values.passboltEnv.configMapName ) }}
         checksum/cm-env: {{ include (print $.Template.BasePath "/configmap-env.yaml") . | sha256sum }}
+        {{- end }}
         {{- if and .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtExistingSecret ) }}
         checksum/sec-jwt: {{ include (print $.Template.BasePath "/secret-jwt.yaml") . | sha256sum }}
         {{- end }}
@@ -90,9 +94,9 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ $Name }}-cm-env
+                name: {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
             - secretRef:
-                name: {{ $Name }}-sec-env
+                name: {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
             {{- with .Values.passboltEnv.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
@@ -128,9 +132,9 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ $Name }}-cm-env
+                name: {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
             - secretRef:
-                name: {{ $Name }}-sec-env
+                name: {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
             {{- with .Values.passboltEnv.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}
             {{- end }}

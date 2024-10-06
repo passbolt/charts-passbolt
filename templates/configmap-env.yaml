@@ -1,3 +1,4 @@
+{{- if not .Values.passboltEnv.configMapName }}
 {{- $type := "cm" -}}
 {{- $action := "env" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
@@ -20,3 +21,4 @@ data:
     DATASOURCES_DEFAULT_DRIVER: 'Cake\Database\Driver\Postgres'
     DATASOURCES_DEFAULT_ENCODING: "utf8"
 {{- end -}}
+{{- end }}

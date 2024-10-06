@@ -83,9 +83,9 @@ spec:
             {{- end }}
           envFrom:
             - configMapRef:
-                name: {{ $Name }}-cm-env
+                name: {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
             - secretRef:
-                name: {{ $Name }}-sec-env
+                name: {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
             {{- with .Values.passboltEnv.extraEnvFrom }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
