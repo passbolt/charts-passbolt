@@ -161,6 +161,8 @@ app:
     # @ignored
     autogenerate: true
     #existingSecret: ""
+  # -- Configure additional containers to be added to the pod
+  extraContainers: []
 
 # -- Enable email cron
 cronJobEmail:

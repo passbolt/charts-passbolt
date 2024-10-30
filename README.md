@@ -115,6 +115,7 @@ chart and deletes the release.
 | app.database.kind | string | `"mariadb"` |  |
 | app.databaseInitContainer | object | `{"enabled":true}` | Configure pasbolt deployment init container that waits for database |
 | app.databaseInitContainer.enabled | bool | `true` | Toggle pasbolt deployment init container that waits for database |
+| app.extraContainers | list | `[]` | Configure extra container to be added to pods |
 | app.extraPodLabels | object | `{}` |  |
 | app.image.pullPolicy | string | `"IfNotPresent"` | Configure pasbolt deployment image pullPolicy |
 | app.image.registry | string | `""` | Configure pasbolt deployment image repsitory |
@@ -269,5 +270,5 @@ and they will be downloaded during the tests execution if they are not installed
 We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release
 
 ```
-helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md 
+helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md
 ```

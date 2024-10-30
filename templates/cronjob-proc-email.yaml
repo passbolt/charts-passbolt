@@ -84,6 +84,9 @@ spec:
               resources:
                 {{- toYaml .Values.redisProxyResources | nindent 16 }}
             {{- end }}
+          {{- if .Values.app.extraContainers }}
+          {{- toYaml .Values.app.extraContainers | nindent 12 }}
+          {{- end }}
           volumes:
             - name: vol-success
               emptyDir: {}
