@@ -54,7 +54,6 @@ spec:
                 - secretRef:
                     name: {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
                 {{- with .Values.passboltEnv.extraEnvFrom }}
-                {{- with .Values.passboltEnv.extraEnvFrom }}
                 {{- toYaml . | nindent 16 }}
                 {{- end }}
               volumeMounts:
