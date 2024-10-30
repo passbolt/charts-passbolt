@@ -4,7 +4,7 @@
     <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
 </h3>
 
-![Version: 1.1.2](https://img.shields.io/badge/Version-1.1.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.9.1-1-ce](https://img.shields.io/badge/AppVersion-4.9.1--1--ce-informational?style=flat-square)
+![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.9.1-1-ce](https://img.shields.io/badge/AppVersion-4.9.1--1--ce-informational?style=flat-square)
 
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
@@ -115,12 +115,12 @@ chart and deletes the release.
 | app.database.kind | string | `"mariadb"` |  |
 | app.databaseInitContainer | object | `{"enabled":true}` | Configure pasbolt deployment init container that waits for database |
 | app.databaseInitContainer.enabled | bool | `true` | Toggle pasbolt deployment init container that waits for database |
-| app.extraContainers | list | `[]` | Configure extra container to be added to pods |
+| app.extraContainers | list | `[]` | Configure additional containers to be added to the pod |
 | app.extraPodLabels | object | `{}` |  |
 | app.image.pullPolicy | string | `"IfNotPresent"` | Configure pasbolt deployment image pullPolicy |
 | app.image.registry | string | `""` | Configure pasbolt deployment image repsitory |
 | app.image.repository | string | `"passbolt/passbolt"` |  |
-| app.image.tag | string | `"4.6.2-1-ce"` | Overrides the image tag whose default is the chart appVersion. |
+| app.image.tag | string | `"4.9.1-1-ce"` | Overrides the image tag whose default is the chart appVersion. |
 | app.resources | object | `{}` |  |
 | app.tls | object | `{}` |  |
 | autoscaling.enabled | bool | `false` | Enable autoscaling on passbolt deployment |
@@ -184,6 +184,7 @@ chart and deletes the release.
 | networkPolicy.namespaceLabel | string | `"ingress-nginx"` | Configure network policies namespaceLabel for namespaceSelector |
 | networkPolicy.podLabel | string | `"ingress-nginx"` | Configure network policies podLabel for podSelector |
 | nodeSelector | object | `{}` | Configure passbolt deployment nodeSelector |
+| passboltEnv.configMapName | string | `""` |  |
 | passboltEnv.extraEnv | list | `[]` | Environment variables to add to the passbolt pods |
 | passboltEnv.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to the passbolt pods |
 | passboltEnv.plain.APP_FULL_BASE_URL | string | `"https://passbolt.local"` | Configure passbolt fullBaseUrl |
@@ -211,9 +212,10 @@ chart and deletes the release.
 | passboltEnv.secret.DATASOURCES_DEFAULT_USERNAME | string | `"CHANGEME"` | Configure passbolt default database username |
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_PASSWORD | string | `"CHANGEME"` | Configure passbolt default email service password |
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_USERNAME | string | `"CHANGEME"` | Configure passbolt default email service username |
+| passboltEnv.secretName | string | `""` |  |
 | podAnnotations | object | `{}` | Map of annotation for passbolt server pod |
 | podSecurityContext | object | `{}` | Security Context configuration for passbolt server pod |
-| postgresqlDependencyEnabled | bool | `false` | Install mariadb as a depending chart |
+| postgresqlDependencyEnabled | bool | `false` | Install postgresql as a depending chart |
 | rbacEnabled | bool | `true` | Enable role based access control |
 | readinessProbe | object | `{"initialDelaySeconds":5,"periodSeconds":10}` | Configure passbolt container RadinessProbe |
 | redis.auth.enabled | bool | `true` | Enable redis authentication |
@@ -270,5 +272,5 @@ and they will be downloaded during the tests execution if they are not installed
 We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release
 
 ```
-helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md
+helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md 
 ```
