@@ -50,9 +50,9 @@ spec:
                 {{- end }}
               envFrom:
                 - configMapRef:
-                    name: {{ $Name }}-cm-env
+                    name: {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
                 - secretRef:
-                    name: {{ $Name }}-sec-env
+                    name: {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
                 {{- with .Values.passboltEnv.extraEnvFrom }}
                 {{- toYaml . | nindent 16 }}
                 {{- end }}
@@ -84,6 +84,9 @@ spec:
               resources:
                 {{- toYaml .Values.redisProxyResources | nindent 16 }}
             {{- end }}
+          {{- if .Values.app.extraContainers }}
+          {{- toYaml .Values.app.extraContainers | nindent 12 }}
+          {{- end }}
           volumes:
             - name: vol-success
               emptyDir: {}

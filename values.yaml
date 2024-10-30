@@ -9,7 +9,7 @@
 redisDependencyEnabled: true
 # -- Install mariadb as a depending chart
 mariadbDependencyEnabled: true
-# -- Install mariadb as a depending chart
+# -- Install postgresql as a depending chart
 postgresqlDependencyEnabled: false
 
 # Configure postgresql as a dependency chart
@@ -161,6 +161,8 @@ app:
     # @ignored
     autogenerate: true
     #existingSecret: ""
+  # -- Configure additional containers to be added to the pod
+  extraContainers: []
 
 # -- Enable email cron
 cronJobEmail:
@@ -264,6 +266,12 @@ passboltEnv:
     []
     # - secretRef:
     #     name: passbolt-secret
+  ## Overrides the plain value in the case of not wanting to provide the config from values
+  ## Do this ONLY if you know what you are doing
+  configMapName: ''
+  ## Overrides the secrets value in the case of not wanting to provide them in the values file.
+  ## Do this ONLY if you know what you are doing
+  secretName: ''
 ## Passbolt deployment parameters
 
 # -- If autoscaling is disabled this will define the number of pods to run

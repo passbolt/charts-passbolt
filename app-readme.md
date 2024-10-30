@@ -1,13 +1,16 @@
 # Passbolt Helm chart
 
-<h3 align="center">
-    <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
-</h3>
-
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.9.1-1-ce](https://img.shields.io/badge/AppVersion-4.9.1--1--ce-informational?style=flat-square)
-
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
+
+## WARNING:
+This Helm chart is designed for expert users who are comfortable with Kubernetes and managing their own infrastructure. Please be aware that there are easier and more supported methods to install Passbolt. If you are looking for a simpler, more streamlined installation experience, we highly recommend using the packages as outlined in the official [Passbolt Hosting Guide](https://www.passbolt.com/docs/hosting/).
+
+By choosing this installation method, you acknowledge that it may be more complex, and support will be more limited compared to the standard installation methods. Proceed with caution and ensure you have the necessary technical expertise.
+
+## Documentation
+- [PRO](https://www.passbolt.com/docs/hosting/install/pro/helm-chart/)
+- [CE](https://www.passbolt.com/docs/hosting/install/ce/helm-chart/)
 
 ## TL;DR
 
@@ -115,12 +118,11 @@ chart and deletes the release.
 | app.database.kind | string | `"mariadb"` |  |
 | app.databaseInitContainer | object | `{"enabled":true}` | Configure pasbolt deployment init container that waits for database |
 | app.databaseInitContainer.enabled | bool | `true` | Toggle pasbolt deployment init container that waits for database |
-| app.extraContainers | list | `[]` | Configure additional containers to be added to the pod |
 | app.extraPodLabels | object | `{}` |  |
 | app.image.pullPolicy | string | `"IfNotPresent"` | Configure pasbolt deployment image pullPolicy |
 | app.image.registry | string | `""` | Configure pasbolt deployment image repsitory |
 | app.image.repository | string | `"passbolt/passbolt"` |  |
-| app.image.tag | string | `"4.9.1-1-ce"` | Overrides the image tag whose default is the chart appVersion. |
+| app.image.tag | string | `"4.6.2-1-ce"` | Overrides the image tag whose default is the chart appVersion. |
 | app.resources | object | `{}` |  |
 | app.tls | object | `{}` |  |
 | autoscaling.enabled | bool | `false` | Enable autoscaling on passbolt deployment |
@@ -184,7 +186,6 @@ chart and deletes the release.
 | networkPolicy.namespaceLabel | string | `"ingress-nginx"` | Configure network policies namespaceLabel for namespaceSelector |
 | networkPolicy.podLabel | string | `"ingress-nginx"` | Configure network policies podLabel for podSelector |
 | nodeSelector | object | `{}` | Configure passbolt deployment nodeSelector |
-| passboltEnv.configMapName | string | `""` |  |
 | passboltEnv.extraEnv | list | `[]` | Environment variables to add to the passbolt pods |
 | passboltEnv.extraEnvFrom | list | `[]` | Environment variables from secrets or configmaps to add to the passbolt pods |
 | passboltEnv.plain.APP_FULL_BASE_URL | string | `"https://passbolt.local"` | Configure passbolt fullBaseUrl |
@@ -212,10 +213,9 @@ chart and deletes the release.
 | passboltEnv.secret.DATASOURCES_DEFAULT_USERNAME | string | `"CHANGEME"` | Configure passbolt default database username |
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_PASSWORD | string | `"CHANGEME"` | Configure passbolt default email service password |
 | passboltEnv.secret.EMAIL_TRANSPORT_DEFAULT_USERNAME | string | `"CHANGEME"` | Configure passbolt default email service username |
-| passboltEnv.secretName | string | `""` |  |
 | podAnnotations | object | `{}` | Map of annotation for passbolt server pod |
 | podSecurityContext | object | `{}` | Security Context configuration for passbolt server pod |
-| postgresqlDependencyEnabled | bool | `false` | Install postgresql as a depending chart |
+| postgresqlDependencyEnabled | bool | `false` | Install mariadb as a depending chart |
 | rbacEnabled | bool | `true` | Enable role based access control |
 | readinessProbe | object | `{"initialDelaySeconds":5,"periodSeconds":10}` | Configure passbolt container RadinessProbe |
 | redis.auth.enabled | bool | `true` | Enable redis authentication |

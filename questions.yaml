@@ -1,0 +1,89 @@
+questions:
+#Credentials
+- variable: redis.auth.password
+  description: The password you'd like to assign to redis
+  default: CHANGEME
+  type: string
+  label: Redis Password
+  group: "Credentials"
+- variable: mariadb.auth.password
+  description: The password you'd like to assign to MariaDB
+  default: CHANGEME
+  type: string
+  label: MariaDB Password
+  group: "Credentials"
+- variable: mariadb.auth.username
+  description: The username you'd like to use with MariaDB
+  default: CHANGEME
+  type: string
+  label: MariaDB Username
+  group: "Credentials"
+- variable: mariadb.auth.replicationPassword
+  description: The password you'd like to assign to MariaDB replication
+  default: CHANGEME
+  type: string
+  label: MariaDB Replication Password
+  group: "Credentials"
+- variable: passboltEnv.secret.CACHE_CAKE_DEFAULT_PASSWORD
+  description: The password you'd like to assign to the cake cache
+  default: CHANGEME
+  type: string
+  label: Cake Cache Password
+  group: "Credentials"
+- variable: passboltEnv.secret.DATASOURCES_DEFAULT_PASSWORD
+  description: Should be the same as you used for MariaDB Password
+  default: CHANGEME
+  type: string
+  label: Application connection password.
+  group: "Credentials"
+- variable: passboltEnv.secret.DATASOURCES_DEFAULT_USERNAME
+  description: Should be the same as you used for MariaDB Username
+  default: CHANGEME
+  type: string
+  label: Application connection username
+  group: "Credentials"
+# GPG Key
+- variable: gpgServerKeyPrivate
+  description: GPG private key for the server, base64 encoded https://www.passbolt.com/docs/hosting/faq/generate-openpgp-key/
+  default: CHANGEME
+  type: string
+  label: GPG Private Key
+  group: "GPG Key"
+- variable: gpgServerKeyPublic
+  description: GPG public key for the server, base64 encoded https://www.passbolt.com/docs/hosting/faq/generate-openpgp-key/
+  default: CHANGEME
+  type: string
+  label: GPG Public Key
+  group: "GPG Key"
+ #JWT Key 
+- variable: jwtServerPrivate
+  description: JWT private key for the server, base64 encoded https://www.passbolt.com/docs/hosting/faq/how-to-generate-jwt-key-pair-manually/
+  default: CHANGEME
+  type: string
+  label: JWT Private Key
+  group: "JWT Key"
+- variable: jwtServerPublic
+  description: JWT public key for the server, base64 encoded https://www.passbolt.com/docs/hosting/faq/how-to-generate-jwt-key-pair-manually/
+  default: CHANGEME
+  type: string
+  label: JWT Public Key
+  group: "JWT Key"
+# Server Config
+- variable: passboltEnv.plain.APP_FULL_BASE_URL
+  description: URL to access passbolt through
+  default: https://passbolt.local
+  type: string
+  label: App Full Base URL
+  group: "Server configuration"
+- variable: app.image.tag
+  description: This is the image tag to use. Available tags https://hub.docker.com/r/passbolt/passbolt/tags
+  default: 4.9.1-1-ce
+  type: string
+  label: Server version
+  group: "Server configuration"
+- variable: subscriptionKey
+  description: Base64 encode it, only needed for PRO version
+  default: 
+  type: string
+  label: Subscription key
+  group: "Server configuration"
