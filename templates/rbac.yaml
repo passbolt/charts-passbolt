@@ -16,8 +16,8 @@ rules:
   resources: [ "configmaps", "secrets" ]
   resourceNames:
   - {{ $Name }}-sec-redis-proxy
-  - {{ $Name }}-cm-env
-  - {{ $Name }}-sec-env
+  - {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
+  - {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
   - {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
   - {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
   - {{ $Name }}-sec-tls
@@ -64,9 +64,9 @@ rules:
 - apiGroups: [""]
   resources: [ "configmaps", "secrets" ]
   resourceNames:
-  - {{ $Name }}-cm-env
+  - {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
   - {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
-  - {{ $Name }}-sec-env
+  - {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
   - {{ $Name }}-sec-redis-proxy
   verbs: ["get", "patch"]
 ---
@@ -112,9 +112,9 @@ rules:
 - apiGroups: [""]
   resources: [ "configmaps", "secrets" ]
   resourceNames:
-  - {{ $Name }}-cm-env
+  - {{ default (printf "%s-cm-env" $Name) .Values.passboltEnv.configMapName }}
   - {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }}
-  - {{ $Name }}-sec-env
+  - {{ default (printf "%s-sec-env" $Name) .Values.passboltEnv.secretName }}
   - {{ $Name }}-sec-redis-proxy
   verbs: ["get", "patch"]
 ---
