@@ -21,6 +21,31 @@ function installNginxIngress {
   "$KUBECTL_BINARY" rollout status deployment ingress-nginx-controller --timeout=120s -n ingress-nginx
 }
 
+function http_port {
+  if [ "$ROOTLESS" == true ]; then
+    echo 8080
+  else
+    echo 80
+  fi
+}
+
+function https_port {
+  if [ "$ROOTLESS" == true ]; then
+    echo 4433
+  else
+    echo 443
+  fi
+}
+
+function image_tag {
+  tag="$(awk -F ' ' '/^    tag:/ {print $2}' values.yaml)"
+  if [ "$ROOTLESS" == true ]; then
+    echo "$tag"-non-root
+  else
+    echo "$tag"
+  fi
+}
+
 function upgradePassboltChart {
   local private_key=""
   local public_key=""
@@ -33,7 +58,7 @@ function upgradePassboltChart {
   jwt_private_key=$(kubectl get secret passbolt-sec-jwt --namespace default -o jsonpath="{.data.jwt\.key}")
   jwt_public_key=$(kubectl get secret passbolt-sec-jwt --namespace default -o jsonpath="{.data.jwt\.pem}")
   "$HELM_BINARY" upgrade -i passbolt . \
-    -f $HELM_TESTING_VALUES \
+    -f "$HELM_TESTING_VALUES" \
     -n default \
     --set integrationTests.debug="$DEBUG" \
     --set integrationTests.rootless="$ROOTLESS" \
@@ -41,7 +66,9 @@ function upgradePassboltChart {
     --set gpgServerKeyPublic="$public_key" \
     --set passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT="$fingerprint" \
     --set jwtServerPrivate="$jwt_private_key" \
-    --set jwtServerPublic="$jwt_public_key"
+    --set jwtServerPublic="$jwt_public_key" \
+    --set service.ports.https.targetPort="$(https_port)" \
+    --set service.ports.http.targetPort="$(http_port)"
 }
 
 function installPassboltChart {
@@ -54,6 +81,8 @@ function installPassboltChart {
     upgradePassboltChart
   else
     "$HELM_BINARY" install passbolt . -f $HELM_TESTING_VALUES -n default \
+      --set service.ports.https.targetPort="$(https_port)" \
+      --set service.ports.http.targetPort="$(http_port)" \
       --set integrationTests.debug="$DEBUG" \
       --set integrationTests.rootless="$ROOTLESS"
   fi
