@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.2.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.0...HEAD)
+
+## [1.3.0] - 2024-11-13
+
+### Added
+
+- Added non-root image support
 
 ## [1.2.0] - 2024-10-30
 

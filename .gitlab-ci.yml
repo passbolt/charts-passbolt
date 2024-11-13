@@ -32,6 +32,8 @@ test Helm Charts:
     - bash run_tests.sh --unit
 
 integration Tests Helm Charts Mariadb:
+  variables:
+    ROOTLESS: false
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
   script:
     - |
@@ -39,13 +41,25 @@ integration Tests Helm Charts Mariadb:
       sleep 10 # Wait for docker service
       bash run_tests.sh --integration
 
+integration Tests Helm Charts Mariadb Rootless:
+  variables:
+    ROOTLESS: true
+  extends: integration Tests Helm Charts Mariadb
+
 integration Tests Helm Charts Postgresql:
+  variables:
+    ROOTLESS: false
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
   script:
     - |
       apk update && apk add -U curl bash
       sleep 10 # Wait for docker service
       bash run_tests.sh --integration -d postgresql
+
+integration Tests Helm Charts Postgresql Rootless:
+  variables:
+    ROOTLESS: true
+  extends: integration Tests Helm Charts Postgresql
 
 publish:
   stage: publish
