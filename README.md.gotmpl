@@ -74,6 +74,25 @@ helm install my-release my-repo
 The above command deploys passbolt with default settings on your kubernetes cluster.
 Check the [configuration](#Configuration) section to check which parameters you can fine tune.
 
+## Use passbolt non-root image
+
+In case you want to use the non-root passbolt image, there are a few changes that you have to introduce on your values file:
+
+```bash
+app:
+  image:
+    tag: <NON_ROOT_TAG>
+
+service:
+  ports:
+    https:
+      targetPort: 4433
+    http:
+      targetPort: 8080
+```
+
+With these changes you should be able to run passbolt on a container executed by www-data user.
+
 ## Creating first user
 
 Once the chart is deployed, you can create your first user by running the following command:

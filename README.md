@@ -4,7 +4,7 @@
     <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
 </h3>
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.9.1-1-ce](https://img.shields.io/badge/AppVersion-4.9.1--1--ce-informational?style=flat-square)
+![Version: 1.3.0](https://img.shields.io/badge/Version-1.3.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 4.9.1-1-ce](https://img.shields.io/badge/AppVersion-4.9.1--1--ce-informational?style=flat-square)
 
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
@@ -73,6 +73,25 @@ helm install my-release my-repo
 
 The above command deploys passbolt with default settings on your kubernetes cluster.
 Check the [configuration](#Configuration) section to check which parameters you can fine tune.
+
+## Use passbolt non-root image
+
+In case you want to use the non-root passbolt image, there are a few changes that you have to introduce on your values file:
+
+```bash
+app:
+  image:
+    tag: <NON_ROOT_TAG>
+
+service:
+  ports:
+    https:
+      targetPort: 4433
+    http:
+      targetPort: 8080
+```
+
+With these changes you should be able to run passbolt on a container executed by www-data user.
 
 ## Creating first user
 
