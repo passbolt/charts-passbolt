@@ -20,7 +20,9 @@ spec:
           bash /tests/run_tests.sh
       env:
         - name: TESTS_DEBUG
-          value: {{ quote .Values.integrationTests.debug  }}
+          value: {{ quote .Values.integrationTests.debug | default false }}
+        - name: ROOTLESS
+          value: {{ quote .Values.integrationTests.rootless | default false }}
       volumeMounts:
         - name: integration-tests-runner
           mountPath: "/tests/run_tests.sh"
