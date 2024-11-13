@@ -49,6 +49,16 @@ jobs:
       - name: Run integration tests
         run: bash run_tests.sh --integration
 
+  integration-tests-mariadb-rootless:
+    name: Integration Tests Mariadb
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run integration tests
+        run: ROOTLESS=true bash run_tests.sh --integration
+
   integration-tests-postgresql:
     name: Integration Tests Postgresql
     runs-on: ubuntu-latest
@@ -58,3 +68,13 @@ jobs:
 
       - name: Run integration tests
         run: bash run_tests.sh --integration -d postgresql
+
+  integration-tests-postgresql-rootless:
+    name: Integration Tests Postgresql
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run integration tests
+        run: ROOTLESS=true bash run_tests.sh --integration -d postgresql

@@ -62,6 +62,7 @@ function upgradePassboltChart {
     -n default \
     --set integrationTests.debug="$DEBUG" \
     --set integrationTests.rootless="$ROOTLESS" \
+    --set app.image.tag="$(image_tag)" \
     --set gpgServerKeyPrivate="$private_key" \
     --set gpgServerKeyPublic="$public_key" \
     --set passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT="$fingerprint" \
@@ -83,6 +84,7 @@ function installPassboltChart {
     "$HELM_BINARY" install passbolt . -f $HELM_TESTING_VALUES -n default \
       --set service.ports.https.targetPort="$(https_port)" \
       --set service.ports.http.targetPort="$(http_port)" \
+      --set app.image.tag="$(image_tag)" \
       --set integrationTests.debug="$DEBUG" \
       --set integrationTests.rootless="$ROOTLESS"
   fi
