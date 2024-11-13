@@ -53,7 +53,9 @@ function installPassboltChart {
   if "$HELM_BINARY" status passbolt; then
     upgradePassboltChart
   else
-    "$HELM_BINARY" install passbolt . -f $HELM_TESTING_VALUES -n default --set integrationTests.debug="$DEBUG" --set integrationTests.rootless="$ROOTLESS"
+    "$HELM_BINARY" install passbolt . -f $HELM_TESTING_VALUES -n default \
+      --set integrationTests.debug="$DEBUG" \
+      --set integrationTests.rootless="$ROOTLESS"
   fi
   "$KUBECTL_BINARY" rollout status deployment passbolt-depl-srv --timeout=120s -n default
 }

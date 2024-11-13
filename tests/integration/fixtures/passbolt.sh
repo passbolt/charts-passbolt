@@ -4,15 +4,14 @@ function registerPassboltUser {
   local firstname=$1
   local lastname=$2
   local email=$3
-  local register_command="bin/cake passbolt register_user -u $email -f $firstname -l $lastname -r admin"
-  local command_as_root="su -c \"$register_command\" -s /bin/bash www-data"
+  local register_command='bin/cake passbolt register_user -u $0 -f $1 -l $2 -r admin'
+  #local command_as_root="su -c "$register_command" -- $email $firstname $lastname -s /bin/bash www-data"
+  #local command_as_www="bash -c "$register_command" -- $email $firstname $lastname"
   if [ "$ROOTLESS" == true ]; then
-    command=$register_command
+    registration=$("$KUBECTL_BINARY" exec -it deployment/passbolt-depl-srv -n default -- bash -c "$register_command" $email $firstname $lastname 2>/dev/null)
   else
-    command=$command_as_root
+    registration=$("$KUBECTL_BINARY" exec -it deployment/passbolt-depl-srv -n default -- su www-data -c "$register_command" $email $firstname $lastname -s /bin/bash 2>/dev/null)
   fi
-  _log "$KUBECTL_BINARY" exec -it deployment/passbolt-depl-srv -n default -- ${command} >/dev/null
-  registration=$("$KUBECTL_BINARY" exec -it deployment/passbolt-depl-srv -n default -- ${command})
   _log "$registration"
   regex='(https?)://[-[:alnum:]\+&@#/%?=~_|!:,.;]*[-[:alnum:]\+&@#/%=~_|]'
   if [[ $registration =~ $regex ]]; then
