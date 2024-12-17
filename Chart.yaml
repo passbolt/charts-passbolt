@@ -27,14 +27,14 @@ dependencies:
     version: 0.2.7
     repository: "https://download.passbolt.com/charts/passbolt-library"
   - name: redis
-    version: 17.15.2
+    version: 20.6.0
     repository: "https://charts.bitnami.com/bitnami"
     condition: redisDependencyEnabled
   - name: mariadb
-    version: 11.5.7
+    version: 20.2.1
     repository: "https://charts.bitnami.com/bitnami"
     condition: mariadbDependencyEnabled
   - name: postgresql
-    version: 13.2.3
+    version: 16.3.2
     repository: "https://charts.bitnami.com/bitnami"
     condition: postgresqlDependencyEnabled
