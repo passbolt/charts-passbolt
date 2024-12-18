@@ -9,14 +9,15 @@ spec:
   #serviceAccountName: -sa-common
   containers:
     - name: tests
-      image: alpine
-      command: ["/bin/sh"]
+      image: debian:stable-slim
+      command: ["/bin/bash"]
       args:
         - -c
         - |
           set -e
-          apk update && apk add -U curl bash jq gpg gpg-agent
+          apt-get update && apt-get install -y curl jq gpg gpg-agent
           cd
+          sleep 10
           bash /tests/run_tests.sh
       env:
         - name: TESTS_DEBUG
