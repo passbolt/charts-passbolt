@@ -3,13 +3,13 @@ dependencies:
   repository: https://download.passbolt.com/charts/passbolt-library
   version: 0.2.7
 - name: redis
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 17.15.2
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.6.0
 - name: mariadb
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 11.5.7
+  repository: https://charts.bitnami.com/bitnami
+  version: 20.2.1
 - name: postgresql
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.2.3
-digest: sha256:03492f569f9d139a995793d26fa13888751f98e95ad7abe7520924ece5afbdeb
-generated: "2025-01-16T14:21:04.226362693+01:00"
+  repository: https://charts.bitnami.com/bitnami
+  version: 16.3.2
+digest: sha256:335233f8e1f606d9ebdb15529e793050c5cd38aee2c04d3f513189bb1c94fb27
+generated: "2024-12-17T11:19:24.709158792+01:00"
