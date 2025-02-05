@@ -25,6 +25,7 @@ tests:
                 subPath: haproxy.cfg
                 name: sec-redis-proxy
                 readOnly: true
+          any: true
 
   - it: should have only one redis sidecar and mount its configuration
     templates:
@@ -59,12 +60,12 @@ tests:
       app.cache.redis.enabled: false
       app.cache.redis.sentinelProxy.enabled: false
     asserts:
-      - contains:
+      - notContains:
           path: spec.template.spec.volumes
           content:
+            name: sec-redis-proxy
             secret:
               secretName: test-passbolt-sec-redis-proxy
-          count: 0
           any: true
 
   - it: should contain a volumes section
@@ -81,6 +82,7 @@ tests:
       - contains:
           path: spec.template.spec.volumes
           content:
+            name: sec-redis-proxy
             secret:
               secretName: test-passbolt-sec-redis-proxy
           count: 1
