@@ -30,6 +30,7 @@ tests:
     set:
       app.image.tag: testingtag
       global.imageRegistry: testingRegistry
+      global.security.allowInsecureImages: true
     asserts:
       - contains:
           path: spec.template.spec.containers
@@ -77,6 +78,7 @@ tests:
     set:
       app.image.tag: testingtag
       global.imageRegistry: testingRegistry
+      global.security.allowInsecureImages: true
     asserts:
       - contains:
           path: spec.template.spec.containers
