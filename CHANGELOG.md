@@ -3,7 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.1...HEAD)
+
+## [1.3.1] - 2025-01-16
+
+### Fixed
+
+- Updated Bitnami registry name
+- Bump passbolt docker image tag to 4.10.1-1-ce
 
 ## [1.3.0] - 2024-11-13
 

@@ -28,7 +28,7 @@ test Helm Charts:
   stage: test
   script:
     - helm dependency update
-    - helm plugin install https://github.com/helm-unittest/helm-unittest
+    - helm plugin install https://github.com/helm-unittest/helm-unittest --version 0.7.0
     - bash run_tests.sh --unit
 
 integration Tests Helm Charts Mariadb:
