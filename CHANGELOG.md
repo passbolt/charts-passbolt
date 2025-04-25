@@ -5,6 +5,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.1...HEAD)
 
+## [1.3.1] - 2025-04-25
+
+### Fixed
+
+- [#95](https://github.com/passbolt/charts-passbolt/pull/95) Bump chart dependencies and set defaults for KUBECTL_CMD for multiarch execution.
+- [#101](https://github.com/passbolt/charts-passbolt/pull/101) Fix haproxy of email job is occupying one CPU core
+- [#102](https://github.com/passbolt/charts-passbolt/pull/102) feat: support redis authentication with existing secret
+- Bump passbolt docker image tag to 5.0.0-1-ce
+
 ## [1.3.1] - 2025-01-16
 
 ### Fixed
