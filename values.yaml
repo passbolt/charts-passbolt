@@ -124,7 +124,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 4.10.1-1-ce
+    tag: 5.0.0-1-ce
   # Allowed options: mariadb, mysql or postgresql
   database:
     kind: mariadb
