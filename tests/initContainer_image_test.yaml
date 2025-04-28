@@ -53,6 +53,7 @@ tests:
     set:
       app.initImage: null
       global.imageRegistry: registry.test
+      global.security.allowInsecureImages: true
     asserts:
       - equal:
           path: spec.template.spec.initContainers[0].image

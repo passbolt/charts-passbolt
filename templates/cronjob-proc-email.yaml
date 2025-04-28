@@ -73,7 +73,7 @@ spec:
                 - |
                   haproxy -f /usr/local/etc/haproxy/haproxy.cfg &
                   REDIS_PROXY_PID=$?
-                  while true; do if [ -f "/tmp/pod/success" ]; then kill $REDIS_PROXY_PID; sleep 5;  exit 0; fi; done
+                  while true; do if [ -f "/tmp/pod/success" ]; then kill $REDIS_PROXY_PID; sleep 5; exit 0; else sleep 1; fi; done
               volumeMounts:
                 - name: vol-success
                   mountPath: /tmp/pod
@@ -83,6 +83,14 @@ spec:
                   readOnly: true
               resources:
                 {{- toYaml .Values.redisProxyResources | nindent 16 }}
+              {{- if and .Values.redis.auth.enabled .Values.redis.auth.existingSecret }}
+              env:
+                - name: REDISPWD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ .Values.redis.auth.existingSecret }}
+                      key: {{ .Values.redis.auth.existingSecretPasswordKey }}
+              {{- end -}}
             {{- end }}
           {{- if .Values.app.extraContainers }}
           {{- toYaml .Values.app.extraContainers | nindent 12 }}

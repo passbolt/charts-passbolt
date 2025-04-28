@@ -178,6 +178,14 @@ spec:
               readOnly: true
           resources:
             {{- toYaml .Values.app.cache.redis.sentinelProxy.resources | nindent 12 }}
+          {{- if and .Values.redis.auth.enabled .Values.redis.auth.existingSecret }}
+          env:
+            - name: REDISPWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.redis.auth.existingSecret }}
+                  key: {{ .Values.redis.auth.existingSecretPasswordKey }}
+          {{- end -}}
         {{- end -}}
         {{- if .Values.app.extraContainers }}
         {{- toYaml .Values.app.extraContainers | nindent 8 }}
