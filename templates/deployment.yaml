@@ -145,9 +145,14 @@ spec:
               name: cm-app-php
               readOnly: true
             {{- end }}
-            - mountPath: /etc/ssl/certs/passbolt
+            - mountPath: /etc/ssl/certs/certificate.crt
               name: sec-tls
               readOnly: true
+              subPath: certificate.crt
+            - mountPath: /etc/ssl/certs/certificate.key
+              name: sec-tls
+              readOnly: true
+              subPath: certificate.key
             - name: sec-gpg
               mountPath: {{ .Values.gpgPath }}
               readOnly: true
@@ -204,8 +209,19 @@ spec:
       {{- end }}
       volumes:
         - name: sec-tls
-          secret:
-            secretName: {{ include "passbolt.container.tls.secretName" (dict "name" $Name "tls" .Values.app.tls ) }}
+          projected:
+            defaultMode: 420
+            sources:
+              - secret:
+                  items:
+                    - key: tls.crt
+                      path: certificate.crt
+                  name: {{ include "passbolt.container.tls.secretName" (dict "name" $Name "tls" .Values.app.tls ) }}
+              - secret:
+                  items:
+                  - key: tls.key
+                    path: certificate.key
+                  name: {{ include "passbolt.container.tls.secretName" (dict "name" $Name "tls" .Values.app.tls ) }}
         - name: sec-gpg
           secret:
             secretName: {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}

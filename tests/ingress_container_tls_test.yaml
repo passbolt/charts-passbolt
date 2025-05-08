@@ -14,8 +14,19 @@ tests:
       - contains:
           path: spec.template.spec.volumes
           content:
-            secret:
-              secretName: test-passbolt-sec-tls-internal
+            projected:
+              defaultMode: 420
+              sources:
+                - secret:
+                    items:
+                      - key: tls.crt
+                        path: certificate.crt
+                    name: test-passbolt-sec-tls-internal
+                - secret:
+                    items:
+                      - key: tls.key
+                        path: certificate.key
+                    name: test-passbolt-sec-tls-internal
           any: true
   - it: should set container tls secretName as given value
     templates:
@@ -27,6 +38,17 @@ tests:
       - contains:
           path: spec.template.spec.volumes
           content:
-            secret:
-              secretName: supersecretname
+            projected:
+              defaultMode: 420
+              sources:
+                - secret:
+                    items:
+                      - key: tls.crt
+                        path: certificate.crt
+                    name: supersecretname
+                - secret:
+                    items:
+                      - key: tls.key
+                        path: certificate.key
+                    name: supersecretname
           any: true
