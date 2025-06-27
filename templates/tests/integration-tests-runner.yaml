@@ -24,6 +24,8 @@ spec:
           value: {{ quote .Values.integrationTests.debug | default false }}
         - name: ROOTLESS
           value: {{ quote .Values.integrationTests.rootless | default false }}
+        - name: PROTOCOL
+          value: {{ quote .Values.integrationTests.protocol | default "https" }}
       volumeMounts:
         - name: integration-tests-runner
           mountPath: "/tests/run_tests.sh"

@@ -27,7 +27,7 @@ function registerPassboltUser {
   createGPGKey "${email}"
 
   _log Registering user on passbolt api...
-  curl -s "https://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
+  curl -s "${PROTOCOL}://${PASSBOLT_FQDN}/setup/complete/${user_uuid}" \
     -H "authority: ${PASSBOLT_FQDN}" \
     -H "accept: application/json" \
     -H "content-type: application/json" \
@@ -41,8 +41,8 @@ function registerPassboltUser {
 function configurePassbolt {
   local id=${1}
   _log Configuring passbolt cli...
-  _log "${PASSBOLT_CLI_BINARY}" configure --serverAddress "https://${PASSBOLT_FQDN}" --userPassword "${PASSPHRASE}" --userPrivateKeyFile "secret-${id}.asc"
-  ${PASSBOLT_CLI_BINARY} configure --serverAddress "https://${PASSBOLT_FQDN}" --userPassword "${PASSPHRASE}" --userPrivateKeyFile "secret-${id}.asc"
+  _log "${PASSBOLT_CLI_BINARY}" configure --serverAddress "${PROTOCOL}://${PASSBOLT_FQDN}" --userPassword "${PASSPHRASE}" --userPrivateKeyFile "secret-${id}.asc"
+  ${PASSBOLT_CLI_BINARY} configure --serverAddress "${PROTOCOL}://${PASSBOLT_FQDN}" --userPassword "${PASSPHRASE}" --userPrivateKeyFile "secret-${id}.asc"
   _log passbolt cli configured
 }
 

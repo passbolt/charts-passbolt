@@ -74,7 +74,7 @@ Render the value of the database service
 {{- else if and ( eq .Values.postgresqlDependencyEnabled true ) ( eq .Values.app.database.kind "postgresql" ) }}
 {{- default ( printf "%s-postgresql" .Release.Name ) .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
 {{- else if ( hasKey .Values.passboltEnv.plain "DATASOURCES_DEFAULT_HOST" )  -}}
-{{- printf "%s" .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST }}
+{{- .Values.passboltEnv.plain.DATASOURCES_DEFAULT_HOST | quote }}
 {{- else }}
 {{- fail "DATASOURCES_DEFAULT_HOST can't be empty when mariadbDependencyEnabled and postgresqlDependencyEnabled are disabled"}}
 {{- end }}
@@ -264,8 +264,8 @@ ca.key: {{ $ca.Key | b64enc }}
 {{- $altNames := .altNames }}
 {{- $ca := genCA "vault-ca" 365 -}}
 {{- $cert := genSignedCert $commonName nil $altNames 365 $ca -}}
-server.crt: {{ $cert.Cert | b64enc }}
-server-key.pem: {{ $cert.Key | b64enc }}
+tls.crt: {{ $cert.Cert | b64enc }}
+tls.key: {{ $cert.Key | b64enc }}
 ca.crt: {{ $ca.Cert | b64enc }}
 ca.key: {{ $ca.Key | b64enc }}
 {{- end -}}

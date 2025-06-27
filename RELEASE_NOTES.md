@@ -1,19 +1,15 @@
-Announcing the immediate availability of passbolt's helm chart 1.3.2
+Announcing the immediate availability of passbolt's helm chart 1.3.3
 
 This is a minor change release that has the following changes:
 
 ### Fixed
 
-- [#95](https://github.com/passbolt/charts-passbolt/pull/95) Bump chart dependencies and set defaults for KUBECTL_CMD for multiarch execution.
-- [#101](https://github.com/passbolt/charts-passbolt/pull/101) Fix haproxy of email job is occupying one CPU core
-- Bump passbolt docker image tag to 5.0.0-1-ce
+- Internal TLS certificate are mounted in the wrong path [#100](https://github.com/passbolt/charts-passbolt/issues/100)
+- PASSBOLT_SSL_FORCE set to false, still redirecting to HTTPs [#45](https://github.com/passbolt/charts-passbolt/issues/45)
 
 ### Added
 
-- [#102](https://github.com/passbolt/charts-passbolt/pull/102) feat: support redis authentication with existing secret
-
+- Integration test running ingress and passbolt without TLS
 
 Thanks to all the community members that helped us to improve this chart! :tada:
 
-@cgiraldo
-@kamphaus

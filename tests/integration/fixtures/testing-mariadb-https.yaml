@@ -3,6 +3,7 @@ integrationTests:
   enabled: true
   certificatesSecret: mkcert-ca
   debug: false
+  protocol: https
 ingress:
   # -- Enable passbolt ingress
   enabled: true
