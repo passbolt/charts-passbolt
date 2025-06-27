@@ -112,15 +112,33 @@ helm delete my-release
 The above command deletes all the kubernetes components associated with the
 chart and deletes the release.
 
-## Requirements
+{{ template "chart.requirementsHeader" . }}
+{{ template "chart.requirementsTable" . }}
 
-| Repository                                            | Name             | Version |
-|-------------------------------------------------------|------------------|---------|
-| https://download.passbolt.com/charts/passbolt-library | passbolt-library | 0.2.7   |
-| oci://registry-1.docker.io/bitnamicharts              | mariadb          | 11.5.7  |
-| oci://registry-1.docker.io/bitnamicharts              | redis            | 17.15.2 |
 
 {{ template "chart.valuesSection" . }}
+
+## Upgrading
+
+### To 1.3.2
+
+Due to the dependency bump on mariadb dependency to [20.2.1](https://artifacthub.io/packages/helm/bitnami/mariadb#to-20-0-0), upgrading to 1.3.2 will need some manual changes before 
+executing the helm upgrade command:
+
+#### Mariadb architecture set to standalone
+
+```
+kubectl delete sts <RELEASE_NAME>-mariadb --cascade=false
+```
+
+#### Mariadb architecture set to replication
+
+```
+ kubectl delete sts <RELEASE_NAME>-mariadb-primary --cascade=false
+ kubectl delete sts <RELEASE_NAME>-mariadb-secondary --cascade=false
+```
+
+These manual steps will not impact the availability of the service.
 
 ## Running tests
 
