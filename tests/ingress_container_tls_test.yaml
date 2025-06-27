@@ -30,3 +30,28 @@ tests:
             secret:
               secretName: supersecretname
           any: true
+  - it: should not set container volume for tls
+    templates:
+      - deployment.yaml
+    set:
+      app.tls.autogenerate: false
+      app.tls.existingSecret: null
+    asserts:
+      - notContains:
+          path: spec.template.spec.volumes
+          content:
+            secret:
+              secretName: supersecretname
+          any: true
+  - it: should not set container volumeMount for tls
+    templates:
+      - deployment.yaml
+    set:
+      app.tls.autogenerate: false
+      app.tls.existingSecret: null
+    asserts:
+      - notContains:
+          path: spec.template.spec.containers[0].volumeMounts
+          content:
+            name: sec-tls
+          any: true
