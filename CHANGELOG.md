@@ -3,7 +3,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.2...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.3...HEAD)
+
+## [1.3.3] - 2025-06-27
+
+### Fixed
+
+- Internal TLS certificate are mounted in the wrong path [#100](https://github.com/passbolt/charts-passbolt/issues/100)
+- PASSBOLT_SSL_FORCE set to false, still redirecting to HTTPs [#45](https://github.com/passbolt/charts-passbolt/issues/45)
+
+### Added
+
+- Integration test running ingress and passbolt without TLS
 
 ## [1.3.2] - 2025-04-25
 
@@ -16,7 +27,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - [#102](https://github.com/passbolt/charts-passbolt/pull/102) feat: support redis authentication with existing secret
-
 
 ## [1.3.1] - 2025-01-16
 
