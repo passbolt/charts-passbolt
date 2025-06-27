@@ -265,7 +265,7 @@ ca.key: {{ $ca.Key | b64enc }}
 {{- $ca := genCA "vault-ca" 365 -}}
 {{- $cert := genSignedCert $commonName nil $altNames 365 $ca -}}
 tls.crt: {{ $cert.Cert | b64enc }}
-tls.: {{ $cert.Key | b64enc }}
+tls.key: {{ $cert.Key | b64enc }}
 ca.crt: {{ $ca.Cert | b64enc }}
 ca.key: {{ $ca.Key | b64enc }}
 {{- end -}}
