@@ -3,9 +3,9 @@
 
 set -eo pipefail
 
-DATABASE_ENGINE="${1:-mariadb}"
+DATABASE_ENGINE=mariadb
+PROTOCOL=https
 KIND_CLUSTER_CONFIG_FILE="tests/integration/fixtures/kind-config.yaml"
-HELM_TESTING_VALUES="tests/integration/fixtures/testing-${DATABASE_ENGINE}.yaml"
 KIND_CLUSTER_NAME="charts-passbolt-integration"
 K8S_LOCAL_TLS_SECRET="local-tls-secret"
 SSL_KEY_PATH="/tmp/ssl.key"
@@ -47,6 +47,7 @@ function image_tag {
 }
 
 function upgradePassboltChart {
+  local helm_testing_values="tests/integration/fixtures/testing-${DATABASE_ENGINE}-${PROTOCOL}.yaml"
   local private_key=""
   local public_key=""
   local fingerprint=""
@@ -58,7 +59,7 @@ function upgradePassboltChart {
   jwt_private_key=$(kubectl get secret passbolt-sec-jwt --namespace default -o jsonpath="{.data.jwt\.key}")
   jwt_public_key=$(kubectl get secret passbolt-sec-jwt --namespace default -o jsonpath="{.data.jwt\.pem}")
   "${HELM_BINARY}" upgrade -i passbolt . \
-    -f "${HELM_TESTING_VALUES}" \
+    -f "${helm_testing_values}" \
     -n default \
     --set integrationTests.debug="${DEBUG}" \
     --set integrationTests.rootless="${ROOTLESS}" \
@@ -73,6 +74,7 @@ function upgradePassboltChart {
 }
 
 function installPassboltChart {
+  local helm_testing_values="tests/integration/fixtures/testing-${DATABASE_ENGINE}-${PROTOCOL}.yaml"
   if [[ -n "${GITLAB_CI}" || -n "${GITHUB_WORKFLOW}" ]]; then
     "${HELM_BINARY}" repo add bitnami https://charts.bitnami.com/bitnami
     "${HELM_BINARY}" repo add passbolt-library https://download.passbolt.com/charts/passbolt-library
@@ -81,7 +83,7 @@ function installPassboltChart {
   if "${HELM_BINARY}" status passbolt; then
     upgradePassboltChart
   else
-    "${HELM_BINARY}" install passbolt . -f "${HELM_TESTING_VALUES}" -n default \
+    "${HELM_BINARY}" install passbolt . -f "${helm_testing_values}" -n default \
       --set service.ports.https.targetPort="$(https_port)" \
       --set service.ports.http.targetPort="$(http_port)" \
       --set app.image.tag="$(image_tag)" \
@@ -123,5 +125,27 @@ function createInfraAndInstallPassboltChart {
     echo "Cluster ${KIND_CLUSTER_NAME} already exists"
   fi
 }
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+  -h | --help)
+    showHelp
+    ;;
+  -d | --database)
+    shift
+    DATABASE_ENGINE=$1
+    shift
+    ;;
+  -p | --protocol)
+    shift
+    PROTOCOL=$1
+    shift
+    ;;
+  *)
+    echo "Unknown argurment $1"
+    exit 1
+    ;;
+  esac
+done
 
 createInfraAndInstallPassboltChart

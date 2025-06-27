@@ -1,0 +1,25 @@
+# -- Enable integration tests
+integrationTests:
+  enabled: true
+  certificatesSecret: mkcert-ca
+  debug: false
+  protocol: http
+ingress:
+  # -- Enable passbolt ingress
+  enabled: true
+  # -- Configure passbolt ingress annotations
+  hosts:
+    # @ignored
+    - host: "passbolt.local"
+      paths:
+        - path: /
+          port: http
+          pathType: ImplementationSpecific
+  tls: null
+passboltEnv:
+  plain:
+    APP_FULL_BASE_URL: http://passbolt.local
+    PASSBOLT_SSL_FORCE: false
+app:
+  tls:
+    autogenerate: false

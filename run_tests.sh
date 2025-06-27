@@ -2,7 +2,8 @@
 
 set -eo pipefail
 
-DATABASE_ENGINGE=mariadb
+DATABASE_ENGINE=mariadb
+PROTOCOL=https
 RUN_UNIT=false
 RUN_LINT=false
 RUN_INTEGRATION=false
@@ -23,10 +24,11 @@ function run_unit_tests {
 
 function run_integration_tests {
   local database="$1"
+  local protocol="$2"
   if [[ "$RUN_INTEGRATION" == "true" || "$RUN_ALL" == "true" ]]; then
     source tests/integration/fixtures/install_dependencies.sh
     installDependencies
-    bash tests/integration/fixtures/create-cluster-with-passbolt.sh "$database"
+    bash tests/integration/fixtures/create-cluster-with-passbolt.sh -d "$database" -p "$protocol"
     "$HELM_BINARY" test --logs passbolt -n default
   fi
 }
@@ -49,7 +51,8 @@ function showHelp {
   echo "-l|--lint                 Run helm lint."
   echo "-u|--unit                 Run helm unittest tests."
   echo "-i|--integration          Run integration tests."
-  echo "-d|--database [option]    Database to run integration tests to [mariadb|postgresql]."
+  echo "-d|--database [optional]  Database to run integration tests to [mariadb|postgresql]."
+  echo "-p|--protocol [optional]  Http protocol scheme to run integration tests to [http|https]."
   echo "-no-clean                 Skip cleaning step."
   echo
   exit 0
@@ -58,7 +61,7 @@ function showHelp {
 function run_all {
   run_linter
   run_unit_tests
-  run_integration_tests "$DATABASE_ENGINGE"
+  run_integration_tests "$DATABASE_ENGINE" "$PROTOCOL"
   clean_integration_assets
 }
 
@@ -84,7 +87,12 @@ while [[ $# -gt 0 ]]; do
     ;;
   -d | --database)
     shift
-    DATABASE_ENGINGE=$1
+    DATABASE_ENGINE=$1
+    shift
+    ;;
+  -p | --protocol)
+    shift
+    PROTOCOL=$1
     shift
     ;;
   --no-clean)
