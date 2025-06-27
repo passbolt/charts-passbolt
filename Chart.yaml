@@ -21,7 +21,7 @@ version: 1.3.2
 # This is the version number of the application being deployed. This version number should be
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
-appVersion: 5.0.0-1-ce
+appVersion: 5.2.0-1-ce
 dependencies:
   - name: passbolt-library
     version: 0.2.7
