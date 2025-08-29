@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.3.3...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.4.0...HEAD)
+
+## [1.4.0] - 2025-08-29
+
+### Changed
+
+- Bump Passbolt version to 5.4.1-1-ce
+- Bump Redis chart dependency to 22.0.6
+- Bump MariaDB chart dependency to 22.0.0
+- Bump PostgreSQL chart dependency to 16.7.2
+- Pinned Redis/MariaDB and PostgreSQL docker images to Bitnami's legacy docker hub repository
 
 ## [1.3.3] - 2025-06-27
 

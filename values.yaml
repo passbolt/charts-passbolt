@@ -14,6 +14,13 @@ postgresqlDependencyEnabled: false
 
 # Configure postgresql as a dependency chart
 #postgresql:
+#  global: 
+#    security:
+#      # -- Allow insecure images on bitnami charts. Required as per when  using bitnamilegacy https://github.com/bitnami/charts/issues/30850
+#      allowInsecureImages: true
+#  image:
+#    # -- Pin PostgreSQL image to bitnamilegacy image repository.
+#    repository: bitnamilegacy/postgresql
 #  auth:
 #    # -- Configure postgresql auth username
 #    username: CHANGEME
@@ -28,12 +35,22 @@ global:
 
 # Configure redis dependency chart
 redis:
+  global: 
+    security:
+      # -- Allow insecure images on bitnami charts. Required as per when  using bitnamilegacy https://github.com/bitnami/charts/issues/30850
+      allowInsecureImages: true
+  image:
+      # -- Pin redis image to bitnamilegacy image repository.
+      repository: bitnamilegacy/redis
   auth:
     # -- Enable redis authentication
     enabled: true
     # -- Configure redis password
     password: "CHANGEME"
   sentinel:
+    image:
+      # -- Pin redis-sentinel image to bitnamilegacy image repository.
+     repository: bitnamilegacy/redis-sentinel
     # -- Enable redis sentinel
     enabled: true
 
@@ -41,6 +58,13 @@ redis:
 
 # Configure mariadb as a dependency chart
 mariadb:
+  global: 
+    security:
+      # -- Allow insecure images on bitnami charts. Required as per when  using bitnamilegacy https://github.com/bitnami/charts/issues/30850
+      allowInsecureImages: true
+  image:
+      # -- Pin redis image to bitnamilegacy image repository.
+      repository: bitnamilegacy/mariadb
   # -- Configure mariadb architecture
   architecture: replication
   auth:
@@ -124,7 +148,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 5.2.0-1-ce
+    tag: 5.4.1-1-ce
   # Allowed options: mariadb, mysql or postgresql
   database:
     kind: mariadb
