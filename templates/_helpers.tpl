@@ -113,7 +113,7 @@ Show error message if the user didn't set the needed values during upgrade
 {{- $header = printf "GPG" -}}
 {{- $message = printf "%s\n%s" $message (printf "  export PRIVATE_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey_private\\.asc") -}}
 {{- $message = printf "%s\n%s" $message (printf "  export PUBLIC_KEY=$(kubectl get secret %s --namespace %s -o jsonpath=\"{.data.%s}\")" $secretName $.Release.Namespace "serverkey\\.asc") -}}
-{{- $message = printf "%s\n%s" $message (printf "  export FINGERPRINT=$(kubectl exec deploy/%s -c %s -- grep PASSBOLT_GPG_SERVER_KEY_FINGERPRINT /etc/environment | awk -F= '{gsub(/\"/, \"\"); print $2}')" $dpName $containerName) -}}
+{{- $message = printf "%s\n%s" $message (printf "  export FINGERPRINT=$(kubectl exec deploy/%s --namespace %s -c %s -- grep PASSBOLT_GPG_SERVER_KEY_FINGERPRINT /etc/environment | awk -F= '{gsub(/\"/, \"\"); print $2}')" $dpName $.Release.Namespace $containerName) -}}
 {{- $arguments = printf "%s %s" $arguments (printf "--set %s=$%s --set %s=$%s --set %s=$%s" "gpgServerKeyPrivate" "PRIVATE_KEY" "gpgServerKeyPublic" "PUBLIC_KEY" "passboltEnv.secret.PASSBOLT_GPG_SERVER_KEY_FINGERPRINT" "FINGERPRINT" ) -}}
 {{- end }}
 {{ if and $.Release.IsUpgrade .Values.passboltEnv.plain.PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED ( not .Values.jwtCreateKeysForced ) ( not .Values.jwtExistingSecret ) (or ( not $.Values.jwtServerPublic ) ( not $.Values.jwtServerPrivate )) }}
@@ -269,4 +269,3 @@ tls.key: {{ $cert.Key | b64enc }}
 ca.crt: {{ $ca.Cert | b64enc }}
 ca.key: {{ $ca.Key | b64enc }}
 {{- end -}}
-
