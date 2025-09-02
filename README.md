@@ -9,6 +9,9 @@
 Passbolt is an open source, security first password manager with strong focus on
 collaboration.
 
+## :warning: Important Notice :warning:
+The current chart uses Bitnami dependencies. [The free useage of these is ending](https://community.broadcom.com/tanzu/blogs/beltran-rueda-borrego/2025/08/18/how-to-prepare-for-the-bitnami-changes-coming-soon?CommunityKey=56a49fa1-c592-460c-aa05-019446f8102f) and the legacy charts & images will be in use for the meantime. We'll be transitioning away from these in the future. We do not recommend using the legacy images in production and instead encourage you to use a different solution of your choice for these images.
+
 ## TL;DR
 
 The following commands are not recommended for production deployments as they will
