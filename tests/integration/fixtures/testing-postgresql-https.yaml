@@ -1,6 +1,13 @@
 postgresqlDependencyEnabled: true
 mariadbDependencyEnabled: false
 postgresql:
+  global:
+    security:
+      # -- Allow insecure images on bitnami charts. Required as per when  using bitnamilegacy https://github.com/bitnami/charts/issues/30850
+      allowInsecureImages: true
+  image:
+    # -- Pin postgresql image to bitnamilegacy image repository.
+    repository: bitnamilegacy/postgresql
   auth:
     # -- Configure postgresql auth username
     username: CHANGEME
