@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.4.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.4.1...HEAD)
+
+## [1.4.1] - 2025-10-06
+
+### Changed
+
+- [#114](https://github.com/passbolt/charts-passbolt/pull/114) fix: pin GPG algorithm to RSA and supply key usage. Fixes #113
 
 ## [1.4.0] - 2025-08-29
 
