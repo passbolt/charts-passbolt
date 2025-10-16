@@ -139,12 +139,6 @@ spec:
             {{- toYaml . | nindent 12 }}
             {{- end }}
           volumeMounts:
-            {{- if .Values.app.cache.redis.enabled }}
-            - mountPath: "/etc/passbolt/app.php"
-              subPath: app.php
-              name: cm-app-php
-              readOnly: true
-            {{- end }}
             {{- if or .Values.app.tls.autogenerate .Values.app.tls.existingSecret }}
             - mountPath: /etc/ssl/certs/certificate.crt
               name: sec-tls
@@ -229,11 +223,6 @@ spec:
         - name: sec-gpg
           secret:
             secretName: {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }}
-        {{- if .Values.app.cache.redis.enabled }}
-        - configMap:
-            name: {{ $Name }}-cm-app-php
-          name: cm-app-php
-        {{- end }}
         {{- if .Values.subscriptionKey }}
         - name: sec-subscription
           secret:

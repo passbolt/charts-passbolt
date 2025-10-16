@@ -237,7 +237,17 @@ passboltEnv:
     # -- Toggle passbolt public registration
     PASSBOLT_REGISTRATION_PUBLIC: true
     # -- Configure passbolt cake cache server
-    CACHE_CAKE_DEFAULT_SERVER: 127.0.0.1
+    CACHE_DEFAULT_HOST: 127.0.0.1
+    # -- Configure passbolt cake cache server port
+    CACHE_DEFAULT_PORT: 6379
+    # -- Configure passbolt cake session storage, either php, cake, database or cache
+    SESSION_DEFAULTS: cache
+    # -- Configure passbolt cake cache class
+    CACHE_DEFAULT_CLASSNAME: Redis
+    # -- Configure passbolt cake model cache class
+    CACHE_CAKEMODEL_CLASSNAME: Redis
+    # -- Configure passbolt cake core cache class
+    CACHE_CAKECORE_CLASSNAME: Redis
     # -- Configure passbolt default email service port
     EMAIL_TRANSPORT_DEFAULT_PORT: 587
     # -- Toggle passbolt debug mode
@@ -268,7 +278,7 @@ passboltEnv:
     KUBECTL_DOWNLOAD_CMD: ""
   secret:
     # -- Configure passbolt cake cache password
-    CACHE_CAKE_DEFAULT_PASSWORD: CHANGEME
+    CACHE_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt default database password
     DATASOURCES_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt default database username
