@@ -18,7 +18,7 @@ function createKindCluster {
 
 function installNginxIngress {
   "${KUBECTL_BINARY}" apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-  "${KUBECTL_BINARY}" rollout status deployment ingress-nginx-controller --timeout=120s -n ingress-nginx
+  "${KUBECTL_BINARY}" rollout status deployment ingress-nginx-controller --timeout=200s -n ingress-nginx
 }
 
 function http_port {
