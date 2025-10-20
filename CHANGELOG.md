@@ -3,7 +3,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/1.4.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.0.0...HEAD)
+
+## [2.0.0] - 2025-10-20
+
+This release introduces breaking changes!
+
+Some environment variables were renamed:
+CACHE_CAKE_DEFAULT_SERVER -> CACHE_DEFAULT_HOST
+CACHE_CAKE_DEFAULT_PASSWORD -> CACHE_DEFAULT_PASSWORD
+
+### Changed
+
+- Switch to the app.default.php provided by passbolt-api application instead of injecting a custom app.php
 
 ## [1.4.1] - 2025-10-06
 
