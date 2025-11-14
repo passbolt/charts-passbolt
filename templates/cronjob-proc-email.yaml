@@ -26,9 +26,11 @@ spec:
           {{- include "passbolt.pullSecrets" ( dict "images" (list .Values.imagePullSecrets ) "global" .Values.global) | nindent 10 }}
           serviceAccountName: {{ $Name }}-sa-common
           restartPolicy: OnFailure
+          {{- if eq .Values.Openshift false }}
           securityContext:
             runAsUser: 33
             fsGroup: 33
+          {{- end }}
           containers:
             - name: proc-email
               image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
