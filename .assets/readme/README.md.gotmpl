@@ -1,13 +1,3 @@
-# Passbolt Helm chart
-
-<h3 align="center">
-    <img src="./.assets/helm_passbolt.png" alt="passbolt sails kubernetes" width="500"/>
-</h3>
-
-{{ template "chart.versionBadge" . }}{{ template "chart.typeBadge" . }}{{ template "chart.appVersionBadge" . }}
-
-Passbolt is an open source, security first password manager with strong focus on
-collaboration.
 
 ## :warning: Important Notice :warning:
 
@@ -178,6 +168,6 @@ and they will be downloaded during the tests execution if they are not installed
 
 We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release 
 
-```
-helm-docs -t README.md.gotmpl --dry-run | mdformat - > README.md  
+```bash
+helm-docs -t .assets/readme/README_header.md.gotmpl -t .assets/readme/README.md.gotmpl --dry-run | mdformat - > README.md && helm-docs -t .assets/readme/app_readme_header.md.gotmpl -t .assets/readme/README.md.gotmpl --dry-run | mdformat - > app-readme.md
 ```
