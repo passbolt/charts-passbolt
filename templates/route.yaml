@@ -1,0 +1,28 @@
+{{- if eq .Values.Openshift true }}
+{{- $type := "svc" -}}
+{{- $action := "common" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ $Name }}
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+spec:
+  {{- range .Values.ingress.hosts }}
+  host: {{ .host | quote }}
+  {{- end }}
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  to:
+    kind: Service
+    name: {{ $Name }}
+    weight: 100
+{{- end }}

@@ -228,6 +228,9 @@ jobCreateGpgKeys:
 
 passboltEnv:
   plain:
+
+
+
     # -- Configure passbolt privacy url
     PASSBOLT_LEGAL_PRIVACYPOLICYURL: https://www.passbolt.com/privacy
     # -- Configure passbolt fullBaseUrl
@@ -238,8 +241,16 @@ passboltEnv:
     PASSBOLT_REGISTRATION_PUBLIC: true
     # -- Configure passbolt cake cache server
     CACHE_DEFAULT_HOST: 127.0.0.1
+    # -- Configure passbolt cake core cache server
+    CACHE_CAKECORE_HOST: 127.0.0.1
+    # -- Configure passbolt cake model cache server
+    CACHE_CAKEMODEL_HOST: 127.0.0.1
     # -- Configure passbolt cake cache server port
     CACHE_DEFAULT_PORT: 6379
+    # -- Configure passbolt cake core cache server port
+    CACHE_CAKECORE_PORT: 6379
+    # -- Configure passbolt cake model cache server port
+    CACHE_CAKEMODEL_PORT: 6379
     # -- Configure passbolt cake session storage, either php, cake, database or cache
     SESSION_DEFAULTS: cache
     # -- Configure passbolt cake cache class
@@ -276,9 +287,15 @@ passboltEnv:
     PASSBOLT_PLUGINS_JWT_AUTHENTICATION_ENABLED: true
     # -- Download Command for kubectl
     KUBECTL_DOWNLOAD_CMD: ""
+    # -- Set to false to supress warnings when running passbolt commands as non webserver user, mainly for Openshift
+    PASSBOLT_SECURITY_DISPLAY_NON_WEBUSER_WARNING: true
   secret:
     # -- Configure passbolt cake cache password
     CACHE_DEFAULT_PASSWORD: CHANGEME
+    # -- Configure passbolt cake core cache password
+    CACHE_CAKECORE_PASSWORD: CHANGEME
+    # -- Configure passbolt cake model cache password
+    CACHE_CAKEMODEL_PASSWORD: CHANGEME
     # -- Configure passbolt default database password
     DATASOURCES_DEFAULT_PASSWORD: CHANGEME
     # -- Configure passbolt default database username
@@ -444,3 +461,8 @@ extraVolumes: []
 
 # -- Add additional volume mounts, e.g. for overwriting config files
 extraVolumeMounts: []
+
+# Toggle to true if deploying on Openshift
+# Removes security context specifying UID from the email cronjob
+# Adds a route to use
+Openshift: false
