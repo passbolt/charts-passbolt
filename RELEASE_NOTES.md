@@ -1,26 +1,10 @@
-Announcing the immediate availability of Passbolt's helm chart 2.0.0.
+Announcing the immediate availability of Passbolt's helm chart 2.0.1.
 
-## Breaking changes
+## Openshift Support
 
-Historically passbolt-api default configuration was not considering using an external
-cache such as valkey or redis on its default configuration. This helm chart was
-injecting a custom app.php file to workaround that issue.
+This version of the helm chart introduces some functionality to improve the experience of installing on Openshift.
 
-Starting with passbolt-api 5.6.0 using an external storage for cache/sessions is supported.
-This version introduces breaking changes being:
+A new environment variable has been added to suppress the webserver user warning:
+- PASSBOLT_SECURITY_DISPLAY_NON_WEBUSER_WARNING
 
-- Passbolt API minimiun supported version is 5.6.0
-- Custom app.php configmap is no longer provided with this chart
-
-List of renamed environment variables:
-
-- CACHE_CAKE_DEFAULT_SERVER -> CACHE_DEFAULT_HOST
-- CACHE_CAKE_DEFAULT_PASSWORD -> CACHE_DEFAULT_PASSWORD
-
-## What should I do?
-
-1. Update to passbolt-api >= 5.6.0
-2. Users must review their cache authentication environment variables and update
-   them accordingly.
-
-Thanks to all the community members that helped us to improve this chart! :tada:
+Additionally setting the value `Openshift: false` to true will include the routes.yaml template. Another change when setting this to true is that the security context on the cronjob which looks for a particular UID and GID will no longer be included.
