@@ -3,7 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.0.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.0.1...HEAD)
+
+## [2.0.1] - 2025-11-17
+
+### Added
+
+- Adds support for deployments on Openshift.
+
+### Changed
+
+- Bump Passbolt version to 5.7.2-1-ce
 
 ## [2.0.0] - 2025-10-20
 
