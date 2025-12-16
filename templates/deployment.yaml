@@ -39,6 +39,9 @@ spec:
         {{- if .Values.app.cache.redis.sentinelProxy.enabled }}
         checksum/sec-redis-proxy: {{ include (print $.Template.BasePath "/secret-redis-proxy.yaml") . | sha256sum }}
         {{- end }}
+        {{- if $.Values.podAnnotations }}
+        {{ toYaml $.Values.podAnnotations }}
+        {{- end }}
     spec:
       {{- include "passbolt.pullSecrets" ( dict "images" (list .Values.imagePullSecrets ) "global" .Values.global) | nindent 6 }}
       serviceAccountName: {{ $Name }}-sa-common
