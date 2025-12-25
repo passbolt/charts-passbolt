@@ -29,6 +29,6 @@ spec:
       name: {{ .Values.service.ports.http.name | default "http" }}
   selector:
     {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
-  {{- if .Values.trafficDistribution }}
-  trafficDistribution: {{ .Values.trafficDistribution }}
+  {{- if .Values.service.trafficDistribution }}
+  trafficDistribution: {{ .Values.service.trafficDistribution }}
   {{- end }}
