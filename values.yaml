@@ -425,7 +425,7 @@ service:
       # -- Configure passbolt HTTP service port name
       name: http
   # -- Preference for routing traffic to endpoints that are in the same zone as the client
-  #trafficDistribution: PreferClose
+  # trafficDistribution: "PreferSameZone"
 
 ingress:
   # -- Enable passbolt ingress
