@@ -1,0 +1,16 @@
+---
+suite: service
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should have annotations
+    templates:
+      - service.yaml
+    set:
+      service.trafficDistribution: "a-traffic-distribution-value"
+    asserts:
+      - equal:
+          path: spec.trafficDistribution
+          value: "a-traffic-distribution-value"
