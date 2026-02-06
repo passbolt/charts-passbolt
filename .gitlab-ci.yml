@@ -22,7 +22,7 @@ stages:
 
 lint Helm Charts:
   image:
-    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm
+    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.0
     entrypoint: ["/bin/sh", "-c"]
   stage: test
   script:
@@ -31,7 +31,7 @@ lint Helm Charts:
 
 test Helm Charts:
   image:
-    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm
+    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.0
     entrypoint: ["/bin/sh", "-c"]
   stage: test
   script:
@@ -81,7 +81,7 @@ integration Tests Helm Charts Postgresql Rootless:
 
 publish:
   stage: publish
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.0
   variables:
     REPO_BUCKET: "download.passbolt.com"
     REPO_DIR: "charts"
