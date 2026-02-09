@@ -1,0 +1,17 @@
+---
+suite: pod annotations
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: deployment should have pod annotations
+    templates:
+      - deployment.yaml
+    set:
+      podAnnotations:
+        test-annotation: "test-annotation-value"
+    asserts:
+      - equal:
+          path: spec.template.metadata.annotations.test-annotation
+          value: "test-annotation-value"

@@ -274,6 +274,7 @@ chart and deletes the release.
 | service.ports.https.name | string | `"https"` | Configure passbolt HTTPS service port name |
 | service.ports.https.port | int | `443` | Configure passbolt HTTPS service port |
 | service.ports.https.targetPort | int | `443` | Configure passbolt HTTPS service targetPort |
+| service.trafficDistribution | string | `` | Configure passbolt service traffic distribution |
 | service.type | string | `"ClusterIP"` | Configure passbolt service type |
 | serviceAccount.annotations | object | `{}` | Annotations to add to the service account |
 | serviceAccount.create | bool | `true` | Specifies whether a service account should be created |
