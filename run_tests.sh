@@ -4,6 +4,7 @@ set -eo pipefail
 
 DATABASE_ENGINE=mariadb
 PROTOCOL=https
+GPG_KEY_GENERATION=auto
 RUN_UNIT=false
 RUN_LINT=false
 RUN_INTEGRATION=false
@@ -25,10 +26,11 @@ function run_unit_tests {
 function run_integration_tests {
   local database="$1"
   local protocol="$2"
+  local gpg_key_generation="$3"
   if [[ "$RUN_INTEGRATION" == "true" || "$RUN_ALL" == "true" ]]; then
     source tests/integration/fixtures/install_dependencies.sh
     installDependencies
-    bash tests/integration/fixtures/create-cluster-with-passbolt.sh -d "$database" -p "$protocol"
+    bash tests/integration/fixtures/create-cluster-with-passbolt.sh -d "$database" -p "$protocol" -g "$gpg_key_generation"
     "$HELM_BINARY" test --logs passbolt -n default
   fi
 }
@@ -53,6 +55,7 @@ function showHelp {
   echo "-i|--integration          Run integration tests."
   echo "-d|--database [optional]  Database to run integration tests to [mariadb|postgresql]."
   echo "-p|--protocol [optional]  Http protocol scheme to run integration tests to [http|https]."
+  echo "-g|--gpg [optional]  	  Automagically create GPG key using init job or manually through secrets. [auto|provided|existing_secret]"
   echo "-no-clean                 Skip cleaning step."
   echo
   exit 0
@@ -61,7 +64,7 @@ function showHelp {
 function run_all {
   run_linter
   run_unit_tests
-  run_integration_tests "$DATABASE_ENGINE" "$PROTOCOL"
+  run_integration_tests "$DATABASE_ENGINE" "$PROTOCOL" "$GPG_KEY_GENERATION"
   clean_integration_assets
 }
 
@@ -93,6 +96,11 @@ while [[ $# -gt 0 ]]; do
   -p | --protocol)
     shift
     PROTOCOL=$1
+    shift
+    ;;
+  -g | --gpg)
+    shift
+    GPG_KEY_GENERATION=$1
     shift
     ;;
   --no-clean)

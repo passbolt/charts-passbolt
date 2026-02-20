@@ -64,6 +64,26 @@ integration Tests Helm Charts Mariadb Rootless:
     ROOTLESS: true
   extends: integration Tests Helm Charts Mariadb
 
+integration Tests Helm Charts Mariadb existing GPG secret:
+  variables:
+    ROOTLESS: false
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
+  script:
+    - |
+      apk update && apk add -U curl bash gnupg
+      sleep 10 # Wait for docker service
+      bash run_tests.sh --integration -g existing_secret
+
+integration Tests Helm Charts Mariadb provided GPG key:
+  variables:
+    ROOTLESS: false
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:dind
+  script:
+    - |
+      apk update && apk add -U curl bash gnupg
+      sleep 10 # Wait for docker service
+      bash run_tests.sh --integration -g provided
+
 integration Tests Helm Charts Postgresql:
   variables:
     ROOTLESS: false

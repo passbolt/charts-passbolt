@@ -1,8 +1,7 @@
 charts/*
 values-sec.yaml
 *.vim
-secret.asc
-public.asc
+*.asc
 passbolt
 mkcert
 helm
