@@ -44,6 +44,7 @@ CAROOT=/mkcert "${MKCERT_BINARY}" -install
 addHostsEntry
 
 list=(
+  "testServerGpgFingerprintMatchesExpected:GPG_server_fingerprint_should_match_expected"
   "testCreateAndDecryptPassword:It_should_create_and_decrypt_a_password"
   "testCreateAndRemovePassword:It_should_create_and_remove_a_password"
   "testCreateShareAndDecryptPassword:It_should_create_share_and_decrypt_a_password"

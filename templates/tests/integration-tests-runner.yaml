@@ -26,6 +26,8 @@ spec:
           value: {{ quote .Values.integrationTests.rootless | default false }}
         - name: PROTOCOL
           value: {{ quote .Values.integrationTests.protocol | default "https" }}
+        - name: EXPECTED_GPG_FINGERPRINT
+          value: {{ quote .Values.integrationTests.expected_gpg_fingerprint | default "" }}
       volumeMounts:
         - name: integration-tests-runner
           mountPath: "/tests/run_tests.sh"
