@@ -432,6 +432,8 @@ ingress:
   enabled: false
   # -- Configure passbolt ingress annotations
   annotations: {}
+  # -- Configure passbolt ingress class name
+  # className: "nginx-example"
   # -- Configure passbolt ingress hosts
   hosts:
     # @ignored

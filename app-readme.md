@@ -171,6 +171,7 @@ chart and deletes the release.
 | gpgServerKeyPublic | string | `""` | Gpg server public key in base64 |
 | imagePullSecrets | list | `[]` | Configure image pull secrets |
 | ingress.annotations | object | `{}` | Configure passbolt ingress annotations |
+| ingress.className | string | | The ingress class name |
 | ingress.enabled | bool | `false` | Enable passbolt ingress |
 | ingress.hosts | list | `[]` | Configure passbolt ingress hosts |
 | ingress.tls | list | `[]` | Configure passbolt ingress tls |

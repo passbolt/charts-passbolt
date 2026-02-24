@@ -1,0 +1,16 @@
+---
+suite: ingress class name
+release:
+  name: test
+tests:
+  - it: should have ingressClassName
+    templates:
+      - ingress.yaml
+    set:
+      ingress:
+        enabled: true
+        className: "a-class-name-value"
+    asserts:
+      - equal:
+          path: spec.ingressClassName
+          value: "a-class-name-value"
