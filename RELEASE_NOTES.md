@@ -1,10 +1,15 @@
-Announcing the immediate availability of Passbolt's helm chart 2.0.1.
+Announcing the immediate availability of Passbolt's helm chart 2.1.0.
 
-## Openshift Support
+## General improvements
 
-This version of the helm chart introduces some functionality to improve the experience of installing on Openshift.
+This version of the helm chart addresses a few GitHub issues, notably:
 
-A new environment variable has been added to suppress the webserver user warning:
-- PASSBOLT_SECURITY_DISPLAY_NON_WEBUSER_WARNING
+- https://github.com/passbolt/charts-passbolt/issues/109 - to add a way to set the service `ingressClassName` field using the `ingress.className` value.
+- https://github.com/passbolt/charts-passbolt/issues/117 - to add a way to set the `trafficDistribution` service field using the `service.trafficDistribution` value.
+- https://github.com/passbolt/charts-passbolt/issues/119 - to fix the fact that the `podAnnotations` was not used in the Passbolt server template despite being set in the values file.
 
-Additionally setting the value `Openshift: false` to true will include the routes.yaml template. Another change when setting this to true is that the security context on the cronjob which looks for a particular UID and GID will no longer be included.
+This version also bumps and pins a few CI-related dependencies and introduces
+[renovate](https://github.com/renovatebot/renovate) to our CI tool belt.
+
+
+Thanks to all the community members that helped us to improve this chart! :tada:

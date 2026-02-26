@@ -3,7 +3,26 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.0.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.1.0...HEAD)
+
+## [2.1.0] - 2026-02-27
+
+### Added
+
+- Adds missing documentation for the `ingress.className` value for setting the `ingressClassName` field in the ingress configuration, with a corresponding unit test. Fixes #109
+- Adds the `service.trafficDistribution` value to set the [traffic distribution](https://kubernetes.io/docs/concepts/services-networking/service/#traffic-distribution) field in the service configuration, with a corresponding unit test.
+- Adds missing `podAnnotations` value handling in the Passbolt server pod definition.
+- Adds an integration test for when the server OpenPGP keypair is manually generated and provided using the `gpgServerKeyPrivate` and `gpgServerKeyPublic` values.
+- Adds an integration test for when the server OpenPGP keypair is manually generated, stored in a Kubernetes secret and provided through the `gpgExistingSecret` value.
+- Adds a new argument to the `run_tests.sh` script, `-g`/`--gpg`, with possible values `auto` being the current behavior (generating the key with a Kubernetes job), `provided` (providing a manually generated keypair through the `gpgServerKeyPrivate` and `gpgServerKeyPublic` values) and `existing_secret` (providing an existing Kubernetes secret with the `gpgExistingSecret` value).
+- Adds renovate configuration.
+
+### Changed
+
+- Bumps Passbolt version to 5.9.0-1-ce.
+- Bumps Helm version to v3.20.0 in CI.
+- Bumps `helm-unittest` version to 1.0.3 in CI.
+- Pins OCI image versions in CI.
 
 ## [2.0.1] - 2025-11-17
 
