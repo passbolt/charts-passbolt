@@ -53,7 +53,7 @@ integration Tests Helm Charts Mariadb no TLS:
   variables:
     ROOTLESS: false
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.2.1-dind@sha256:68f6d9ab84623d1116c5432a3b924a07ee09960e6129ca1cb03ef14010588cb4  
-script:
+  script:
     - |
       apk update && apk add -U curl bash
       sleep 10 # Wait for docker service
