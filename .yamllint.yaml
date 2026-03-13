@@ -1,0 +1,21 @@
+---
+extends: default
+
+ignore:
+  - templates/
+
+rules:
+  line-length:
+    max: 256
+  truthy:
+    check-keys: false
+  document-start: disable
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: disable
+  braces:
+    min-spaces-inside: 0
+    max-spaces-inside: 1
+  brackets:
+    min-spaces-inside: 0
+    max-spaces-inside: 0

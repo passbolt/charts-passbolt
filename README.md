@@ -331,6 +331,20 @@ We rely on [helm unitttest](https://github.com/helm-unittest/helm-unittest) fram
 The integration tests code is under the `tests/integration`. There are a list of tools that are required locally to run the integration tests ([kind](https://github.com/kubernetes-sigs/kind), [helm](https://github.com/helm/helm), [kubectl](https://kubernetes.io/docs/tasks/tools/#kubectl), [mkcert](https://github.com/FiloSottile/mkcert) and [passbolt go cli](https://github.com/passbolt/go-passbolt-cli))
 and they will be downloaded during the tests execution if they are not installed in the system. Even though, there is a cleaning step that runs at the end of the execution to clean the directory.
 
+## Development
+
+### Prerequisites
+
+- [prek](https://github.com/j178/prek) (`brew install j178/tap/prek` or `cargo install prek`)
+
+### Quickstart
+
+```bash
+prek install
+```
+
+This sets up local hooks for `yamllint` and `gitleaks` that run on every commit.
+
 ## Updating README.md
 
 We rely on the [helm-docs](https://github.com/norwoodj/helm-docs) helm plugin and [mdformat](https://github.com/executablebooks/mdformat) with [mdformat-tables](https://github.com/executablebooks/mdformat-tables) to generate and format the README.md on each release
