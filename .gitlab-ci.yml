@@ -42,7 +42,7 @@ test Helm Charts:
 integration Tests Helm Charts Mariadb:
   variables:
     ROOTLESS: false
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537  
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
   script:
     - |
       apk update && apk add -U curl bash
@@ -52,7 +52,7 @@ integration Tests Helm Charts Mariadb:
 integration Tests Helm Charts Mariadb no TLS:
   variables:
     ROOTLESS: false
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537  
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
   script:
     - |
       apk update && apk add -U curl bash
@@ -67,7 +67,7 @@ integration Tests Helm Charts Mariadb Rootless:
 integration Tests Helm Charts Mariadb existing GPG secret:
   variables:
     ROOTLESS: false
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537  
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
   script:
     - |
       apk update && apk add -U curl bash gnupg
@@ -77,7 +77,7 @@ integration Tests Helm Charts Mariadb existing GPG secret:
 integration Tests Helm Charts Mariadb provided GPG key:
   variables:
     ROOTLESS: false
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537  
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
   script:
     - |
       apk update && apk add -U curl bash gnupg
@@ -87,7 +87,7 @@ integration Tests Helm Charts Mariadb provided GPG key:
 integration Tests Helm Charts Postgresql:
   variables:
     ROOTLESS: false
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537  
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:29.3.0-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
   script:
     - |
       apk update && apk add -U curl bash
