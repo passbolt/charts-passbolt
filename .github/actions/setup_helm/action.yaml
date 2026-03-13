@@ -14,7 +14,7 @@ runs:
       uses: azure/setup-helm@v3
       id: install-helm
       with:
-         version: ${{ inputs.helm-version }}
+        version: ${{ inputs.helm-version }}
 
     - name: Add and update repos
       run: |

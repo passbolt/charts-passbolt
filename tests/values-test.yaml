@@ -286,9 +286,9 @@ ingress:
   # -- Configure passbolt ingress tls
   tls:
     # @ignored
-  - secretName: ""
-    hosts:
-      - passbolt.local
+    - secretName: ""
+      hosts:
+        - passbolt.local
 # -- Configure passbolt deployment nodeSelector
 nodeSelector: {}
 
