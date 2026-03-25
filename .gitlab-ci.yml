@@ -22,7 +22,7 @@ stages:
 
 lint Helm Charts:
   image:
-    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.0@sha256:2240b3c3e917a156c4af570c7f8bdf951072196de69f2a0d06e2cd2fc0ba40a8
+    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.1@sha256:9ccb6cb780553282592b8628e78c50cd914976d481d0d8fd1f362887194a9c4b
     entrypoint: ["/bin/sh", "-c"]
   stage: test
   script:
@@ -31,7 +31,7 @@ lint Helm Charts:
 
 test Helm Charts:
   image:
-    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.0@sha256:2240b3c3e917a156c4af570c7f8bdf951072196de69f2a0d06e2cd2fc0ba40a8
+    name: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.1@sha256:9ccb6cb780553282592b8628e78c50cd914976d481d0d8fd1f362887194a9c4b
     entrypoint: ["/bin/sh", "-c"]
   stage: test
   script:
@@ -101,7 +101,7 @@ integration Tests Helm Charts Postgresql Rootless:
 
 publish:
   stage: publish
-  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.0@sha256:2240b3c3e917a156c4af570c7f8bdf951072196de69f2a0d06e2cd2fc0ba40a8
+  image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/alpine/helm:3.20.1@sha256:9ccb6cb780553282592b8628e78c50cd914976d481d0d8fd1f362887194a9c4b
   variables:
     REPO_BUCKET: "download.passbolt.com"
     REPO_DIR: "charts"
