@@ -173,7 +173,7 @@ app:
           # -- Configure redis sentinel image repository
           repository: haproxy
           # -- Configure redis sentinel image tag
-          tag: "latest@sha256:011a9e9706551ee3eebdc4272546c440f19b1d8d135d7e72d7aac501b3c1ac11"
+          tag: "3.3.7@sha256:011a9e9706551ee3eebdc4272546c440f19b1d8d135d7e72d7aac501b3c1ac11"
         # -- Configure redis sentinel container resources
         resources: {}
         # -- Configure the passbolt deployment resources
