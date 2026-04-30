@@ -1,0 +1,48 @@
+{{- if .Values.httpRoute.enabled -}}
+{{- $type := "httprt" -}}
+{{- $action := "common" -}}
+{{- $Name := include "passbolt-library.fullname" . -}}
+{{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
+{{- $defaultBackendPort := .Values.service.ports.http.port | default 80 -}}
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "passbolt-library.labels" . | nindent 4 }}
+    {{- include "passbolt-library.selectorLabels" . | nindent 4 }}
+    {{- include "passbolt-library.typelabels" (dict "action" $action "type" $type) | nindent 4 }}
+  {{- with .Values.httpRoute.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  {{- with .Values.httpRoute.parentRefs }}
+  parentRefs:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.httpRoute.hostnames }}
+  hostnames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+  {{- if .Values.httpRoute.rules }}
+  {{- range .Values.httpRoute.rules }}
+  {{- if not (hasKey . "backendRefs") }}
+    {{- $defaultBackend := dict "name" $Name "port" ($defaultBackendPort) }}
+    {{- $rule := merge (dict "backendRefs" (list $defaultBackend)) . }}
+    - {{ toYaml $rule | nindent 6 | trim }}
+  {{- else }}
+    - {{ toYaml . | nindent 6 | trim }}
+  {{- end }}
+  {{- end }}
+  {{- else }}
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ $Name }}
+          port: {{ $defaultBackendPort }}
+  {{- end }}
+{{- end }}

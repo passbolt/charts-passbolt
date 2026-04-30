@@ -1,0 +1,203 @@
+---
+suite: httproute
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should not render httproute when disabled
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: should set parentRefs
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+          namespace: gateway-ns
+    asserts:
+      - contains:
+          path: spec.parentRefs
+          content:
+            name: my-gateway
+            namespace: gateway-ns
+
+  - it: should set hostnames
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      httpRoute.hostnames:
+        - passbolt.example.com
+    asserts:
+      - contains:
+          path: spec.hostnames
+          content: passbolt.example.com
+
+  - it: should set annotations
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      httpRoute.annotations:
+        some-annotation: some-value
+    asserts:
+      - equal:
+          path: metadata.annotations.some-annotation
+          value: some-value
+
+  - it: should render default catch-all rule when rules is empty
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+    asserts:
+      - equal:
+          path: spec.rules[0].matches[0].path.type
+          value: PathPrefix
+      - equal:
+          path: spec.rules[0].matches[0].path.value
+          value: /
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: test-passbolt
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 80
+
+  - it: should use configured http port in default rule
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      service.ports.http.port: 8080
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 8080
+
+  - it: should render custom rule with explicit backendRefs
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      httpRoute.rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
+          backendRefs:
+            - name: my-service
+              port: 443
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: my-service
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 443
+
+  - it: should append default backendRef when rule has no backendRefs
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      httpRoute.rules:
+        - filters:
+            - type: RequestHeaderModifier
+              requestHeaderModifier:
+                add:
+                  - name: X-Forwarded-Proto
+                    value: https
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: test-passbolt
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 80
+
+  - it: should append default backendRef even when rule has a RequestRedirect filter
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      httpRoute.rules:
+        - filters:
+            - type: RequestRedirect
+              requestRedirect:
+                scheme: https
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].name
+          value: test-passbolt
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 80
+
+  - it: should use configured http port when appending default backendRef
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      service.ports.http.port: 8080
+      httpRoute.rules:
+        - filters:
+            - type: RequestHeaderModifier
+              requestHeaderModifier:
+                add:
+                  - name: X-Forwarded-Proto
+                    value: https
+    asserts:
+      - equal:
+          path: spec.rules[0].backendRefs[0].port
+          value: 8080
+
+  - it: should pass through timeouts and name fields on a rule
+    templates:
+      - httproute.yaml
+    set:
+      httpRoute.enabled: true
+      httpRoute.parentRefs:
+        - name: my-gateway
+      httpRoute.rules:
+        - name: my-rule
+          timeouts:
+            request: 10s
+            backendRequest: 5s
+          backendRefs:
+            - name: my-service
+              port: 443
+    asserts:
+      - equal:
+          path: spec.rules[0].name
+          value: my-rule
+      - equal:
+          path: spec.rules[0].timeouts.request
+          value: 10s
+      - equal:
+          path: spec.rules[0].timeouts.backendRequest
+          value: 5s

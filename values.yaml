@@ -449,6 +449,37 @@ ingress:
       # existingSecret: ""
       hosts:
         - passbolt.local
+
+httpRoute:
+  # -- Enable passbolt HTTPRoute
+  enabled: false
+  # -- Configure passbolt HTTPRoute annotations
+  annotations: {}
+  # -- Configure passbolt HTTPRoute parentRefs (references to Gateway resources)
+  parentRefs: []
+    # - name: my-gateway
+    #   namespace: gateway-namespace
+  # -- Configure passbolt HTTPRoute hostnames
+  hostnames:
+    - passbolt.local
+  # -- Configure passbolt HTTPRoute rules. Default catch-all rule is used if empty. Rules without backendRefs get the passbolt service appended automatically.
+  rules:
+    # Example with filters (backendRefs omitted - passbolt service will be used automatically):
+    # - filters:
+    #     - type: RequestHeaderModifier
+    #       requestHeaderModifier:
+    #         add:
+    #           - name: X-Forwarded-Proto
+    #             value: https
+    # Example with explicit backendRefs:
+    # - matches:
+    #     - path:
+    #         type: PathPrefix
+    #         value: /
+    #   backendRefs:
+    #     - name: <service-name>
+    #       port: 443
+
 # -- Configure passbolt deployment nodeSelector
 nodeSelector: {}
 
