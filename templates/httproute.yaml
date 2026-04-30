@@ -3,7 +3,7 @@
 {{- $action := "common" -}}
 {{- $Name := include "passbolt-library.fullname" . -}}
 {{- $fullName := printf "%s-%s-%s" $Name $type $action -}}
-{{- $defaultBackendPort := .Values.service.ports.https.port | default 443 -}}
+{{- $defaultBackendPort := .Values.service.ports.http.port | default 80 -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

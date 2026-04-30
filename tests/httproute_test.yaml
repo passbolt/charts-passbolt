@@ -76,20 +76,20 @@ tests:
           value: test-passbolt
       - equal:
           path: spec.rules[0].backendRefs[0].port
-          value: 443
+          value: 80
 
-  - it: should use configured https port in default rule
+  - it: should use configured http port in default rule
     templates:
       - httproute.yaml
     set:
       httpRoute.enabled: true
       httpRoute.parentRefs:
         - name: my-gateway
-      service.ports.https.port: 8443
+      service.ports.http.port: 8080
     asserts:
       - equal:
           path: spec.rules[0].backendRefs[0].port
-          value: 8443
+          value: 8080
 
   - it: should render custom rule with explicit backendRefs
     templates:
@@ -134,7 +134,7 @@ tests:
           value: test-passbolt
       - equal:
           path: spec.rules[0].backendRefs[0].port
-          value: 443
+          value: 80
 
   - it: should append default backendRef even when rule has a RequestRedirect filter
     templates:
@@ -154,16 +154,16 @@ tests:
           value: test-passbolt
       - equal:
           path: spec.rules[0].backendRefs[0].port
-          value: 443
+          value: 80
 
-  - it: should use configured https port when appending default backendRef
+  - it: should use configured http port when appending default backendRef
     templates:
       - httproute.yaml
     set:
       httpRoute.enabled: true
       httpRoute.parentRefs:
         - name: my-gateway
-      service.ports.https.port: 8443
+      service.ports.http.port: 8080
       httpRoute.rules:
         - filters:
             - type: RequestHeaderModifier
@@ -174,7 +174,7 @@ tests:
     asserts:
       - equal:
           path: spec.rules[0].backendRefs[0].port
-          value: 8443
+          value: 8080
 
   - it: should pass through timeouts and name fields on a rule
     templates:
