@@ -43,7 +43,7 @@ function https_port {
 function image_tag {
   tag="$(awk -F ' ' '/^    tag:/ {print $2}' values.yaml)"
   if [ "${ROOTLESS}" == true ]; then
-    echo "${tag}"-non-root
+    echo "${tag}" | sed 's/@.*/-non-root/'
   else
     echo "${tag}"
   fi
