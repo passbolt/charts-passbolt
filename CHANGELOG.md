@@ -3,7 +3,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.1.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.1.1...HEAD)
+
+## [2.1.1] - 2026-07-02
+
+### Added
+
+- YAML linting is setup on the whole repository.
+
+### Changed
+
+- Bumps Passbolt version to 5.13.0-1-ce.
+- Bumps `passbolt-library` helm charts version to 0.3.7.
+- Bumps Redis helm charts version to 22.0.7.
+- Bumps PostgreSQL helm charts version to 16.7.27.
+- Pinned HAProxy to version 3.4.1.
 
 ## [2.1.0] - 2026-02-27
 
