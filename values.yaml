@@ -148,7 +148,7 @@ app:
     # -- Configure pasbolt deployment image pullPolicy
     pullPolicy: IfNotPresent
     # -- Overrides the image tag whose default is the chart appVersion.
-    tag: 5.13.0-1-ce@sha256:f9ad2f613fa37691b23e8294f18d9f32da72f3fbcc1331bb5e8c82b01a407182
+    tag: 5.13.0-1-ce@sha256:f5ac218f5155e9cb026edc1d8152af788ea420fac61b205d7d80262fd64359c1
   # Allowed options: mariadb, mysql or postgresql
   database:
     kind: mariadb
@@ -173,7 +173,7 @@ app:
           # -- Configure redis sentinel image repository
           repository: haproxy
           # -- Configure redis sentinel image tag
-          tag: "3.4.2@sha256:a41a63f856841429403e056b19c51250ce55f642aad1231b428e31a790bc5056"
+          tag: "3.4.2@sha256:728fec0da177a4010e53a0a1327d2aaef70dfd2151798507c8a0d503d01e4d7f"
         # -- Configure redis sentinel container resources
         resources: {}
         # -- Configure the passbolt deployment resources
