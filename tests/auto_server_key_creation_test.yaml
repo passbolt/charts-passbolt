@@ -59,7 +59,7 @@ tests:
     asserts:
       - matchRegex:
           path: spec.template.spec.containers[0].args[1]
-          pattern: ./kubectl patch secret test-passbolt-sec-gpg*
+          pattern: ./kubectl patch secret test-passbolt-sec-gpg --patch-file .*
 
   - it: should have a gpg-secret with smaller weight than gpg secret job
     templates:

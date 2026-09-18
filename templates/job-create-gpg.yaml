@@ -66,17 +66,22 @@ spec:
                 %no-protection
                 %commit
               EOF
-
-              PRIVATE_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export-secret-keys $key_email | base64 -w0)"
-              PUBLIC_SERVERKEY="$(gpg --homedir $GNUPGHOME --armor --export $key_email | base64 -w0)"
+              
+              KUBECTL_GPG_SECRET_PATCH=$(mktemp)
+              chmod 600 "${KUBECTL_GPG_SECRET_PATCH}"
+              printf 'data:\n  serverkey_private.asc: %s\n  serverkey.asc: %s\n' \
+                  "$(gpg --homedir $GNUPGHOME --armor --export-secret-keys $key_email | base64 -w0)" \
+                  "$(gpg --homedir $GNUPGHOME --armor --export $key_email | base64 -w0)" \
+                      > "${KUBECTL_GPG_SECRET_PATCH}"
 
               cd /tmp
               cpuArch=${CPU_ARCH:-$(eval "case `uname -m` in 'x86_64') echo 'amd64';;'aarch64') echo 'arm64';;esac")}
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${cpuArch}/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
-              ./kubectl patch secret {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/serverkey_private.asc", "value" : '"${PRIVATE_SERVERKEY}"'}]'
-              ./kubectl patch secret {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/serverkey.asc", "value" : '"${PUBLIC_SERVERKEY}"'}]'
+              ./kubectl patch secret {{ include "passbolt.gpg.secretName" ( dict "name" $Name "Values" $.Values ) }} --patch-file "${KUBECTL_GPG_SECRET_PATCH}"
+
+              rm -f "${KUBECTL_GPG_SECRET_PATCH}"
               touch /tmp/pod/success
               echo "Success"
           env:

@@ -41,16 +41,22 @@ spec:
               set -e
 
               /usr/share/php/passbolt/bin/cake passbolt create_jwt_keys
-              PRIVATE_JWT_KEY="$(cat {{ .Values.jwtPath }}/jwt.key | base64 -w0 )"
-              PUBLIC_JWT_KEY="$(cat {{ .Values.jwtPath }}/jwt.pem | base64 -w0 )"
+              
+              KUBECTL_JWT_SECRET_PATCH=$(mktemp)
+              chmod 600 "${KUBECTL_JWT_SECRET_PATCH}"
+              printf 'data:\n  jwt.key: %s\n  jwt.pem: %s\n' \
+                  "$(cat {{ .Values.jwtPath }}/jwt.key | base64 -w0 )" \
+                  "$(cat {{ .Values.jwtPath }}/jwt.pem | base64 -w0 )" \
+                      > "${KUBECTL_JWT_SECRET_PATCH}"
 
               cd /tmp
               cpuArch=${CPU_ARCH:-$(eval "case `uname -m` in 'x86_64') echo 'amd64';;'aarch64') echo 'arm64';;esac")}
               kubectlDownload=${KUBECTL_DOWNLOAD_CMD:-'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${cpuArch}/kubectl"'}
               eval $kubectlDownload
               chmod +x kubectl
-              ./kubectl patch secret {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/jwt.key", "value" : '"${PRIVATE_JWT_KEY}"'}]'
-              ./kubectl patch secret {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }} --type='json' -p='[{"op": "replace", "path" : "/data/jwt.pem", "value" : '"${PUBLIC_JWT_KEY}"'}]'
+              ./kubectl patch secret {{ include "passbolt.jwt.secretName" ( dict "name" $Name "Values" $.Values ) }} --patch-file "${KUBECTL_JWT_SECRET_PATCH}"
+
+              rm -f "${KUBECTL_JWT_SECRET_PATCH}"
               touch /tmp/pod/success
               echo "Success"
           env:
