@@ -3,7 +3,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.1.1...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.2.0...HEAD)
+
+## [2.2.0] - 2026-09-28
+
+### Changed
+
+- Bumps Passbolt version to 5.16.0-1-ce.
+- Bumps HAProxy version to 3.4.3.
+- Using a patch file for updating the GPG/JWT secret key Kubernetes secret to avoid passing secret values through `kubectl` command-line interface.
 
 ## [2.1.1] - 2026-07-02
 
