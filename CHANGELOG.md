@@ -3,7 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.2.0...HEAD)
+## [Unreleased](https://github.com/passbolt/charts-passbolt/compare/2.2.1...HEAD)
+
+## [2.2.1] - 2026-10-21
+
+### Changed
+
+- Bumps Passbolt version to 5.17.0-1-ce.
 
 ## [2.2.0] - 2026-09-28
 
