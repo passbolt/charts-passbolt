@@ -131,6 +131,8 @@ app:
   databaseInitContainer:
     # -- Toggle pasbolt deployment init container that waits for database
     enabled: true
+    # -- Security Context configuration for the database init container
+    securityContext: {}
   # initImage:
   #   # -- Configure pasbolt deployment init container image client for database
   #   client: mariadb
@@ -167,6 +169,8 @@ app:
         # -- Inject a haproxy sidecar container configured as a proxy to redis sentinel
         # Make sure that CACHE_CAKE_DEFAULT_SERVER is set to '127.0.0.1' to use the proxy
         enabled: true
+        # -- Security Context configuration for the redis sentinel proxy container (server pod and email cron job)
+        securityContext: {}
         # -- Configure redis sentinel proxy image
         image:
           registry: ""
@@ -193,6 +197,9 @@ cronJobEmail:
   enabled: true
   schedule: "* * * * *"
   extraPodLabels: {}
+  # -- Security Context configuration for the email cron job pod. Not applied when Openshift is true.
+  # When empty, `runAsUser: 33` and `fsGroup: 33` are used. A value set here replaces them.
+  podSecurityContext: {}
 
 ## Passbolt environment parameters
 
@@ -222,9 +229,13 @@ jwtServerPublic: ""
 jwtCreateKeysForced: false
 jobCreateJwtKeys:
   extraPodLabels: {}
+  # -- Security Context configuration for the JWT keys creation job pod
+  podSecurityContext: {}
 
 jobCreateGpgKeys:
   extraPodLabels: {}
+  # -- Security Context configuration for the GPG keys creation job pod
+  podSecurityContext: {}
 
 passboltEnv:
   plain:
@@ -399,6 +410,15 @@ podAnnotations: {}
 podSecurityContext:
   {}
   # fsGroup: 2000
+
+# -- Security Context configuration for the containers running the passbolt image
+# (server, email cron job, GPG and JWT keys creation jobs)
+containerSecurityContext:
+  {}
+  # allowPrivilegeEscalation: false
+  # capabilities:
+  #   drop:
+  #     - ALL
 
 service:
   # -- Configure passbolt service type
