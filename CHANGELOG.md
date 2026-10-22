@@ -11,6 +11,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Bumps Passbolt version to 5.17.0-1-ce.
 
+### Added
+
+- `containerSecurityContext` value for the containers running the passbolt image (server, email cron job, GPG and JWT keys creation jobs).
+- `app.cache.redis.sentinelProxy.securityContext` and `app.databaseInitContainer.securityContext` values.
+- `cronJobEmail.podSecurityContext`, `jobCreateGpgKeys.podSecurityContext` and `jobCreateJwtKeys.podSecurityContext` values. All new values default to empty, and the email cron job keeps `runAsUser: 33` and `fsGroup: 33` when `cronJobEmail.podSecurityContext` is empty.
+
 ## [2.2.0] - 2026-09-28
 
 ### Changed
