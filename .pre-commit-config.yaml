@@ -10,7 +10,7 @@ repos:
         stages: [commit-msg]
         args: [feat, fix, chore, refactor, docs, test, ci, build, perf]
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.30.0
+    rev: v8.30.1
     hooks:
       - id: gitleaks
   - repo: https://github.com/pre-commit/pre-commit-hooks
