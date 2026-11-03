@@ -11,6 +11,13 @@
         "tests/*.yaml"
       ],
       "enabled": false
+    },
+    {
+      "description": ".pre-commit-config.yaml is managed by IaC, so its revs are bumped in the hook catalogue",
+      "matchFileNames": [
+        ".pre-commit-config.yaml"
+      ],
+      "enabled": false
     }
   ]
 }
