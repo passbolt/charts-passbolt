@@ -51,6 +51,10 @@ spec:
         {{- if .Values.app.databaseInitContainer.enabled }}
         - name: {{ $fullName }}-init
           {{ include "passbolt.initImage" . | nindent 10 }}
+          {{- with .Values.app.databaseInitContainer.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           command:
             - "/bin/bash"
           args:
@@ -116,6 +120,10 @@ spec:
               /docker-entrypoint.sh
           image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+          {{- with .Values.containerSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
           - name: https
             containerPort: {{ .Values.service.ports.https.targetPort }}
@@ -175,6 +183,10 @@ spec:
         - name: redisproxy
           image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.cache.redis.sentinelProxy.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.app.cache.redis.sentinelProxy.pullPolicy }}
+          {{- with .Values.app.cache.redis.sentinelProxy.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: "/usr/local/etc/haproxy/haproxy.cfg"
               subPath: haproxy.cfg

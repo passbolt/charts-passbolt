@@ -137,9 +137,11 @@ chart and deletes the release.
 | app.cache.redis.sentinelProxy.image.repository | string | `"haproxy"` | Configure redis sentinel image repository |
 | app.cache.redis.sentinelProxy.image.tag | string | `"3.4.1@sha256:0f597665a2a6d57f5a52fe81166fa781281ef54a771a9f9b4ff0567725be637c"` | Configure redis sentinel image tag |
 | app.cache.redis.sentinelProxy.resources | object | `{}` | Configure redis sentinel container resources |
+| app.cache.redis.sentinelProxy.securityContext | object | `{}` | Security Context configuration for the redis sentinel proxy container (server pod and email cron job) |
 | app.database.kind | string | `"mariadb"` | |
-| app.databaseInitContainer | object | `{"enabled":true}` | Configure pasbolt deployment init container that waits for database |
+| app.databaseInitContainer | object | `{"enabled":true,"securityContext":{}}` | Configure pasbolt deployment init container that waits for database |
 | app.databaseInitContainer.enabled | bool | `true` | Toggle pasbolt deployment init container that waits for database |
+| app.databaseInitContainer.securityContext | object | `{}` | Security Context configuration for the database init container |
 | app.extraContainers | list | `[]` | Configure additional containers to be added to the pod |
 | app.extraPodLabels | object | `{}` | |
 | app.image.pullPolicy | string | `"IfNotPresent"` | Configure pasbolt deployment image pullPolicy |
@@ -152,7 +154,9 @@ chart and deletes the release.
 | autoscaling.maxReplicas | int | `100` | Configure autoscaling maximum replicas |
 | autoscaling.minReplicas | int | `1` | Configure autoscaling minimum replicas |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` | Configure autoscaling target CPU uptilization percentage |
-| cronJobEmail | object | `{"enabled":true,"extraPodLabels":{},"schedule":"* * * * *"}` | Enable email cron |
+| containerSecurityContext | object | `{}` | Security Context configuration for the containers running the passbolt image (server, email cron job, GPG and JWT keys creation jobs) |
+| cronJobEmail | object | `{"enabled":true,"extraPodLabels":{},"podSecurityContext":{},"schedule":"* * * * *"}` | Enable email cron |
+| cronJobEmail.podSecurityContext | object | `{}` | Security Context configuration for the email cron job pod. Not applied when Openshift is true. When empty, `runAsUser: 33` and `fsGroup: 33` are used. A value set here replaces them. |
 | extraVolumeMounts | list | `[]` | Add additional volume mounts, e.g. for overwriting config files |
 | extraVolumes | list | `[]` | Add additional volumes, e.g. for overwriting config files |
 | fullnameOverride | string | `""` | Value to override the whole fullName |
@@ -168,7 +172,9 @@ chart and deletes the release.
 | ingress.hosts | list | `[]` | Configure passbolt ingress hosts |
 | ingress.tls | list | `[]` | Configure passbolt ingress tls |
 | jobCreateGpgKeys.extraPodLabels | object | `{}` | |
+| jobCreateGpgKeys.podSecurityContext | object | `{}` | Security Context configuration for the GPG keys creation job pod |
 | jobCreateJwtKeys.extraPodLabels | object | `{}` | |
+| jobCreateJwtKeys.podSecurityContext | object | `{}` | Security Context configuration for the JWT keys creation job pod |
 | jwtCreateKeysForced | bool | `false` | Forces overwrite JWT keys |
 | jwtExistingSecret | string | `""` | Name of the existing secret for the JWT server keypair. The secret must contain the `jwt.key` and `jwt.pem` keys. |
 | jwtPath | string | `"/etc/passbolt/jwt"` | Configure passbolt jwt directory |

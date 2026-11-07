@@ -28,13 +28,16 @@ spec:
           restartPolicy: OnFailure
           {{- if eq .Values.Openshift false }}
           securityContext:
-            runAsUser: 33
-            fsGroup: 33
+            {{- toYaml (default (dict "runAsUser" 33 "fsGroup" 33) .Values.cronJobEmail.podSecurityContext) | nindent 12 }}
           {{- end }}
           containers:
             - name: proc-email
               image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.image "global" .Values.global) }}
               imagePullPolicy: {{ .Values.app.image.pullPolicy }}
+              {{- with .Values.containerSecurityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               command:
                 - "/bin/bash"
               args:
@@ -68,6 +71,10 @@ spec:
             - name: redisproxy
               image: {{ include "passbolt.image" (dict "imageRoot" .Values.app.cache.redis.sentinelProxy.image "global" .Values.global) }}
               imagePullPolicy: {{ .Values.app.cache.redis.sentinelProxy.pullPolicy }}
+              {{- with .Values.app.cache.redis.sentinelProxy.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
               command:
                 - "/bin/bash"
               args:

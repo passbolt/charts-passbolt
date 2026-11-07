@@ -1,0 +1,189 @@
+---
+suite: security contexts
+release:
+  name: test
+values:
+  - values-test.yaml
+tests:
+  - it: should not set container security contexts by default
+    templates:
+      - deployment.yaml
+    set:
+      app.cache.redis.sentinelProxy.enabled: true
+    asserts:
+      - notExists:
+          path: spec.template.spec.containers[0].securityContext
+      - notExists:
+          path: spec.template.spec.containers[1].securityContext
+      - notExists:
+          path: spec.template.spec.initContainers[0].securityContext
+
+  - it: should keep the historical email cron job pod security context by default
+    templates:
+      - cronjob-proc-email.yaml
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.securityContext
+          value:
+            runAsUser: 33
+            fsGroup: 33
+      - notExists:
+          path: spec.jobTemplate.spec.template.spec.containers[0].securityContext
+
+  - it: should apply containerSecurityContext to the passbolt container
+    templates:
+      - deployment.yaml
+    set:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[0].name
+          value: passbolt
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+
+  - it: should apply the redis proxy security context to the sidecar only
+    templates:
+      - deployment.yaml
+    set:
+      containerSecurityContext:
+        runAsNonRoot: true
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.securityContext:
+        allowPrivilegeEscalation: false
+    asserts:
+      - equal:
+          path: spec.template.spec.containers[1].name
+          value: redisproxy
+      - equal:
+          path: spec.template.spec.containers[1].securityContext
+          value:
+            allowPrivilegeEscalation: false
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            runAsNonRoot: true
+
+  - it: should apply the database init container security context
+    templates:
+      - deployment.yaml
+    set:
+      app.databaseInitContainer.enabled: true
+      app.databaseInitContainer.securityContext:
+        allowPrivilegeEscalation: false
+    asserts:
+      - equal:
+          path: spec.template.spec.initContainers[0].securityContext
+          value:
+            allowPrivilegeEscalation: false
+
+  - it: should apply the security contexts to the email cron job
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+      app.cache.redis.sentinelProxy.enabled: true
+      app.cache.redis.sentinelProxy.securityContext:
+        capabilities:
+          drop:
+            - ALL
+      cronJobEmail.podSecurityContext:
+        runAsNonRoot: true
+        runAsUser: 33
+        seccompProfile:
+          type: RuntimeDefault
+    asserts:
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.securityContext
+          value:
+            runAsNonRoot: true
+            runAsUser: 33
+            seccompProfile:
+              type: RuntimeDefault
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].name
+          value: proc-email
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[0].securityContext
+          value:
+            allowPrivilegeEscalation: false
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[1].name
+          value: redisproxy
+      - equal:
+          path: spec.jobTemplate.spec.template.spec.containers[1].securityContext
+          value:
+            capabilities:
+              drop:
+                - ALL
+
+  - it: should not set the email cron job pod security context on OpenShift
+    templates:
+      - cronjob-proc-email.yaml
+    set:
+      Openshift: true
+    asserts:
+      - notExists:
+          path: spec.jobTemplate.spec.template.spec.securityContext
+
+  - it: should apply the security contexts to the gpg keys job
+    templates:
+      - job-create-gpg.yaml
+    set:
+      gpgServerKeyPublic: ""
+      gpgServerKeyPrivate: ""
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+      jobCreateGpgKeys.podSecurityContext:
+        runAsNonRoot: true
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            runAsNonRoot: true
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            allowPrivilegeEscalation: false
+
+  - it: should not set security contexts on the gpg keys job by default
+    templates:
+      - job-create-gpg.yaml
+    set:
+      gpgServerKeyPublic: ""
+      gpgServerKeyPrivate: ""
+    asserts:
+      - notExists:
+          path: spec.template.spec.securityContext
+      - notExists:
+          path: spec.template.spec.containers[0].securityContext
+
+  - it: should apply the security contexts to the jwt keys job
+    templates:
+      - job-create-jwt.yaml
+    set:
+      jwtServerPublic: ""
+      jwtServerPrivate: ""
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+      jobCreateJwtKeys.podSecurityContext:
+        runAsNonRoot: true
+    asserts:
+      - equal:
+          path: spec.template.spec.securityContext
+          value:
+            runAsNonRoot: true
+      - equal:
+          path: spec.template.spec.containers[0].securityContext
+          value:
+            allowPrivilegeEscalation: false
