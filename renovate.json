@@ -19,5 +19,8 @@
       ],
       "enabled": false
     }
-  ]
+  ],
+  "vulnerabilityAlerts": {
+    "groupName": "{{manager}}-security-fixes"
+  }
 }
